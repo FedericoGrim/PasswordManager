@@ -1,17 +1,19 @@
 from sqlalchemy import Column, String, Integer
-from sqlalchemy.dialects.postgresql import UUID
+import uuid
 from sqlalchemy.ext.declarative import declarative_base
+from pydantic import BaseModel, EmailStr
+from typing import Optional
 
 Base = declarative_base()
 
 class User(Base):
-    __tablename__ = 'users'
-    id = Column(UUID(as_uuid=True), primary_key=True, nullable=False)
+    __tablename__ = "users"
+
+    id = Column(uuid.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     username = Column(String(50), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
 
-from pydantic import BaseModel, EmailStr
 
 class UserCreate(BaseModel):
     username: str
@@ -19,6 +21,6 @@ class UserCreate(BaseModel):
     email: EmailStr
 
 class UserUpdate(BaseModel):
-    username: str
-    password: str
-    email: EmailStr
+    username: Optional[str] = None
+    password: Optional[str] = None
+    email: Optional[EmailStr] = None
