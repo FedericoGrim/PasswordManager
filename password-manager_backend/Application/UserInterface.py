@@ -9,8 +9,6 @@ def InterfaceCreateUser(user: UserCreate, db: Session):
     return ICreateUser(db, user)
 
 def InterfaceGetUser(userEmail: str, db: Session):
-    if db is None:
-        db = next(get_db()) 
     return IGetUser(db, userEmail)
 
 def InterfaceUpdateUser(user_id: uuid.UUID, user: UserUpdate, db: Session):
