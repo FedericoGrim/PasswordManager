@@ -23,18 +23,18 @@ def get_db():
     finally:
         db.close()
 
-def CreateUser(db_session, user: UserCreate):
+def CreateUser(dbSession, user: UserCreate):
     newUser = User(**user.dict())
-    db_session.add(newUser)
-    db_session.commit()
-    db_session.refresh(newUser)
+    dbSession.add(newUser)
+    dbSession.commit()
+    dbSession.refresh(newUser)
     return newUser
 
-def GetUser(db_session, userEmail: str):
-    return db_session.query(User).filter(User.email == userEmail).first()
+def GetUser(dbSession, userEmail: str):
+    return dbSession.query(User).filter(User.email == userEmail).first()
 
-def UpdateUser(db_session, userId: uuid.UUID, updatedUser: UserUpdate):
-    user = db_session.query(User).filter(User.id == userId).first()
+def UpdateUser(dbSession, userId: uuid.UUID, updatedUser: UserUpdate):
+    user = dbSession.query(User).filter(User.id == userId).first()
     if user:
         if updatedUser.username:
             user.username = updatedUser.username
@@ -42,13 +42,13 @@ def UpdateUser(db_session, userId: uuid.UUID, updatedUser: UserUpdate):
             user.email = updatedUser.email
         if updatedUser.password:
             user.password = updatedUser.password
-        db_session.commit()
-        db_session.refresh(user)
+        dbSession.commit()
+        dbSession.refresh(user)
     return user
 
-def DeleteUser(db_session, userId: uuid.UUID):
-    user = db_session.query(User).filter(User.id == userId).first()
+def DeleteUser(dbSession, userId: uuid.UUID):
+    user = dbSession.query(User).filter(User.id == userId).first()
     if user:
-        db_session.delete(user)
-        db_session.commit()
+        dbSession.delete(user)
+        dbSession.commit()
     return user

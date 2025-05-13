@@ -7,9 +7,9 @@ router = APIRouter()
 
 @router.post("/")
 async def CreateUser(user: UserCreate):
-    created_user = InterfaceCreateUser(user)
-    if created_user:
-        return {"message": "User created successfully", "user": created_user}  # Restituire i dettagli dell'utente creato
+    createdUser = InterfaceCreateUser(user)
+    if createdUser:
+        return {"message": "User created successfully", "user": createdUser}
     else:
         raise HTTPException(status_code=400, detail="User creation failed")
 
@@ -22,10 +22,10 @@ async def GetUser(userEmail: str):
         raise HTTPException(status_code=404, detail="User not found")
 
 @router.put("/{user_id}")
-async def UpdateUser(userId: uuid.UUID, user: UserUpdate):
-    updated_user = InterfaceUpdateUser(userId, user)
-    if updated_user:
-        return {"message": "User updated successfully", "user": updated_user}  # Restituire i dettagli dell'utente aggiornato
+async def UpdateUser(userId: uuid.UUID, userUpdated: UserUpdate):
+    updatedUser = InterfaceUpdateUser(userId, userUpdated)
+    if updatedUser:
+        return {"message": "User updated successfully", "user": updatedUser}
     else:
         raise HTTPException(status_code=400, detail="User update failed")
 

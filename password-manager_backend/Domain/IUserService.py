@@ -10,8 +10,8 @@ def CreateUser(db: Session, user: UserCreate):
 def GetUser(db: Session, userEmail: str):
     return UserServiceImpl.GetUser(db, userEmail)
 
-def UpdateUser(db: Session, user_id: uuid.UUID, user: UserUpdate):
-    return UserServiceImpl.UpdateUser(db, user_id, user)
+def UpdateUser(db: Session, userId: uuid.UUID, user: UserUpdate):
+    return UserServiceImpl.UpdateUser(db, userId, user)
 
-def DeleteUser(db: Session, user_id: uuid.UUID):
-    return UserServiceImpl.DeleteUser(db, user_id)
+def DeleteUser(db: Session, userId: uuid.UUID):
+    return UserServiceImpl.DeleteUser(db, userId)

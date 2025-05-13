@@ -2,7 +2,6 @@ import uuid
 from fastapi import Depends
 from sqlalchemy.orm import Session
 
-# Importa il domain layer, senza fare importazioni dirette dal DB.
 from Domain.UserService import get_db
 from Domain.Objects.UserObj import UserCreate, UserUpdate
 from Domain.IUserService import CreateUser, GetUser, UpdateUser, DeleteUser
