@@ -1,1 +1,5 @@
-Generic single-database configuration.
+To generete a migration: 
+    python -m alembic revision --autogenerate -m "name of the migration"
+
+To apply the changes from the migration on the DB:
+    python -m alembic upgrade head  
