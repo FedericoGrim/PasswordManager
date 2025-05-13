@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer, UUID
+from sqlalchemy import Column, String, UUID
 import uuid
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel, EmailStr
