@@ -1,0 +1,9 @@
+FastAPI
+SQLAlchemy
+uvicorn
+pydantic
+python-multipart
+pydantic[email]
+alembic
+pyscopg2
+psycopg2-binary
