@@ -1,9 +1,8 @@
 import uuid
 from sqlalchemy.orm import Session
 
-from Domain.UserService import get_db
 from Domain.Objects.UserObj import UserCreate, UserUpdate
-from Domain.IUserService import ICreateUser, IGetUser, IUpdateUser, IDeleteUser
+from Infrastructure.IUserService import ICreateUser, IGetUser, IUpdateUser, IDeleteUser
 
 def InterfaceCreateUser(user: UserCreate, db: Session):
     return ICreateUser(db, user)

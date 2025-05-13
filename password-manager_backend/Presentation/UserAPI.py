@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import uuid
 
 from Domain.Objects.UserObj import UserCreate, UserUpdate
-from Domain.UserService import get_db
+from Infrastructure.UserService import get_db
 from Application.UserInterface import InterfaceDeleteUser, InterfaceGetUser, InterfaceCreateUser, InterfaceUpdateUser
 
 router = APIRouter()
