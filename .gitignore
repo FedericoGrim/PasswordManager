@@ -122,7 +122,6 @@ celerybeat.pid
 
 # Environments
 .env
-!password-manager-backend/.env
 .env.local
 .env.development.local
 .env.test.local
@@ -227,6 +226,9 @@ node_modules/
 .env.development.local
 .env.test.local
 .env.production.local
+
+# Eccezione per il file .env nella directory password-manager_backend
+!password-manager_backend/.env
 
 # Python virtual environments
 venv/
