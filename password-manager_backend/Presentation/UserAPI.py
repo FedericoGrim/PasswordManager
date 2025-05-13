@@ -27,9 +27,9 @@ async def ApiGetUser(userEmail: str, db: Session = Depends(get_db)):
 
 @router.put("/{user_id}")
 async def ApiUpdateUser(userId: uuid.UUID, userUpdated: UserUpdate, db: Session = Depends(get_db)):
-    updatedUser = InterfaceUpdateUser(userId, userUpdated, db)
-    if updatedUser:
-        return {"message": "User updated successfully", "user": updatedUser}
+    userUpdated = InterfaceUpdateUser(userId, userUpdated, db)
+    if userUpdated:
+        return {"message": "User updated successfully", "user": userUpdated}
     else:
         raise HTTPException(status_code=400, detail="User update failed")
 
