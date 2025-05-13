@@ -5,7 +5,7 @@ import os
 import uuid
 from dotenv import load_dotenv
 
-from Objects.UserObj import User, UserCreate, UserUpdate
+from Domain.Objects.UserObj import User, UserCreate, UserUpdate
 
 load_dotenv()
 
