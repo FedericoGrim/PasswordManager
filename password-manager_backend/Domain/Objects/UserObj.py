@@ -1,4 +1,4 @@
-from sqlalchemy import Column, String, Integer
+from sqlalchemy import Column, String, Integer, UUID
 import uuid
 from sqlalchemy.ext.declarative import declarative_base
 from pydantic import BaseModel, EmailStr
@@ -9,11 +9,13 @@ Base = declarative_base()
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(uuid.UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
+    id = Column(UUID(), primary_key=True, default=uuid.uuid4, nullable=False)
     username = Column(String(50), unique=True, nullable=False)
     password = Column(String(255), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
 
+    def __repr__(self):
+        return f"<User(id={self.id}, username='{self.username}', email='{self.email}')>"
 
 class UserCreate(BaseModel):
     username: str
