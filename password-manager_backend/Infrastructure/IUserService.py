@@ -2,7 +2,7 @@ import uuid
 
 from sqlalchemy.orm import Session
 from Domain.Objects.UserObj import UserCreate, UserUpdate
-from Domain import UserService as UserServiceImpl
+from Infrastructure import UserService as UserServiceImpl
 
 def ICreateUser(db: Session, user: UserCreate):
     return UserServiceImpl.CreateUser(db, user)
