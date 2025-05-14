@@ -1,16 +1,16 @@
-from fastapi import FastAPI, Request
-from Presentation.UserAPI import router as user_router
-import time
-import logging
+from fastapi import FastAPI
+from config import Container
+from Presentation.Controllers.UserController import router
+
+container = Container()
+container.wire(modules=["Presentation.Controllers.UserController"])
 
 app = FastAPI()
 
-@app.middleware("http")
-async def LogRequestMiddleware(request: Request, call_next):
-    start = time.time()
-    response = await call_next(request)
-    duration = time.time() - start
-    logging.info(f"{request.method} {request.url.path} - {response.status_code} - {duration:.2f}s")
-    return response
+app.container = container
 
-app.include_router(user_router, prefix="/users", tags=["user"])
+app.include_router(
+    router,          
+    prefix="/user",  
+    tags=["user"]  
+)
