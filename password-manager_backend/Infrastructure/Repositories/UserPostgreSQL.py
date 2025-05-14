@@ -7,6 +7,8 @@ import uuid
 from dotenv import load_dotenv
 import logging
 
+from Infrastructure.Exceptions.UserPostgreSqlExcemption import *
+
 from Domain.IUserService import IUserService
 from Domain.Objects.UserObj import User, UserCreate, UserUpdate
 
@@ -24,7 +26,7 @@ def get_db():
         
     except Exception as e:
         logging.error(f"Error: {e}")
-        raise HTTPException(status_code=500, detail="Database connection error")
+        raise PostgreSqlConnectionException()
     
     finally:
         db.close()
@@ -43,24 +45,24 @@ class UserService(IUserService):
         
         except IntegrityError:
             self.Db.rollback()
-            raise HTTPException(status_code=400, detail="User already exists or violates DB constraints")
+            raise UserAlreadyExistsException()
         
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise HTTPException(status_code=400, detail="User creation failed")
+            raise UserCreationFailedException()
 
     def GetUser(self, userEmail: str):
         try:
             user = self.Db.query(User).filter(User.email == userEmail).first()
             if user is None:
-                raise HTTPException(status_code=404, detail="User not found")
+                raise UserNotFoundException()
             
             return user
         
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise HTTPException(status_code=500, detail="Database error during user retrieval")
+            raise UserRetrievalException()
 
     def UpdateUser(self, userId: uuid.UUID, updatedUser: UserUpdate):
         try:
@@ -79,14 +81,14 @@ class UserService(IUserService):
                 self.Db.refresh(user)
                 
             if user is None:
-                raise HTTPException(status_code=404, detail="User not found")  
+                raise UserNotFoundException()
             
             return user
         
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise HTTPException(status_code=400, detail="User update failed")
+            raise UserUpdateException()
 
     def DeleteUser(self, userId: uuid.UUID):
         try:
@@ -96,11 +98,11 @@ class UserService(IUserService):
                 self.Db.commit()
                 
             else:
-                raise HTTPException(status_code=404, detail="User not found")
+                raise UserNotFoundException()
             
             return user
         
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise HTTPException(status_code=400, detail="User deletion failed")
+            raise UserDeletionException()
