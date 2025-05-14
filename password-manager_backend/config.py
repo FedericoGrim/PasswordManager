@@ -3,9 +3,6 @@ from Infrastructure.Repositories.postgreSQL import UserService
 from Application.UseCase.UserUseCase import CreateUserUseCase, GetUserByEmailUseCase, UpdateUserUseCase, DeleteUserUseCase
 
 class Container(containers.DeclarativeContainer):
-
-    WiringConfig = containers.WiringConfiguration(modules=["Presentation.Routes.UserRouter"])
-
     UserRepositoryFactory = providers.Factory(UserService)
 
     CreateUserUseCaseProvider = providers.Factory(
