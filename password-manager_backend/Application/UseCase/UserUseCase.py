@@ -1,5 +1,7 @@
 import uuid
+
 from Domain.Objects.UserObj import UserCreate, UserUpdate
+from Application.Exceptions.UserUseCaseExceptions import *
 
 class CreateUserUseCase():
     def __init__(self, UserRepository):
@@ -7,10 +9,9 @@ class CreateUserUseCase():
         
     def execute(self, user_create: UserCreate):
         try:
-            newUser = self.UserRepository.CreateUser(user_create)
-            return newUser
+            return self.UserRepository.CreateUser(user_create)
         except Exception as e:
-            raise e
+            raise UserCreationException(str(e)) from e
 
 class GetUserByEmailUseCase():
     def __init__(self, UserRepository):
@@ -18,13 +19,9 @@ class GetUserByEmailUseCase():
         
     def execute(self, userEmail: str):
         try:
-            user = self.UserRepository.GetUser(userEmail)
-            if user:
-                return user
-            else:
-                raise Exception("User not found")
+            return self.UserRepository.GetUser(userEmail)
         except Exception as e:
-            raise e
+            raise UserRetrievalException(str(e)) from e
 
 class UpdateUserUseCase():
     def __init__(self, UserRepository):
@@ -32,13 +29,9 @@ class UpdateUserUseCase():
         
     def execute(self, user_id: uuid.UUID, user_update: UserUpdate):
         try:
-            updatedUser = self.UserRepository.UpdateUser(user_id, user_update)
-            if updatedUser:
-                return updatedUser
-            else:
-                raise Exception("User not found or failed to update")
+            return self.UserRepository.UpdateUser(user_id, user_update)
         except Exception as e:
-            raise e
+            raise UserUpdateException(str(e)) from e
 
 class DeleteUserUseCase():
     def __init__(self, UserRepository):
@@ -46,10 +39,6 @@ class DeleteUserUseCase():
         
     def execute(self, user_id: uuid.UUID):
         try:
-            success = self.UserRepository.DeleteUser(user_id)
-            if success:
-                return True
-            else:
-                raise Exception("Failed to delete user")
+            return self.UserRepository.DeleteUser(user_id)
         except Exception as e:
-            raise e
+            raise UserDeletionException(str(e)) from e

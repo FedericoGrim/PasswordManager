@@ -7,7 +7,7 @@ import uuid
 from dotenv import load_dotenv
 import logging
 
-from Infrastructure.Exceptions.UserPostgreSqlExcemption import *
+from Infrastructure.Exceptions.UserPostgreSqlException import *
 
 from Domain.IUserService import IUserService
 from Domain.Objects.UserObj import User, UserCreate, UserUpdate
