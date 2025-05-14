@@ -1,7 +1,6 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from sqlalchemy.orm import Session
 from Domain.Objects.UserObj import UserCreate, UserUpdate
 
 @abstractmethod

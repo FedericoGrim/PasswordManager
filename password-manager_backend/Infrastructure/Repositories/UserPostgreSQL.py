@@ -1,7 +1,6 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker, Session
+from sqlalchemy.orm import sessionmaker
 from sqlalchemy.exc import IntegrityError
-from fastapi import HTTPException
 import os
 import uuid
 from dotenv import load_dotenv
