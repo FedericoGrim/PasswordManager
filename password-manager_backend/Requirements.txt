@@ -13,3 +13,6 @@ uvicorn
 #DB
 SQLAlchemy
 alembic
+
+#Injection
+dependency_injector
