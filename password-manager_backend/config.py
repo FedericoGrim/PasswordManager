@@ -1,5 +1,5 @@
 from dependency_injector import containers, providers
-from Infrastructure.Repositories.postgreSQL import UserService
+from Infrastructure.Repositories.UserPostgreSQL import UserService
 from Application.UseCase.UserUseCase import CreateUserUseCase, GetUserByEmailUseCase, UpdateUserUseCase, DeleteUserUseCase
 
 class Container(containers.DeclarativeContainer):
