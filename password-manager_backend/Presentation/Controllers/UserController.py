@@ -5,8 +5,7 @@ from dependency_injector.wiring import inject
 
 from config import Container
 from Domain.Objects.UserObj import UserCreate, UserUpdate
-from Infrastructure.Repositories.postgreSQL import UserService
-from Infrastructure.Repositories.postgreSQL import get_db 
+from Infrastructure.Repositories.UserPostgreSQL import UserService, get_db
 
 router = APIRouter()
 
