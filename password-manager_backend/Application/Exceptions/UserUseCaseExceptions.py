@@ -16,7 +16,9 @@ class UserUpdateException(Exception):
 class UserDeletionException(Exception):
     def __init__(self, message="User deletion failed."):
         self.message = message
-        super().__init__(self.message)class UserCreationException(Exception):
+        super().__init__(self.message)
+
+class UserCreationException(Exception):
     def __init__(self, message="User creation failed."):
         self.message = message
         super().__init__(self.message)
