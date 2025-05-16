@@ -4,7 +4,7 @@ import base64
 
 def HashMasterPassword(masterPassword: str) -> dict:
     try:
-        salt = urandom(16)  # genera salt casuale
+        salt = urandom(16)
         hashPwd = hash_secret_raw(
             secret=masterPassword.encode('utf-8'),
             salt=salt,
@@ -14,10 +14,7 @@ def HashMasterPassword(masterPassword: str) -> dict:
             hash_len=32,
             type=Type.ID
         )
-        return {
-            'Salt': base64.b64encode(salt).decode('utf-8'),
-            'Hash': base64.b64encode(hashPwd).decode('utf-8')
-        }
+        return base64.b64encode(salt).decode('utf-8'), base64.b64encode(hashPwd).decode('utf-8')
     except Exception as e:
         raise Exception(f"Errore durante hashing master password: {e}")
 

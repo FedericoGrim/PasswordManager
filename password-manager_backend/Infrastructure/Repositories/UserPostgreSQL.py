@@ -34,9 +34,14 @@ class UserService(IUserService):
     def __init__(self, db):
         self.Db = db
         
-    def CreateUser(self, user: UserCreate, hash: str, salt: str):
+    def CreateUser(self, user: UserCreate, generatedHash: str, generatedSalt: str):
         try:
-            newUser, newUser.hash, newUser.salt = User(**user.dict()), hash, salt
+            newUser = User(
+                            email=user.email,
+                            username=user.username,
+                            hash=generatedHash,
+                            salt=generatedSalt
+                            )
             self.Db.add(newUser)
             self.Db.commit()
             self.Db.refresh(newUser)
