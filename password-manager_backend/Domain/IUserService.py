@@ -6,7 +6,7 @@ from Domain.Objects.UserObj import UserCreate, UserUpdate
 @abstractmethod
 class IUserService(ABC):
     @abstractmethod
-    def CreateUser(self, user: UserCreate) -> dict:
+    def CreateUser(self, user: UserCreate, hash, salt) -> dict:
         pass
 
     @abstractmethod

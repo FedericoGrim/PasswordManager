@@ -1,6 +1,7 @@
 import uuid
 
 from Domain.Objects.UserObj import UserCreate, UserUpdate
+from Domain.PasswordCripting.PasswordCripting import HashMasterPassword
 from Application.Exceptions.UserUseCaseExceptions import *
 
 class CreateUserUseCase():
@@ -9,7 +10,8 @@ class CreateUserUseCase():
         
     def execute(self, user_create: UserCreate):
         try:
-            return self.UserRepository.CreateUser(user_create)
+            generated_hash, generated_salt = HashMasterPassword(user_create.password)
+            return self.UserRepository.CreateUser(user_create, generated_hash, generated_salt)
         except Exception as e:
             raise UserCreationException(str(e)) from e
 
