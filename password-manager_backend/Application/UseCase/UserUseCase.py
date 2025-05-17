@@ -22,14 +22,35 @@ class GetUserByEmailUseCase():
             return self.UserRepository.GetUser(userEmail)
         except Exception as e:
             raise UserRetrievalException(str(e)) from e
-
-class UpdateUserUseCase():
+        
+class UpdateUserUsernameUseCase():
     def __init__(self, UserRepository):
         self.UserRepository = UserRepository
         
-    def execute(self, user_id: uuid.UUID, user_update: UserUpdate):
+    def execute(self, user_id: uuid.UUID, new_username: str):
         try:
-            return self.UserRepository.UpdateUser(user_id, user_update)
+            return self.UserRepository.UpdateUserUsername(user_id, new_username)
+        except Exception as e:
+            raise UserUpdateException(str(e)) from e        
+
+class UpdateUserEmailUseCase():
+    def __init__(self, UserRepository):
+        self.UserRepository = UserRepository
+        
+    def execute(self, user_id: uuid.UUID, new_email: str):
+        try:
+            return self.UserRepository.UpdateUserEmail(user_id, new_email)
+        except Exception as e:
+            raise UserUpdateException(str(e)) from e
+
+class UpdateUserPasswordUseCase():
+    def __init__(self, UserRepository):
+        self.UserRepository = UserRepository
+        
+    def execute(self, user_id: uuid.UUID, new_password: str):
+        try:
+            generated_hash, generated_salt = HashMasterPassword(new_password)
+            return self.UserRepository.UpdateUserPassword(user_id, generated_hash, generated_salt)
         except Exception as e:
             raise UserUpdateException(str(e)) from e
 

@@ -14,7 +14,15 @@ class IUserService(ABC):
         pass
 
     @abstractmethod
-    def UpdateUser(self, userId: uuid.UUID, user: UserUpdate) -> dict:
+    def UpdateUserUsername(self, userId: uuid.UUID, newUsername: str) -> dict:
+        pass
+
+    @abstractmethod
+    def UpdateUserEmail(self, userId: uuid.UUID, newEmail: str) -> dict:
+        pass
+
+    @abstractmethod
+    def UpdateUserPassword(self, userId: uuid.UUID, newPassword: str) -> dict:
         pass
 
     @abstractmethod

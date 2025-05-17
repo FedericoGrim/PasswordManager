@@ -8,6 +8,7 @@ class PostgreSqlException(Exception):
         self.message = message
         super().__init__(self.message)
 
+
 class UserAlreadyExistsException(Exception):
     def __init__(self, message="User already exists"):
         self.message = message
@@ -23,11 +24,21 @@ class UserRetrievalException(Exception):
         self.message = message
         super().__init__(self.message)
         
-class UserUpdateException(Exception):
-    def __init__(self, message="User update failed"):
+class UserUpdateUsernameException(Exception):
+    def __init__(self, message="User username update failed"):
         self.message = message
         super().__init__(self.message)
-        
+
+class UserUpdateEmailException(Exception):
+    def __init__(self, message="User email update failed"):
+        self.message = message
+        super().__init__(self.message)
+
+class UserUpdatePasswordException(Exception):
+    def __init__(self, message="User password update failed"):
+        self.message = message
+        super().__init__(self.message)
+
 class UserNotFoundException(Exception):
     def __init__(self, message="User not found"):
         self.message = message

@@ -37,18 +37,48 @@ async def ApiGetUser(userEmail: str,
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")
 
-@router.put("/{user_id}")
+@router.put("/{user_id}/username")
 @inject
-async def ApiUpdateUser(userId: uuid.UUID, 
-                        userUpdated: UserUpdate, 
+async def ApiUpdateUserUsername(userId: uuid.UUID, 
+                        newUsername: str, 
                         db: Session = Depends(get_db),
                         request: Request = None):
     container: Container = request.app.container
-    update_user_use_case = container.UpdateUserUseCaseProvider(UserRepository=UserService(db))
+    update_user_username_use_case = container.UpdateUserUsernameUseCaseProvider(UserRepository=UserService(db))
     
     try:
-        user_updated = update_user_use_case.execute(userId, userUpdated)
-        return {"message": "User updated successfully", "user": user_updated}
+        user_username_updated = update_user_username_use_case.execute(userId, newUsername)
+        return {"message": "User username updated successfully", "New username": user_username_updated}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    
+@router.put("/{user_id}/email")
+@inject
+async def ApiUpdateUserEmail(userId: uuid.UUID,
+                        newEmail: str, 
+                        db: Session = Depends(get_db),
+                        request: Request = None):
+    container: Container = request.app.container
+    update_user_email_use_case = container.UpdateUserEmailUseCaseProvider(UserRepository=UserService(db))
+    
+    try:
+        user_email_updated = update_user_email_use_case.execute(userId, newEmail)
+        return {"message": "User email updated successfully", "New email": user_email_updated}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+@router.put("/{user_id}/password")
+@inject
+async def ApiUpdateUserPassword(userId: uuid.UUID,
+                        new_password: str, 
+                        db: Session = Depends(get_db),
+                        request: Request = None):
+    container: Container = request.app.container
+    update_user_password_use_case = container.UpdateUserPasswrordUseCaseProvider(UserRepository=UserService(db))
+    
+    try:
+        user_password_updated = update_user_password_use_case.execute(userId, new_password)
+        return {"message": "User password updated successfully", "New email": user_password_updated}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 

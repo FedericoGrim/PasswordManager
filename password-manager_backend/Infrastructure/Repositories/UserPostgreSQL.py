@@ -62,20 +62,12 @@ class UserService(IUserService):
         except Exception as e:
             logging.error(f"Error: {e}")
             raise UserRetrievalException()
-
-    def UpdateUser(self, userId: uuid.UUID, updatedUser: UserUpdate):
+        
+    def UpdateUserUsername(self, userId: uuid.UUID, newUsername: str):
         try:
             user = self.Db.query(User).filter(User.id == userId).first()
             if user:
-                if updatedUser.username:
-                    user.username = updatedUser.username
-                    
-                if updatedUser.email:
-                    user.email = updatedUser.email
-                    
-                if updatedUser.password:
-                    user.password = updatedUser.password
-                    
+                user.username = newUsername
                 self.Db.commit()
                 self.Db.refresh(user)
                 
@@ -87,7 +79,44 @@ class UserService(IUserService):
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise UserUpdateException()
+            raise UserUpdateUsernameException()
+            
+    def UpdateUserEmail(self, userId: uuid.UUID, newEmail: str):
+        try:
+            user = self.Db.query(User).filter(User.id == userId).first()
+            if user:
+                user.email = newEmail
+                self.Db.commit()
+                self.Db.refresh(user)
+                
+            if user is None:
+                raise UserNotFoundException()
+            
+            return user
+        
+        except Exception as e:
+            self.Db.rollback()
+            logging.error(f"Error: {e}")
+            raise UserUpdateEmailException()
+        
+    def UpdateUserPassword(self, userId: uuid.UUID, generatedHash: str, generatedSalt: str):
+        try:
+            user = self.Db.query(User).filter(User.id == userId).first()
+            if user:
+                user.hash = generatedHash
+                user.salt = generatedSalt
+                self.Db.commit()
+                self.Db.refresh(user)
+                
+            if user is None:
+                raise UserNotFoundException()
+            
+            return user
+        
+        except Exception as e:
+            self.Db.rollback()
+            logging.error(f"Error: {e}")
+            raise UserUpdatePasswordException()
 
     def DeleteUser(self, userId: uuid.UUID):
         try:
