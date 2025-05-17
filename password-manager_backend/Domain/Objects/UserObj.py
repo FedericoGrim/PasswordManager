@@ -11,7 +11,8 @@ class User(Base):
 
     id = Column(UUID(), primary_key=True, default=uuid.uuid4, nullable=False)
     username = Column(String(50), unique=True, nullable=False)
-    password = Column(String(255), nullable=False)
+    hash = Column(String(100), nullable=False)
+    salt = Column(String(100), nullable=False)
     email = Column(String(100), unique=True, nullable=False)
 
     def __repr__(self):
