@@ -5,31 +5,22 @@ from Infrastructure.Repositories.LocalUserPostgreSQL import LocalUserService
 from Application.UseCase.LocalUserUseCase import CreateLocalUserUseCase, GetAllLocalUsersByMainUserIdUseCase, UpdateLocalUserByIdUseCase, DeleteLocalUserByIdUseCase
 #from Application.UseCase.SubaccountUseCase import CreateSubaccountUseCase, GetAllSubaccountsByUserIdUseCase, UpdateSubaccountByIdUseCase, DeleteSubaccountByIdUseCase
 
-class LocalUserCRUD(containers.DeclarativeContainer):
+class Container(containers.DeclarativeContainer):
     LocalUserRepositoryFactory = providers.Factory(LocalUserService)
-        
+
     CreateLocalUserProvider = providers.Factory(
         CreateLocalUserUseCase,
-        UserRepository=LocalUserRepositoryFactory
+        LocalUserRepository=LocalUserRepositoryFactory,
     )
-
-    GetAllLocalUserByIdProvider = providers.Factory(
+    GetAllLocalUsersByMainUserIdProvider = providers.Factory(
         GetAllLocalUsersByMainUserIdUseCase,
-        UserRepository=LocalUserRepositoryFactory
+        LocalUserRepository=LocalUserRepositoryFactory,
     )
-
     UpdateLocalUserByIdProvider = providers.Factory(
         UpdateLocalUserByIdUseCase,
-        UserRepository=LocalUserRepositoryFactory
+        LocalUserRepository=LocalUserRepositoryFactory,
     )
-
-    DeleteUserByIdUseCaseProvider = providers.Factory(
-    DeleteLocalUserByIdUseCase,
-    UserRepository=LocalUserRepositoryFactory
-)
-
-#class SubaccountCRUD:
-    
-    
-class Container(containers.DeclarativeContainer):
-    LocalUserCRUD = providers.Container(LocalUserCRUD)
+    DeleteLocalUserByIdProvider = providers.Factory(
+        DeleteLocalUserByIdUseCase,
+        LocalUserRepository=LocalUserRepositoryFactory,
+    )

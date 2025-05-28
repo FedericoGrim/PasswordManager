@@ -21,7 +21,7 @@ class GetAllLocalUsersByMainUserIdUseCase():
         
     def execute(self, mainUserId: uuid.uuid4):
         try:
-            return self.LocalUserRepository.GetAllUsersByMainUserId(mainUserId)
+            return self.LocalUserRepository.GetAllLocalUserById(mainUserId)
         except Exception as e:
             raise UserRetrievalException(str(e)) from e
         
@@ -29,9 +29,10 @@ class UpdateLocalUserByIdUseCase():
     def __init__(self, LocalUserRepository):
         self.LocalUserRepository = LocalUserRepository
         
-    def execute(self, user_id: uuid.UUID, new_username: str):
+    def execute(self, localUserId: uuid.UUID, new_local_user: UpdateLocalUser):
         try:
-            return self.LocalUserRepository.UpdateLocalUserByIdUseCase(user_id, new_username)
+            new_generated_hash, new_generated_salt = HashMasterPassword(new_local_user.NewMasterPassword)
+            return self.LocalUserRepository.UpdateLocalUserById(localUserId, new_generated_hash, new_generated_salt)
         except Exception as e:
             raise UserUpdateException(str(e)) from e        
 
@@ -41,6 +42,6 @@ class DeleteLocalUserByIdUseCase():
         
     def execute(self, user_id: uuid.UUID):
         try:
-            return self.LocalUserRepository.DeleteUser(user_id)
+            return self.LocalUserRepository.DeleteLocalUserById(user_id)
         except Exception as e:
             raise UserDeletionException(str(e)) from e

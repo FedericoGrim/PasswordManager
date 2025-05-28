@@ -1,5 +1,5 @@
 from sqlalchemy import create_engine
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, Session
 from sqlalchemy.exc import IntegrityError
 import os
 import uuid
@@ -31,7 +31,7 @@ def get_db():
         db.close()
 
 class LocalUserService(ILocalUserService):
-    def __init__(self, db):
+    def __init__(self, db: Session):
         self.Db = db
         
     def CreateLocalUser(self, localuser_create, generatedHash, generatedSalt):
@@ -51,9 +51,9 @@ class LocalUserService(ILocalUserService):
             logging.error(f"Error: {e}")
             raise UserCreationFailedException()
         
-    def GetAllLocalUserById(self, MainUserId: uuid.UUID):
+    def GetAllLocalUserById(self, IdKeycloak: uuid.UUID):
         try:
-            local_users = self.Db.query(LocalUser).filter(LocalUser.MainUserId == MainUserId).all()
+            local_users = self.Db.query(LocalUser).filter(LocalUser.IdKeycloak == IdKeycloak).all()
             if not local_users:
                 raise UserNotFoundException("No local users found for the given main user ID.")
             return local_users
@@ -62,24 +62,25 @@ class LocalUserService(ILocalUserService):
             logging.error(f"Error: {e}")
             raise UserRetrievalException()
         
-    def UpdateLocalUserById(self, userId: uuid.UUID, newLocalUser: str):
+    def UpdateLocalUserById(self, localUserId: uuid.UUID, new_hash: str, new_salt: str):
         try:
-            local_user = self.Db.query(LocalUser).filter(LocalUser.id == userId).first()
+            local_user = self.Db.query(LocalUser).filter(LocalUser.Id == localUserId).first()
             if not local_user:
                 raise UserNotFoundException("Local user not found.")
             
-            local_user.username = newLocalUser
+            local_user.MasterPasswordHash = new_hash
+            local_user.MasterPasswordSalt = new_salt
             self.Db.commit()
             self.Db.refresh(local_user)
             return local_user
             
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise UserUpdateUsernameException()
+            raise UserUpdatePasswordException()
         
     def DeleteLocalUserById(self, userId: uuid.UUID):
         try:
-            local_user = self.Db.query(LocalUser).filter(LocalUser.id == userId).first()
+            local_user = self.Db.query(LocalUser).filter(LocalUser.Id == userId).first()
             if not local_user:
                 raise UserNotFoundException("Local user not found.")
             
