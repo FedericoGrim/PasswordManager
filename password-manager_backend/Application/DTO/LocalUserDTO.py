@@ -8,12 +8,11 @@ class CreateLocalUser(BaseModel):
     IdKeycloak: UUID
     MasterPassword: str
 
-    def ToEntity(self, generatedHash, generatedSalt, generatedIV):
+    def to_entity(self, generatedHash, generatedSalt):
         return LocalUser(
             IdKeycloak=self.IdKeycloak,
             HashMasterPassword=generatedHash,
             SaltArgon=generatedSalt,
-            IV=generatedIV
         )
 
 
