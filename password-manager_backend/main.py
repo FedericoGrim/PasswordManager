@@ -1,16 +1,16 @@
 from fastapi import FastAPI
-from config import Container
-from Presentation.Controllers.UserController import router
+from config import LocalUserCRUD, Container
+from Presentation.Controllers.LocalUserController import router as local_user_router
 
 container = Container()
-container.wire(modules=["Presentation.Controllers.UserController"])
+container.wire(modules=["Presentation.Controllers.LocalUserController"])
 
 app = FastAPI()
 
-app.container = container
+app.container = LocalUserCRUD()
 
 app.include_router(
-    router,          
+    local_user_router,          
     prefix="/user",  
     tags=["user"]  
 )
