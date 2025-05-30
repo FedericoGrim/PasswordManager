@@ -6,7 +6,7 @@ import uuid
 from dotenv import load_dotenv
 import logging
 
-from Infrastructure.Exceptions.UserPostgreSqlException import *
+from Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions import *
 
 from Domain.ILocalUserSercive import ILocalUserService
 from Domain.Entities.LocalUser import LocalUser
@@ -44,29 +44,29 @@ class LocalUserService(ILocalUserService):
             
         except IntegrityError:
             self.Db.rollback()
-            raise UserAlreadyExistsException()
+            raise LocalUserAlreadyExistsException()
             
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise UserCreationFailedException()
+            raise LocalUserCreationFailedException()
         
     def GetAllLocalUserById(self, IdKeycloak: uuid.UUID):
         try:
             local_users = self.Db.query(LocalUser).filter(LocalUser.IdKeycloak == IdKeycloak).all()
             if not local_users:
-                raise UserNotFoundException("No local users found for the given main user ID.")
+                raise GetAllLocalUserByIdNotFoundException("No local users found for the given main user ID.")
             return local_users
             
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise UserRetrievalException()
+            raise GetAllLocalUserByIdRetrivalException()
         
     def UpdateLocalUserById(self, localUserId: uuid.UUID, new_hash: str, new_salt: str):
         try:
             local_user = self.Db.query(LocalUser).filter(LocalUser.Id == localUserId).first()
             if not local_user:
-                raise UserNotFoundException("Local user not found.")
+                raise LocalUserNotFoundException("Local user not found.")
             
             local_user.MasterPasswordHash = new_hash
             local_user.MasterPasswordSalt = new_salt
@@ -76,13 +76,13 @@ class LocalUserService(ILocalUserService):
             
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise UserUpdatePasswordException()
+            raise LocalUserUpdatePasswordException()
         
     def DeleteLocalUserById(self, userId: uuid.UUID):
         try:
             local_user = self.Db.query(LocalUser).filter(LocalUser.Id == userId).first()
             if not local_user:
-                raise UserNotFoundException("Local user not found.")
+                raise LocalUserNotFoundException("Local user not found.")
             
             self.Db.delete(local_user)
             self.Db.commit()
@@ -90,4 +90,4 @@ class LocalUserService(ILocalUserService):
             
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise UserDeletionException()
+            raise LocalUserDeleteException()

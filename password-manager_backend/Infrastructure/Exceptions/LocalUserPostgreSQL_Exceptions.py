@@ -9,42 +9,40 @@ class PostgreSqlException(Exception):
         super().__init__(self.message)
 
 
-class UserAlreadyExistsException(Exception):
-    def __init__(self, message="User already exists"):
+class LocalUserAlreadyExistsException(Exception):
+    def __init__(self, message="LocalUser already exists"):
         self.message = message
         super().__init__(self.message)
         
-class UserCreationFailedException(Exception):
+class LocalUserCreationFailedException(Exception):
     def __init__(self, message="User creation failed"):
         self.message = message
         super().__init__(self.message)
-        
-class UserRetrievalException(Exception):
-    def __init__(self, message="Error during the retrinval of the user"):
-        self.message = message
-        super().__init__(self.message)
-        
-class UserUpdateUsernameException(Exception):
-    def __init__(self, message="User username update failed"):
+
+
+class GetAllLocalUserByIdRetrivalException(Exception):
+    def __init__(self, message="Error retrieving local users by ID"):
         self.message = message
         super().__init__(self.message)
 
-class UserUpdateEmailException(Exception):
-    def __init__(self, message="User email update failed"):
+class GetAllLocalUserByIdNotFoundException(Exception):
+    def __init__(self, message="No local users found for the given main user ID"):
         self.message = message
         super().__init__(self.message)
 
-class UserUpdatePasswordException(Exception):
-    def __init__(self, message="User password update failed"):
+
+class LocalUserNotFoundException(Exception):
+    def __init__(self, message="Local user not found"):
         self.message = message
         super().__init__(self.message)
 
-class UserNotFoundException(Exception):
-    def __init__(self, message="User not found"):
+class LocalUserUpdatePasswordException(Exception):
+    def __init__(self, message="Error updating local user password"):
         self.message = message
         super().__init__(self.message)
-        
-class UserDeletionException(Exception):
-    def __init__(self, message="User deletion failed"):
+
+
+class LocalUserDeleteException(Exception):
+    def __init__(self, message="Error deleting local user"):
         self.message = message
         super().__init__(self.message)
