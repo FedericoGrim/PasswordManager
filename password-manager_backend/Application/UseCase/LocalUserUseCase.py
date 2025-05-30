@@ -2,7 +2,7 @@ import uuid
 
 from Application.DTO.LocalUserDTO import CreateLocalUser, UpdateLocalUser
 from Domain.PasswordCripting.PasswordCripting import HashMasterPassword
-from Application.Exceptions.UserUseCaseExceptions import *
+from Application.Exceptions.LocalUserUseCaseExceptions import *
 
 class CreateLocalUserUseCase():
     def __init__(self, LocalUserRepository):
@@ -13,7 +13,7 @@ class CreateLocalUserUseCase():
             generated_hash, generated_salt = HashMasterPassword(localuser_create.MasterPassword)
             return self.LocalUserRepository.CreateLocalUser(localuser_create, generated_hash, generated_salt)
         except Exception as e:
-            raise UserCreationException(str(e)) from e
+            raise LocalUserCreationException(str(e)) from e
 
 class GetAllLocalUsersByMainUserIdUseCase():
     def __init__(self, LocalUserRepository):
@@ -23,7 +23,7 @@ class GetAllLocalUsersByMainUserIdUseCase():
         try:
             return self.LocalUserRepository.GetAllLocalUserById(mainUserId)
         except Exception as e:
-            raise UserRetrievalException(str(e)) from e
+            raise LocalUserRetrievalException(str(e)) from e
         
 class UpdateLocalUserByIdUseCase():
     def __init__(self, LocalUserRepository):
@@ -34,7 +34,7 @@ class UpdateLocalUserByIdUseCase():
             new_generated_hash, new_generated_salt = HashMasterPassword(new_local_user.NewMasterPassword)
             return self.LocalUserRepository.UpdateLocalUserById(localUserId, new_generated_hash, new_generated_salt)
         except Exception as e:
-            raise UserUpdateException(str(e)) from e        
+            raise LocalUserUpdateException(str(e)) from e        
 
 class DeleteLocalUserByIdUseCase():
     def __init__(self, LocalUserRepository):
@@ -44,4 +44,4 @@ class DeleteLocalUserByIdUseCase():
         try:
             return self.LocalUserRepository.DeleteLocalUserById(user_id)
         except Exception as e:
-            raise UserDeletionException(str(e)) from e
+            raise LocalUserDeletionException(str(e)) from e
