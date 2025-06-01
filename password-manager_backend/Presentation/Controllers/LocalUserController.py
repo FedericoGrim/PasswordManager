@@ -54,14 +54,14 @@ async def ApiUpdateLocalUser(localUserId: UUID,
 
 @router.delete("/{user_id}")
 @inject
-async def ApiDeleteUser(keycloakId: UUID, 
+async def ApiDeleteUser(localUserId: UUID, 
                         db: Session = Depends(get_db), 
                         request: Request = None):
     container: Container = request.app.container
     delete_user_use_case = container.local_user().DeleteLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
-        if delete_user_use_case.execute(keycloakId):
+        if delete_user_use_case.execute(localUserId):
             return {"message": "User deleted successfully"}
         else:
             raise HTTPException(status_code=400, detail="User deletion failed")

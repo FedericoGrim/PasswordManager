@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.post("/{userId}")
 @inject
-async def CreateSubaccount(subaccountObj: CreateSubAccountDTO, 
+async def CreateSubAccount(subaccountObj: CreateSubAccountDTO, 
                            db: Session = Depends(get_db), 
                            request: Request = None, 
                            salt: str = ""):
@@ -27,7 +27,7 @@ async def CreateSubaccount(subaccountObj: CreateSubAccountDTO,
 
 @router.get("/{userId}")
 @inject
-async def GetAllSubaccountsByUserId(userId: uuid.UUID, 
+async def GetAllSubAccountsByUserId(userId: uuid.UUID, 
                                     db: Session = Depends(get_db), 
                                     request: Request = None):
     container: Container = request.app.container
@@ -41,7 +41,7 @@ async def GetAllSubaccountsByUserId(userId: uuid.UUID,
 
 @router.put("/{userId}/{subaccountId}")
 @inject
-async def UpdateSubaccountById(userId: uuid.UUID, 
+async def UpdateSubAccountById(userId: uuid.UUID, 
                                subaccountId: uuid.UUID, 
                                updated_data: UpdateSubAccountDTO, 
                                db: Session = Depends(get_db), 
@@ -58,7 +58,7 @@ async def UpdateSubaccountById(userId: uuid.UUID,
 
 @router.delete("/{userId}/{subaccountId}")
 @inject
-async def DeleteSubaccount(userId: uuid.UUID, 
+async def DeleteSubAccount(userId: uuid.UUID, 
                            subaccountId: uuid.UUID, 
                            db: Session = Depends(get_db), 
                            request: Request = None):

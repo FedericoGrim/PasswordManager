@@ -1,15 +1,15 @@
-class CreateSubaccountException(Exception):
+class CreateSubAccountException(Exception):
     def __init__(self, message: str):
         super().__init__(message)
 
-class SubaccountRetrievalException(Exception):
+class SubAccountRetrievalException(Exception):
     def __init__(self, message: str):
         super().__init__(message)
 
-class SubaccountUpdateException(Exception):
+class SubAccountUpdateException(Exception):
     def __init__(self, message: str):
         super().__init__(message)
 
-class SubaccountDeletionException(Exception):
+class SubAccountDeletionException(Exception):
     def __init__(self, message: str):
         super().__init__(message)

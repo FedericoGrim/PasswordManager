@@ -8,13 +8,13 @@ class PostgreSqlException(Exception):
         self.message = message
         super().__init__(self.message)
 
-class SubaccountAlreadyExistsException(Exception):
-    def __init__(self, message="Subaccount already exists"):
+class SubAccountAlreadyExistsException(Exception):
+    def __init__(self, message="SubAccount already exists"):
         self.message = message
         super().__init__(self.message)
 
-class SubaccountCreationFailedException(Exception):
-    def __init__(self, message="Subaccount creation failed"):
+class SubAccountCreationFailedException(Exception):
+    def __init__(self, message="SubAccount creation failed"):
         self.message = message
         super().__init__(self.message)
 
@@ -23,22 +23,22 @@ class GetAllSubAccountsByUserIdNotFoundException(Exception):
         self.message = message
         super().__init__(self.message)
 
-class SubaccountNotFoundException(Exception):
-    def __init__(self, message="Subaccount not found"):
+class SubAccountNotFoundException(Exception):
+    def __init__(self, message="SubAccount not found"):
         self.message = message
         super().__init__(self.message)
 
-class SubaccountUpdateException(Exception):
+class SubAccountUpdateException(Exception):
     def __init__(self, message="Error updating subaccount"):
         self.message = message
         super().__init__(self.message)
 
-class SubaccountDeletionException(Exception):
+class SubAccountDeletionException(Exception):
     def __init__(self, message="Error deleting subaccount"):
         self.message = message
         super().__init__(self.message)
 
-class SubaccountRetrievalException(Exception):
+class SubAccountRetrievalException(Exception):
     def __init__(self, message="Error retrieving subaccounts"):
         self.message = message
         super().__init__(self.message)

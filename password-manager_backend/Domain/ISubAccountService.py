@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from Domain.Entities.SubAccount import SubAccount
 
 @abstractmethod
-class ISubaccountService(ABC):
+class ISubAccountService(ABC):
     @abstractmethod
     def CreateSubAccount(self, subaccount: SubAccount) -> dict:
         pass

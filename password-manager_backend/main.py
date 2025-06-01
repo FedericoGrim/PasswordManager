@@ -2,10 +2,10 @@
 from fastapi import FastAPI
 from config import Container
 from Presentation.Controllers.LocalUserController import router as local_user_router
-from Presentation.Controllers.SubaccountController import router as subaccount_router
+from Presentation.Controllers.SubAccountController import router as subaccount_router
 
 container = Container()
-container.wire(modules=["Presentation.Controllers.LocalUserController", "Presentation.Controllers.SubaccountController"])
+container.wire(modules=["Presentation.Controllers.LocalUserController", "Presentation.Controllers.SubAccountController"])
 
 app = FastAPI()
 

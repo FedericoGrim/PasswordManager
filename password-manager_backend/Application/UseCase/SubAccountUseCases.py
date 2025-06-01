@@ -1,7 +1,7 @@
 import uuid
 
 from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
-from Application.Exceptions.SubaccountUseCaseException import *
+from Application.Exceptions.SubAccountUseCaseException import *
 
 from Domain.PasswordCripting import PasswordCripting
 
@@ -14,7 +14,7 @@ class CreateSubAccountUseCase():
             subaccount_create.passwordEncrypted = PasswordCripting.hashPassword(subaccount_create.passwordEncrypted, salt)
             return self.SubAccountRepository.CreateSubAccount(subaccount_create)
         except Exception as e:
-            raise CreateSubaccountException(str(e)) from e
+            raise CreateSubAccountException(str(e)) from e
         
 class GetAllSubAccountsByLocalUserIdUseCase():
     def __init__(self, SubAccountRepository):
@@ -24,7 +24,7 @@ class GetAllSubAccountsByLocalUserIdUseCase():
         try:
             return self.SubAccountRepository.GetAllSubAccountsByUserId(userId)
         except Exception as e:
-            raise SubaccountRetrievalException(str(e)) from e
+            raise SubAccountRetrievalException(str(e)) from e
         
 class UpdateSubAccountByIdUseCase():
     def __init__(self, SubAccountRepository):
@@ -34,7 +34,7 @@ class UpdateSubAccountByIdUseCase():
         try:
             return self.SubAccountRepository.UpdateSubAccountById(subaccountId, new_subaccount)
         except Exception as e:
-            raise SubaccountUpdateException(str(e)) from e
+            raise SubAccountUpdateException(str(e)) from e
         
 class DeleteSubAccountByIdUseCase():
     def __init__(self, SubAccountRepository):
@@ -44,4 +44,4 @@ class DeleteSubAccountByIdUseCase():
         try:
             return self.SubAccountRepository.DeleteSubAccountById(subaccountId)
         except Exception as e:
-            raise SubaccountUpdateException(str(e)) from e
+            raise SubAccountUpdateException(str(e)) from e

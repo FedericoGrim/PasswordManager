@@ -6,9 +6,9 @@ import uuid
 from dotenv import load_dotenv
 import logging
 
-from Infrastructure.Exceptions.SubaccountPostgreSQL_Exceptions import *
+from Infrastructure.Exceptions.SubAccountPostgreSQL_Exceptions import *
 
-from Domain.ISubAccountService import ISubaccountService
+from Domain.ISubAccountService import ISubAccountService
 from Domain.Entities.SubAccount import SubAccount
 
 load_dotenv()
@@ -31,7 +31,7 @@ def get_db():
         db.close()
 
 
-class SubAccountService(ISubaccountService):
+class SubAccountService(ISubAccountService):
     def __init__(self, db: Session):
         self.Db = db
 
@@ -44,12 +44,12 @@ class SubAccountService(ISubaccountService):
             
         except IntegrityError:
             self.Db.rollback()
-            raise SubaccountAlreadyExistsException("SubAccount with the same name already exists.")
+            raise SubAccountAlreadyExistsException("SubAccount with the same name already exists.")
             
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise SubaccountCreationFailedException("Failed to create subaccount.")
+            raise SubAccountCreationFailedException("Failed to create subaccount.")
         
     def GetAllSubAccountsByUserId(self, userId: uuid.UUID):
         try:
@@ -60,13 +60,13 @@ class SubAccountService(ISubaccountService):
             
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise SubaccountRetrievalException("Failed to retrieve subaccounts.")
+            raise SubAccountRetrievalException("Failed to retrieve subaccounts.")
         
     def UpdateSubAccountById(self, subaccountId: uuid.UUID, new_subaccount):
         try:
             subaccount = self.Db.query(SubAccount).filter(SubAccount.id == subaccountId).first()
             if not subaccount:
-                raise SubaccountNotFoundException("SubAccount not found.")
+                raise SubAccountNotFoundException("SubAccount not found.")
             
             for key, value in new_subaccount.to_dict().items():
                 setattr(subaccount, key, value)
@@ -77,13 +77,13 @@ class SubAccountService(ISubaccountService):
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise SubaccountUpdateException("Failed to update subaccount.")
+            raise SubAccountUpdateException("Failed to update subaccount.")
         
     def DeleteSubAccountById(self, subaccountId: uuid.UUID):
         try:
             subaccount = self.Db.query(SubAccount).filter(SubAccount.id == subaccountId).first()
             if not subaccount:
-                raise SubaccountNotFoundException("SubAccount not found.")
+                raise SubAccountNotFoundException("SubAccount not found.")
             
             self.Db.delete(subaccount)
             self.Db.commit()
@@ -92,4 +92,4 @@ class SubAccountService(ISubaccountService):
         except Exception as e:
             self.Db.rollback()
             logging.error(f"Error: {e}")
-            raise SubaccountDeletionException("Failed to delete subaccount.")
+            raise SubAccountDeletionException("Failed to delete subaccount.")
