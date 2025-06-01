@@ -1,12 +1,13 @@
 from dependency_injector import containers, providers
 
 from Infrastructure.Repositories.LocalUserPostgreSQL import LocalUserService
+from Infrastructure.Repositories.SubAccountPostgreSQL import SubAccountService
 
 from Application.UseCase.LocalUserUseCase import CreateLocalUserUseCase, GetAllLocalUsersByMainUserIdUseCase, UpdateLocalUserByIdUseCase, DeleteLocalUserByIdUseCase
-#from Application.UseCase.SubaccountUseCase import CreateSubaccountUseCase, GetAllSubaccountsByUserIdUseCase, UpdateSubaccountByIdUseCase, DeleteSubaccountByIdUseCase
+from Application.UseCase.SubAccountUseCases import CreateSubAccountUseCase, GetAllSubAccountsByLocalUserIdUseCase, UpdateSubAccountByIdUseCase, DeleteSubAccountByIdUseCase
 
-class Container(containers.DeclarativeContainer):
-    LocalUserRepositoryFactory = providers.Factory(LocalUserService)
+class LocalUserContainer(containers.DeclarativeContainer):
+    LocalUserRepositoryFactory = providers.Factory(LocalUserService, db=providers.Dependency())
 
     CreateLocalUserProvider = providers.Factory(
         CreateLocalUserUseCase,
@@ -24,3 +25,27 @@ class Container(containers.DeclarativeContainer):
         DeleteLocalUserByIdUseCase,
         LocalUserRepository=LocalUserRepositoryFactory,
     )
+
+class SubAccountContainer(containers.DeclarativeContainer):
+    SubAccountRepositoryFactory = providers.Factory(SubAccountService, db=providers.Dependency())
+    
+    CreateSubAccountProvider = providers.Factory(
+        CreateSubAccountUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    GetAllSubAccountsByUserIdProvider = providers.Factory(
+        GetAllSubAccountsByLocalUserIdUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    UpdateSubAccountByIdProvider = providers.Factory(
+        UpdateSubAccountByIdUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    DeleteSubAccountByIdProvider = providers.Factory(
+        DeleteSubAccountByIdUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+
+class Container(containers.DeclarativeContainer):
+    local_user = providers.Container(LocalUserContainer)
+    subaccount = providers.Container(SubAccountContainer)
