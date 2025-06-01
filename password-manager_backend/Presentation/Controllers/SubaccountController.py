@@ -1,52 +1,72 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 import uuid
+from dependency_injector.wiring import inject
+from config import Container
 
 from Infrastructure.Repositories.LocalUserPostgreSQL import get_db
-from Application.DTO.SubaccountDTO import CreateSubaccountDTO, UpdateSubaccountDTO
-from Domain.Entities.Subaccount import Subaccount  # suppongo questo sia il modello ORM
+from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
 
-router = APIRouter(prefix="/subaccounts", tags=["Subaccounts"])
+router = APIRouter()
 
-@router.post("/{userId}", status_code=status.HTTP_201_CREATED)
-async def CreateSubaccount(userId: uuid.UUID, subaccount: CreateSubaccountDTO, db: Session = Depends(get_db)):
-    new_subaccount = Subaccount(
-        user_id=userId,
-        title=subaccount.Title,
-        username=subaccount.Username,
-        password_encrypted=subaccount.PasswordEncrypted,
-        url=subaccount.Url
-    )
-    db.add(new_subaccount)
-    db.commit()
-    db.refresh(new_subaccount)
-    return {"message": "Subaccount created", "subaccountId": new_subaccount.id}
+@router.post("/{userId}")
+@inject
+async def CreateSubaccount(subaccountObj: CreateSubAccountDTO, 
+                           db: Session = Depends(get_db), 
+                           request: Request = None, 
+                           salt: str = ""):
+    container: Container = request.app.container
+    create_subaccount_use_case = container.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
+
+
+    try:
+        create_subaccount = create_subaccount_use_case.execute(subaccountObj, salt)
+        return {"message": "SubAccount created successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
 @router.get("/{userId}")
-async def GetAllSubaccountsByUserId(userId: uuid.UUID, db: Session = Depends(get_db)):
-    subaccounts = db.query(Subaccount).filter(Subaccount.user_id == userId).all()
-    if not subaccounts:
-        raise HTTPException(status_code=404, detail="No subaccounts found for this user")
-    return subaccounts
+@inject
+async def GetAllSubaccountsByUserId(userId: uuid.UUID, 
+                                    db: Session = Depends(get_db), 
+                                    request: Request = None):
+    container: Container = request.app.container
+    get_subaccounts_use_case = container.subaccount().GetAllSubAccountsByUserIdProvider(SubAccountRepository__db=db)
+
+    try:
+        subaccounts = get_subaccounts_use_case.execute(userId)
+        return {"message": "SubAccounts retrieved successfully", "subaccounts": subaccounts}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail="SubAccounts not found")
 
 @router.put("/{userId}/{subaccountId}")
-async def UpdateSubaccountById(userId: uuid.UUID, subaccountId: uuid.UUID, updated_data: UpdateSubaccountDTO, db: Session = Depends(get_db)):
-    subaccount = db.query(Subaccount).filter(Subaccount.id == subaccountId, Subaccount.user_id == userId).first()
-    if not subaccount:
-        raise HTTPException(status_code=404, detail="Subaccount not found")
+@inject
+async def UpdateSubaccountById(userId: uuid.UUID, 
+                               subaccountId: uuid.UUID, 
+                               updated_data: UpdateSubAccountDTO, 
+                               db: Session = Depends(get_db), 
+                               salt: str = "",
+                               request: Request = None):
+    container: Container = request.app.container
+    update_subaccount_use_case = container.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
 
-    for field, value in updated_data.dict(exclude_unset=True).items():
-        # Assicurati che i nomi campi DTO corrispondano a quelli dell'entity
-        setattr(subaccount, field.lower(), value)
-    db.commit()
-    return {"message": "Subaccount updated"}
+    try:
+        updated_subaccount = update_subaccount_use_case.execute(userId, subaccountId, updated_data, salt)
+        return {"message": "SubAccount updated successfully", "subaccount": updated_subaccount}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
 
-@router.delete("/{userId}/{subaccountId}", status_code=status.HTTP_204_NO_CONTENT)
-async def DeleteSubaccount(userId: uuid.UUID, subaccountId: uuid.UUID, db: Session = Depends(get_db)):
-    subaccount = db.query(Subaccount).filter(Subaccount.id == subaccountId, Subaccount.user_id == userId).first()
-    if not subaccount:
-        raise HTTPException(status_code=404, detail="Subaccount not found")
+@router.delete("/{userId}/{subaccountId}")
+@inject
+async def DeleteSubaccount(userId: uuid.UUID, 
+                           subaccountId: uuid.UUID, 
+                           db: Session = Depends(get_db), 
+                           request: Request = None):
+    container: Container = request.app.container
+    delete_subaccount_use_case = container.subaccount().DeleteSubAccountByIdProvider(SubAccountRepository__db=db)
 
-    db.delete(subaccount)
-    db.commit()
-    return
+    try:
+        delete_subaccount = delete_subaccount_use_case.execute(userId, subaccountId)
+        return {"message": "SubAccount deleted successfully"}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))
