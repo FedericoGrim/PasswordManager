@@ -3,7 +3,7 @@ import uuid
 
 from Domain.Entities.Base import Base
 
-class Subaccount(Base):
+class SubAccount(Base):
     __tablename__ = "Subaccounts"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
