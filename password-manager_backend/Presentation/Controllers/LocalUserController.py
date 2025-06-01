@@ -11,10 +11,11 @@ router = APIRouter()
 
 @router.post("/")
 @inject
-async def ApiCreateUser(localUser: CreateLocalUser, db: Session = Depends(get_db), request: Request = None):
+async def ApiCreateUser(localUser: CreateLocalUser, 
+                        db: Session = Depends(get_db), 
+                        request: Request = None):
     container: Container = request.app.container
-    # Passa db come argomento alla factory della repository
-    create_user_use_case = container.CreateLocalUserProvider(LocalUserRepository__db=db)
+    create_user_use_case = container.local_user().CreateLocalUserProvider(LocalUserRepository__db=db)
 
     try:
         created_user = create_user_use_case.execute(localUser)
@@ -24,9 +25,11 @@ async def ApiCreateUser(localUser: CreateLocalUser, db: Session = Depends(get_db
 
 @router.get("/{user_id}")
 @inject
-async def ApiGetUser(localUserId: UUID, db: Session = Depends(get_db), request: Request = None):
+async def ApiGetUser(localUserId: UUID, 
+                     db: Session = Depends(get_db), 
+                     request: Request = None):
     container: Container = request.app.container
-    get_user_use_case = container.GetAllLocalUsersByMainUserIdProvider(LocalUserRepository__db=db)
+    get_user_use_case = container.local_user().GetAllLocalUsersByMainUserIdProvider(LocalUserRepository__db=db)
     
     try:
         user = get_user_use_case.execute(localUserId)
@@ -36,9 +39,12 @@ async def ApiGetUser(localUserId: UUID, db: Session = Depends(get_db), request: 
 
 @router.put("/{user_id}")
 @inject
-async def ApiUpdateLocalUser(localUserId: UUID, newLocalUser: UpdateLocalUser, db: Session = Depends(get_db), request: Request = None):
+async def ApiUpdateLocalUser(localUserId: UUID, 
+                             newLocalUser: UpdateLocalUser, 
+                             db: Session = Depends(get_db), 
+                             request: Request = None):
     container: Container = request.app.container
-    update_user_username_use_case = container.UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
+    update_user_username_use_case = container.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
         user_username_updated = update_user_username_use_case.execute(localUserId, newLocalUser)
@@ -48,9 +54,11 @@ async def ApiUpdateLocalUser(localUserId: UUID, newLocalUser: UpdateLocalUser, d
 
 @router.delete("/{user_id}")
 @inject
-async def ApiDeleteUser(keycloakId: UUID, db: Session = Depends(get_db), request: Request = None):
+async def ApiDeleteUser(keycloakId: UUID, 
+                        db: Session = Depends(get_db), 
+                        request: Request = None):
     container: Container = request.app.container
-    delete_user_use_case = container.DeleteLocalUserByIdProvider(LocalUserRepository__db=db)
+    delete_user_use_case = container.local_user().DeleteLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
         if delete_user_use_case.execute(keycloakId):
