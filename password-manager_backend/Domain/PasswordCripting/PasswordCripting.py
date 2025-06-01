@@ -2,6 +2,7 @@ from argon2.low_level import hash_secret_raw, Type
 from os import urandom
 import base64
 
+@staticmethod
 def HashMasterPassword(masterPassword: str) -> dict:
     try:
         salt = urandom(16)
