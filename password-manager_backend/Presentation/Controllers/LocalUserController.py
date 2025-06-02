@@ -25,14 +25,14 @@ async def ApiCreateUser(localUser: CreateLocalUser,
 
 @router.get("/{user_id}")
 @inject
-async def ApiGetUser(localUserId: UUID, 
+async def ApiGetUser(keycloakUserId: UUID, 
                      db: Session = Depends(get_db), 
                      request: Request = None):
     container: Container = request.app.container
     get_user_use_case = container.local_user().GetAllLocalUsersByMainUserIdProvider(LocalUserRepository__db=db)
     
     try:
-        user = get_user_use_case.execute(localUserId)
+        user = get_user_use_case.execute(keycloakUserId)
         return {"message": "User retrieved successfully", "user": user}
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")
@@ -40,14 +40,15 @@ async def ApiGetUser(localUserId: UUID,
 @router.put("/{user_id}")
 @inject
 async def ApiUpdateLocalUser(localUserId: UUID, 
-                             newLocalUser: UpdateLocalUser, 
+                             salt: str, 
+                             newLocalUser: UpdateLocalUser,
                              db: Session = Depends(get_db), 
                              request: Request = None):
     container: Container = request.app.container
     update_user_username_use_case = container.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
-        user_username_updated = update_user_username_use_case.execute(localUserId, newLocalUser)
+        user_username_updated = update_user_username_use_case.execute(localUserId, newLocalUser, salt)
         return {"message": "User updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

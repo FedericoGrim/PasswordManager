@@ -11,7 +11,7 @@ class CreateSubAccountUseCase():
         
     def execute(self, subaccount_create: CreateSubAccountDTO, salt = str):
         try:
-            subaccount_create.passwordEncrypted = PasswordCripting.hashPassword(subaccount_create.passwordEncrypted, salt)
+            subaccount_create.password_encrypted = PasswordCripting.hashPassword(subaccount_create.password_encrypted, salt)
             return self.SubAccountRepository.CreateSubAccount(subaccount_create)
         except Exception as e:
             raise CreateSubAccountException(str(e)) from e

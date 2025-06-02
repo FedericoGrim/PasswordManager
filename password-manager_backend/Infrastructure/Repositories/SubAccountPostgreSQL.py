@@ -37,10 +37,18 @@ class SubAccountService(ISubAccountService):
 
     def CreateSubAccount(self, subaccount):
         try:
-            self.Db.add(subaccount)
+            subaccount_entity = SubAccount(
+                user_id = subaccount.user_id,
+                title = subaccount.title,
+                username = subaccount.username,
+                password_encrypted = subaccount.password_encrypted,
+                url = subaccount.url
+            )
+
+            self.Db.add(subaccount_entity)
             self.Db.commit()
-            self.Db.refresh(subaccount)
-            return subaccount
+            self.Db.refresh(subaccount_entity)
+            return subaccount_entity
             
         except IntegrityError:
             self.Db.rollback()
@@ -53,7 +61,7 @@ class SubAccountService(ISubAccountService):
         
     def GetAllSubAccountsByUserId(self, userId: uuid.UUID):
         try:
-            subaccounts = self.Db.query(SubAccount).filter(SubAccount.user_id == userId).all()
+            subaccounts: list[SubAccount] = self.Db.query(SubAccount).filter(SubAccount.user_id == userId).all()
             if not subaccounts:
                 raise GetAllSubAccountsByUserIdNotFoundException("No subaccounts found for the given user ID.")
             return [subaccount for subaccount in subaccounts]
@@ -62,7 +70,7 @@ class SubAccountService(ISubAccountService):
             logging.error(f"Error: {e}")
             raise SubAccountRetrievalException("Failed to retrieve subaccounts.")
         
-    def UpdateSubAccountById(self, subaccountId: uuid.UUID, new_subaccount):
+    def UpdateSubAccountById(self, subaccountId: uuid.UUID, new_subaccount: SubAccount):
         try:
             subaccount = self.Db.query(SubAccount).filter(SubAccount.id == subaccountId).first()
             if not subaccount:
