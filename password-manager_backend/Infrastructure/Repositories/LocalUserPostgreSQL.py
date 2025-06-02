@@ -62,14 +62,13 @@ class LocalUserService(ILocalUserService):
             logging.error(f"Error: {e}")
             raise GetAllLocalUserByIdRetrivalException()
         
-    def UpdateLocalUserById(self, localUserId: uuid.UUID, new_hash: str, new_salt: str):
+    def UpdateLocalUserById(self, localUserId: uuid.UUID, new_hash: str):
         try:
             local_user = self.Db.query(LocalUser).filter(LocalUser.Id == localUserId).first()
             if not local_user:
                 raise LocalUserNotFoundException("Local user not found.")
             
-            local_user.MasterPasswordHash = new_hash
-            local_user.MasterPasswordSalt = new_salt
+            local_user.HashMasterPassword = new_hash
             self.Db.commit()
             self.Db.refresh(local_user)
             return local_user

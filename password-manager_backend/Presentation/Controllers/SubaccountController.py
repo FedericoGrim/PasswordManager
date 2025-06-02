@@ -9,21 +9,22 @@ from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountD
 
 router = APIRouter()
 
-@router.post("/{userId}")
-@inject
-async def CreateSubAccount(subaccountObj: CreateSubAccountDTO, 
-                           db: Session = Depends(get_db), 
-                           request: Request = None, 
-                           salt: str = ""):
+@router.post("/{UserId}")
+async def CreateSubAccount(
+    subaccountObj: CreateSubAccountDTO,
+    db: Session = Depends(get_db),
+    request: Request = None,
+    salt: str = ""
+):
     container: Container = request.app.container
     create_subaccount_use_case = container.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
-
 
     try:
         create_subaccount = create_subaccount_use_case.execute(subaccountObj, salt)
         return {"message": "SubAccount created successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
 
 @router.get("/{userId}")
 @inject

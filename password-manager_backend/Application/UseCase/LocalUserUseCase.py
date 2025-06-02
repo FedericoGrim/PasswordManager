@@ -1,7 +1,7 @@
 import uuid
 
 from Application.DTO.LocalUserDTO import CreateLocalUser, UpdateLocalUser
-from Domain.PasswordCripting.PasswordCripting import HashMasterPassword
+from Domain.PasswordCripting.PasswordCripting import *
 from Application.Exceptions.LocalUserUseCaseExceptions import *
 
 class CreateLocalUserUseCase():
@@ -29,10 +29,10 @@ class UpdateLocalUserByIdUseCase():
     def __init__(self, LocalUserRepository):
         self.LocalUserRepository = LocalUserRepository
         
-    def execute(self, localUserId: uuid.UUID, new_local_user: UpdateLocalUser):
+    def execute(self, localUserId: uuid.UUID, new_local_user: UpdateLocalUser, salt: str):
         try:
-            new_generated_hash, new_generated_salt = HashMasterPassword(new_local_user.NewMasterPassword)
-            return self.LocalUserRepository.UpdateLocalUserById(localUserId, new_generated_hash, new_generated_salt)
+            new_generated_hash = hashPassword(new_local_user.NewMasterPassword, salt)
+            return self.LocalUserRepository.UpdateLocalUserById(localUserId, new_generated_hash)
         except Exception as e:
             raise LocalUserUpdateException(str(e)) from e        
 
