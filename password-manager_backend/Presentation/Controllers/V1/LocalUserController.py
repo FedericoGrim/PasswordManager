@@ -5,11 +5,11 @@ from dependency_injector.wiring import inject
 
 from config import Container
 from Application.DTO.LocalUserDTO import CreateLocalUser, UpdateLocalUser
-from Infrastructure.Repositories.LocalUserPostgreSQL import LocalUserService, get_db
+from Infrastructure.Repositories.LocalUserPostgreSQL import get_db
 
-router = APIRouter()
+routerV1 = APIRouter()
 
-@router.post("/")
+@routerV1.post("/")
 @inject
 async def ApiCreateUser(localUser: CreateLocalUser, 
                         db: Session = Depends(get_db), 
@@ -23,7 +23,7 @@ async def ApiCreateUser(localUser: CreateLocalUser,
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.get("/{user_id}")
+@routerV1.get("/{user_id}")
 @inject
 async def ApiGetUser(keycloakUserId: UUID, 
                      db: Session = Depends(get_db), 
@@ -37,7 +37,7 @@ async def ApiGetUser(keycloakUserId: UUID,
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")
 
-@router.put("/{user_id}")
+@routerV1.put("/{user_id}")
 @inject
 async def ApiUpdateLocalUser(localUserId: UUID, 
                              salt: str, 
@@ -53,7 +53,7 @@ async def ApiUpdateLocalUser(localUserId: UUID,
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.delete("/{user_id}")
+@routerV1.delete("/{user_id}")
 @inject
 async def ApiDeleteUser(localUserId: UUID, 
                         db: Session = Depends(get_db), 

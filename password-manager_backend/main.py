@@ -1,11 +1,11 @@
 # main.py
 from fastapi import FastAPI
 from config import Container
-from Presentation.Controllers.LocalUserController import router as local_user_router
-from Presentation.Controllers.SubAccountController import router as subaccount_router
+from Presentation.Controllers.V1.LocalUserController import routerV1 as local_user_router_V1
+from Presentation.Controllers.V1.SubAccountController import routerV1 as subaccount_router_V1
 
 container = Container()
-container.wire(modules=["Presentation.Controllers.LocalUserController", "Presentation.Controllers.SubAccountController"])
+container.wire(modules=["Presentation.Controllers.V1.LocalUserController", "Presentation.Controllers.V1.SubAccountController"])
 
 app = FastAPI()
 
@@ -13,13 +13,13 @@ app = FastAPI()
 app.container = container
 
 app.include_router(
-    local_user_router,
-    prefix="/user",
-    tags=["user"]
+    local_user_router_V1,
+    prefix="/api/V1/localuser",
+    tags=["LocalUser"]
 )
 
 app.include_router(
-    subaccount_router,
-    prefix="/subaccounts",
-    tags=["subaccounts"]
+    subaccount_router_V1,
+    prefix="/api/V1/subaccount",
+    tags=["SubAccount"]
 )
