@@ -7,9 +7,9 @@ from config import Container
 from Infrastructure.Repositories.LocalUserPostgreSQL import get_db
 from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
 
-router = APIRouter()
+routerV1 = APIRouter()
 
-@router.post("/{UserId}")
+@routerV1.post("/{user_id}")
 async def CreateSubAccount(
     subaccountObj: CreateSubAccountDTO,
     db: Session = Depends(get_db),
@@ -26,7 +26,7 @@ async def CreateSubAccount(
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@router.get("/{userId}")
+@routerV1.get("/{user_id}")
 @inject
 async def GetAllSubAccountsByUserId(userId: uuid.UUID, 
                                     db: Session = Depends(get_db), 
@@ -40,7 +40,7 @@ async def GetAllSubAccountsByUserId(userId: uuid.UUID,
     except Exception as e:
         raise HTTPException(status_code=404, detail="SubAccounts not found")
 
-@router.put("/{userId}/{subaccountId}")
+@routerV1.put("/{user_id}/{subaccount_id}")
 @inject
 async def UpdateSubAccountById(userId: uuid.UUID, 
                                subaccountId: uuid.UUID, 
@@ -57,7 +57,7 @@ async def UpdateSubAccountById(userId: uuid.UUID,
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@router.delete("/{userId}/{subaccountId}")
+@routerV1.delete("/{user_id}/{subaccount_id}")
 @inject
 async def DeleteSubAccount(userId: uuid.UUID, 
                            subaccountId: uuid.UUID, 
