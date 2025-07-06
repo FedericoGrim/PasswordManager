@@ -25,3 +25,4 @@ alembic
 
 #Docs
 sphinx
+sphinx-autobuild
