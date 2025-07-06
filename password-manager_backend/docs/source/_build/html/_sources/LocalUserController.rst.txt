@@ -1,0 +1,7 @@
+LocalUserController module
+==========================
+
+.. automodule:: LocalUserController
+   :members:
+   :show-inheritance:
+   :undoc-members:

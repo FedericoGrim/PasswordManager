@@ -16,6 +16,21 @@ async def CreateSubAccount(
     request: Request = None,
     salt: str = ""
 ):
+    '''
+    Create a new subaccount for a user.
+    
+    Args:
+        subaccountObj (CreateSubAccountDTO): The subaccount data to be created.
+        db (Session): The database session.
+        request (Request): The FastAPI request object.
+        salt (str): Optional salt for password hashing.
+    
+    Returns:
+        dict: A message indicating success or failure.
+        
+    Raises: 
+        HTTPException: If the subaccount creation fails.
+    '''
     container: Container = request.app.container
     create_subaccount_use_case = container.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
 
@@ -31,6 +46,20 @@ async def CreateSubAccount(
 async def GetAllSubAccountsByUserId(userId: uuid.UUID, 
                                     db: Session = Depends(get_db), 
                                     request: Request = None):
+    '''
+    Retrieve all subaccounts for a given user ID.
+
+    Args:
+        userId (uuid.UUID): The ID of the user whose subaccounts are to be retrieved
+        db (Session): The database session.
+        request (Request): The FastAPI request object.
+
+    Returns:
+        dict: A message indicating success and the list of subaccounts.
+
+    Raises:
+        HTTPException: If the subaccounts are not found or an error occurs.
+    '''
     container: Container = request.app.container
     get_subaccounts_use_case = container.subaccount().GetAllSubAccountsByUserIdProvider(SubAccountRepository__db=db)
 
@@ -48,6 +77,24 @@ async def UpdateSubAccountById(userId: uuid.UUID,
                                db: Session = Depends(get_db), 
                                salt: str = "",
                                request: Request = None):
+    '''
+    Update a subaccount by its ID.
+    
+    Args:
+        userId (uuid.UUID): The ID of the user who owns the subaccount.
+        subaccountId (uuid.UUID): The ID of the subaccount to be updated.
+        updated_data (UpdateSubAccountDTO): The new data for the subaccount.
+        db (Session): The database session.
+        salt (str): Optional salt for password hashing.
+        request (Request): The FastAPI request object.
+        
+    Returns:
+        dict: A message indicating success and the updated subaccount data.
+
+    Raises:
+        HTTPException: If the subaccount update fails.
+    '''
+
     container: Container = request.app.container
     update_subaccount_use_case = container.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
 
@@ -63,6 +110,21 @@ async def DeleteSubAccount(userId: uuid.UUID,
                            subaccountId: uuid.UUID, 
                            db: Session = Depends(get_db), 
                            request: Request = None):
+    '''
+    Delete a subaccount by its ID.
+    
+    Args:
+        userId (uuid.UUID): The ID of the user who owns the subaccount.
+        subaccountId (uuid.UUID): The ID of the subaccount to be deleted.
+        db (Session): The database session.
+        request (Request): The FastAPI request object.
+    
+    Returns:
+        dict: A message indicating success or failure.
+        
+    Raises:
+        HTTPException: If the subaccount deletion fails.
+    '''
     container: Container = request.app.container
     delete_subaccount_use_case = container.subaccount().DeleteSubAccountByIdProvider(SubAccountRepository__db=db)
 

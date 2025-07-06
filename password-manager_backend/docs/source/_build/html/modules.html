@@ -1,0 +1,270 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>password-manager_backend &mdash; PasswordManager 0.1 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=e59714d7" />
+
+  
+      <script src="_static/jquery.js?v=5d32c60e"></script>
+      <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="_static/documentation_options.js?v=2709fde1"></script>
+      <script src="_static/doctools.js?v=9bcbadda"></script>
+      <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Application package" href="Application.html" />
+    <link rel="prev" title="PasswordManager documentation" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            PasswordManager
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">password-manager_backend</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Application.html">Application package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Domain.html">Domain package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Infrastructure.html">Infrastructure package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Presentation.html">Presentation package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="config.html">config module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="main.html">main module</a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">PasswordManager</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">password-manager_backend</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/modules.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="password-manager-backend">
+<h1>password-manager_backend<a class="headerlink" href="#password-manager-backend" title="Link to this heading"></a></h1>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="Application.html">Application package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Application.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Application.DTO.html">Application.DTO package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Application.DTO.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.DTO.html#module-Application.DTO.LocalUserDTO">Application.DTO.LocalUserDTO module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.DTO.html#module-Application.DTO.SubAccountDTO">Application.DTO.SubAccountDTO module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.DTO.html#module-Application.DTO">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Application.Exceptions.html">Application.Exceptions package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Application.Exceptions.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.Exceptions.html#module-Application.Exceptions.LocalUserUseCaseExceptions">Application.Exceptions.LocalUserUseCaseExceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.Exceptions.html#module-Application.Exceptions.SubAccountUseCaseException">Application.Exceptions.SubAccountUseCaseException module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.Exceptions.html#module-Application.Exceptions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Application.UseCase.html">Application.UseCase package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Application.UseCase.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.UseCase.html#module-Application.UseCase.LocalUserUseCase">Application.UseCase.LocalUserUseCase module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.UseCase.html#module-Application.UseCase.SubAccountUseCases">Application.UseCase.SubAccountUseCases module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Application.UseCase.html#module-Application.UseCase">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Application.html#module-Application">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Domain.html">Domain package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Domain.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Domain.Entities.html">Domain.Entities package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Domain.Entities.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.Entities.html#module-Domain.Entities.Base">Domain.Entities.Base module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.Entities.html#module-Domain.Entities.LocalUser">Domain.Entities.LocalUser module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.Entities.html#module-Domain.Entities.SubAccount">Domain.Entities.SubAccount module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.Entities.html#module-Domain.Entities">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Domain.Objects.html">Domain.Objects package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Domain.Objects.html#module-Domain.Objects">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Domain.PasswordCripting.html">Domain.PasswordCripting package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Domain.PasswordCripting.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.PasswordCripting.html#module-Domain.PasswordCripting.PasswordCripting">Domain.PasswordCripting.PasswordCripting module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.PasswordCripting.html#module-Domain.PasswordCripting">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Domain.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Domain.html#module-Domain.ILocalUserSercive">Domain.ILocalUserSercive module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Domain.html#Domain.ILocalUserSercive.ILocalUserService"><code class="docutils literal notranslate"><span class="pre">ILocalUserService</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ILocalUserSercive.ILocalUserService.CreateLocalUser"><code class="docutils literal notranslate"><span class="pre">ILocalUserService.CreateLocalUser()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ILocalUserSercive.ILocalUserService.DeleteLocalUserById"><code class="docutils literal notranslate"><span class="pre">ILocalUserService.DeleteLocalUserById()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ILocalUserSercive.ILocalUserService.GetAllLocalUserById"><code class="docutils literal notranslate"><span class="pre">ILocalUserService.GetAllLocalUserById()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ILocalUserSercive.ILocalUserService.UpdateLocalUserById"><code class="docutils literal notranslate"><span class="pre">ILocalUserService.UpdateLocalUserById()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Domain.html#module-Domain.ISubAccountService">Domain.ISubAccountService module</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Domain.html#Domain.ISubAccountService.ISubAccountService"><code class="docutils literal notranslate"><span class="pre">ISubAccountService</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ISubAccountService.ISubAccountService.CreateSubAccount"><code class="docutils literal notranslate"><span class="pre">ISubAccountService.CreateSubAccount()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ISubAccountService.ISubAccountService.DeleteSubAccountById"><code class="docutils literal notranslate"><span class="pre">ISubAccountService.DeleteSubAccountById()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ISubAccountService.ISubAccountService.GetAllSubAccountsByUserId"><code class="docutils literal notranslate"><span class="pre">ISubAccountService.GetAllSubAccountsByUserId()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="Domain.html#Domain.ISubAccountService.ISubAccountService.UpdateSubAccountById"><code class="docutils literal notranslate"><span class="pre">ISubAccountService.UpdateSubAccountById()</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Domain.html#module-Domain">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Infrastructure.html">Infrastructure package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Infrastructure.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Infrastructure.Exceptions.html">Infrastructure.Exceptions package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Exceptions.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Exceptions.html#module-Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Exceptions.html#module-Infrastructure.Exceptions.SubAccountPostgreSQL_Exceptions">Infrastructure.Exceptions.SubAccountPostgreSQL_Exceptions module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Exceptions.html#module-Infrastructure.Exceptions">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="Infrastructure.Repositories.html">Infrastructure.Repositories package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Repositories.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Repositories.html#module-Infrastructure.Repositories.LocalUserPostgreSQL">Infrastructure.Repositories.LocalUserPostgreSQL module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Repositories.html#module-Infrastructure.Repositories.SubAccountPostgreSQL">Infrastructure.Repositories.SubAccountPostgreSQL module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Infrastructure.Repositories.html#module-Infrastructure.Repositories">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Infrastructure.html#module-Infrastructure">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Presentation.html">Presentation package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="Presentation.html#subpackages">Subpackages</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="Presentation.Controllers.html">Presentation.Controllers package</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="Presentation.Controllers.html#submodules">Submodules</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Presentation.Controllers.html#module-Presentation.Controllers.LocalUserController">Presentation.Controllers.LocalUserController module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Presentation.Controllers.html#module-Presentation.Controllers.SubAccountController">Presentation.Controllers.SubAccountController module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="Presentation.Controllers.html#module-Presentation.Controllers">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="Presentation.html#module-Presentation">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="config.html">config module</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="config.html#config.Container"><code class="docutils literal notranslate"><span class="pre">Container</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.Container.cls_providers"><code class="docutils literal notranslate"><span class="pre">Container.cls_providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.Container.containers"><code class="docutils literal notranslate"><span class="pre">Container.containers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.Container.inherited_providers"><code class="docutils literal notranslate"><span class="pre">Container.inherited_providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.Container.local_user"><code class="docutils literal notranslate"><span class="pre">Container.local_user</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.Container.providers"><code class="docutils literal notranslate"><span class="pre">Container.providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.Container.subaccount"><code class="docutils literal notranslate"><span class="pre">Container.subaccount</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.Container.wiring_config"><code class="docutils literal notranslate"><span class="pre">Container.wiring_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#config.LocalUserContainer"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.CreateLocalUserProvider"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.CreateLocalUserProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.DeleteLocalUserByIdProvider"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.DeleteLocalUserByIdProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.GetAllLocalUsersByMainUserIdProvider"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.GetAllLocalUsersByMainUserIdProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.LocalUserRepositoryFactory"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.LocalUserRepositoryFactory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.UpdateLocalUserByIdProvider"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.UpdateLocalUserByIdProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.cls_providers"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.cls_providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.containers"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.containers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.inherited_providers"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.inherited_providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.providers"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.LocalUserContainer.wiring_config"><code class="docutils literal notranslate"><span class="pre">LocalUserContainer.wiring_config</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="config.html#config.SubAccountContainer"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.CreateSubAccountProvider"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.CreateSubAccountProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.DeleteSubAccountByIdProvider"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.DeleteSubAccountByIdProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.GetAllSubAccountsByUserIdProvider"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.GetAllSubAccountsByUserIdProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.SubAccountRepositoryFactory"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.SubAccountRepositoryFactory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.UpdateSubAccountByIdProvider"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.UpdateSubAccountByIdProvider</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.cls_providers"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.cls_providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.containers"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.containers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.inherited_providers"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.inherited_providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.providers"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.providers</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="config.html#config.SubAccountContainer.wiring_config"><code class="docutils literal notranslate"><span class="pre">SubAccountContainer.wiring_config</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="main.html">main module</a></li>
+</ul>
+</div>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="PasswordManager documentation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Application.html" class="btn btn-neutral float-right" title="Application package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2025, Federico Grimaldi.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

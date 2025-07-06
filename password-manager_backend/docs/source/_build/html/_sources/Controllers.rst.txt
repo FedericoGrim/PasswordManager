@@ -1,0 +1,29 @@
+Controllers package
+===================
+
+Submodules
+----------
+
+Controllers.LocalUserController module
+--------------------------------------
+
+.. automodule:: Controllers.LocalUserController
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Controllers.SubAccountController module
+---------------------------------------
+
+.. automodule:: Controllers.SubAccountController
+   :members:
+   :show-inheritance:
+   :undoc-members:
+
+Module contents
+---------------
+
+.. automodule:: Controllers
+   :members:
+   :show-inheritance:
+   :undoc-members:
