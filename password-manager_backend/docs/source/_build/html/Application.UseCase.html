@@ -101,10 +101,18 @@
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.CreateLocalUserUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.LocalUserUseCase.</span></span><span class="sig-name descname"><span class="pre">CreateLocalUserUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">LocalUserRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.CreateLocalUserUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for creating a local user.
+This class handles the creation of a local user by generating a hash and salt for the master password.
+It interacts with the LocalUserRepository to persist the user data.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>LocalUserRepository (ILocalUserService): The repository interface for local user operations.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.CreateLocalUserUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">localuser_create</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Application.DTO.html#Application.DTO.LocalUserDTO.CreateLocalUser" title="Application.DTO.LocalUserDTO.CreateLocalUser"><span class="pre">CreateLocalUser</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.CreateLocalUserUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to create a local user.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -112,10 +120,17 @@
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.DeleteLocalUserByIdUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.LocalUserUseCase.</span></span><span class="sig-name descname"><span class="pre">DeleteLocalUserByIdUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">LocalUserRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.DeleteLocalUserByIdUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for deleting a local user by ID.
+This class handles the deletion of a local user by interacting with the LocalUserRepository.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>LocalUserRepository (ILocalUserService): The repository interface for local user operations.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.DeleteLocalUserByIdUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user_id</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.DeleteLocalUserByIdUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to delete a local user by ID.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -123,10 +138,17 @@
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.GetAllLocalUsersByMainUserIdUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.LocalUserUseCase.</span></span><span class="sig-name descname"><span class="pre">GetAllLocalUsersByMainUserIdUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">LocalUserRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.GetAllLocalUsersByMainUserIdUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for retrieving all local users associated with a main user ID.
+This class interacts with the LocalUserRepository to fetch local users based on the main user ID.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>LocalUserRepository (ILocalUserService): The repository interface for local user operations.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.GetAllLocalUsersByMainUserIdUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mainUserId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">uuid4</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.GetAllLocalUsersByMainUserIdUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to retrieve all local users by main user ID.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -134,10 +156,17 @@
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.UpdateLocalUserByIdUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.LocalUserUseCase.</span></span><span class="sig-name descname"><span class="pre">UpdateLocalUserByIdUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">LocalUserRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.UpdateLocalUserByIdUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for updating a local user by ID.
+This class handles the update of a local user by generating a new hash for the master password and interacting with the LocalUserRepository to persist the changes.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>LocalUserRepository (ILocalUserService): The repository interface for local user operations.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.LocalUserUseCase.UpdateLocalUserByIdUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">localUserId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_local_user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Application.DTO.html#Application.DTO.LocalUserDTO.UpdateLocalUser" title="Application.DTO.LocalUserDTO.UpdateLocalUser"><span class="pre">UpdateLocalUser</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">salt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.LocalUserUseCase.UpdateLocalUserByIdUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to update a local user by ID.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -148,10 +177,18 @@
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.CreateSubAccountUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.SubAccountUseCases.</span></span><span class="sig-name descname"><span class="pre">CreateSubAccountUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SubAccountRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.CreateSubAccountUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for creating a subaccount.
+This class handles the creation of a subaccount by encrypting the password and interacting with the SubAccountRepository to persist the subaccount data.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
+salt (str): The salt used for hashing the password.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.CreateSubAccountUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccount_create:</span> <span class="pre">~Application.DTO.SubAccountDTO.CreateSubAccountDTO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">salt=&lt;class</span> <span class="pre">'str'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.CreateSubAccountUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to create a subaccount.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -159,10 +196,17 @@
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.DeleteSubAccountByIdUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.SubAccountUseCases.</span></span><span class="sig-name descname"><span class="pre">DeleteSubAccountByIdUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SubAccountRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.DeleteSubAccountByIdUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for deleting a subaccount by ID.
+This class handles the deletion of a subaccount by interacting with the SubAccountRepository.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.DeleteSubAccountByIdUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccountId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.DeleteSubAccountByIdUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to delete a subaccount by ID.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -170,10 +214,17 @@
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.GetAllSubAccountsByLocalUserIdUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.SubAccountUseCases.</span></span><span class="sig-name descname"><span class="pre">GetAllSubAccountsByLocalUserIdUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SubAccountRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.GetAllSubAccountsByLocalUserIdUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for retrieving all subaccounts associated with a user ID.
+This class interacts with the SubAccountRepository to fetch subaccounts based on the user ID.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.GetAllSubAccountsByLocalUserIdUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.GetAllSubAccountsByLocalUserIdUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to retrieve all subaccounts by user ID.</p>
+</dd></dl>
 
 </dd></dl>
 
@@ -181,10 +232,18 @@
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.UpdateSubAccountByIdUseCase">
 <em class="property"><span class="k"><span class="pre">class</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Application.UseCase.SubAccountUseCases.</span></span><span class="sig-name descname"><span class="pre">UpdateSubAccountByIdUseCase</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">SubAccountRepository</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.UpdateSubAccountByIdUseCase" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Use case for updating a subaccount by ID.
+This class handles the update of a subaccount by interacting with the SubAccountRepository to persist the changes.</p>
+<dl class="simple">
+<dt>Attributes:</dt><dd><p>SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
+salt (str): The salt used for hashing the password.</p>
+</dd>
+</dl>
 <dl class="py method">
 <dt class="sig sig-object py" id="Application.UseCase.SubAccountUseCases.UpdateSubAccountByIdUseCase.execute">
 <span class="sig-name descname"><span class="pre">execute</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccountId:</span> <span class="pre">~uuid.UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_subaccount:</span> <span class="pre">~Application.DTO.SubAccountDTO.UpdateSubAccountDTO</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">salt=&lt;class</span> <span class="pre">'str'&gt;</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Application.UseCase.SubAccountUseCases.UpdateSubAccountByIdUseCase.execute" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Executes the use case to update a subaccount by ID.</p>
+</dd></dl>
 
 </dd></dl>
 

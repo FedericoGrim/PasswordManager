@@ -4,6 +4,10 @@ import uuid
 from Domain.Entities.Base import Base
 
 class LocalUser(Base):
+    """
+    Represents a local user in the password manager system.
+    This entity is used to store user credentials and manage subaccounts.
+    """
     __tablename__ = 'local_users'
 
     Id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)

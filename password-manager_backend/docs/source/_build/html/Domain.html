@@ -162,22 +162,53 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ILocalUserSercive.ILocalUserService.CreateLocalUser">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CreateLocalUser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">user</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Domain.Entities.html#Domain.Entities.LocalUser.LocalUser" title="Domain.Entities.LocalUser.LocalUser"><span class="pre">LocalUser</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">hash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">salt</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ILocalUserSercive.ILocalUserService.CreateLocalUser" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates a new local user in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>user (LocalUser): The local user data to be created.
+hash (str): The hash of the master password.
+salt (str): The salt used for hashing the master password.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: The created local user entity.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ILocalUserSercive.ILocalUserService.DeleteLocalUserById">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeleteLocalUserById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ILocalUserSercive.ILocalUserService.DeleteLocalUserById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Deletes a local user by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the local user to be deleted.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: The result of the deletion operation.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ILocalUserSercive.ILocalUserService.GetAllLocalUserById">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GetAllLocalUserById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">MainUserId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ILocalUserSercive.ILocalUserService.GetAllLocalUserById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves all local users associated with a given Keycloak user ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>MainUserId (str): The Keycloak user ID to search for.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A list of local users associated with the Keycloak user ID.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ILocalUserSercive.ILocalUserService.UpdateLocalUserById">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UpdateLocalUserById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">newLocalUser</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ILocalUserSercive.ILocalUserService.UpdateLocalUserById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Updates an existing local user by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the local user to be updated.
+newLocalUser (str): The new local user data to replace the existing one.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: The updated local user entity.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
@@ -191,22 +222,51 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ISubAccountService.ISubAccountService.CreateSubAccount">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">CreateSubAccount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Domain.Entities.html#Domain.Entities.SubAccount.SubAccount" title="Domain.Entities.SubAccount.SubAccount"><span class="pre">SubAccount</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ISubAccountService.ISubAccountService.CreateSubAccount" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates a new subaccount in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subaccount (SubAccount): The subaccount data to be created.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: The created subaccount entity.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ISubAccountService.ISubAccountService.DeleteSubAccountById">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">DeleteSubAccountById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccountId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ISubAccountService.ISubAccountService.DeleteSubAccountById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Deletes a subaccount by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subaccountId (uuid.UUID): The ID of the subaccount to be deleted.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: The result of the deletion operation.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ISubAccountService.ISubAccountService.GetAllSubAccountsByUserId">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">GetAllSubAccountsByUserId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ISubAccountService.ISubAccountService.GetAllSubAccountsByUserId" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves all subaccounts associated with a specific user ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the user whose subaccounts are to be retrieved.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A list of subaccounts associated with the user ID.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Domain.ISubAccountService.ISubAccountService.UpdateSubAccountById">
 <em class="property"><span class="k"><span class="pre">abstractmethod</span></span><span class="w"> </span></em><span class="sig-name descname"><span class="pre">UpdateSubAccountById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccountId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_subaccount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Domain.Entities.html#Domain.Entities.SubAccount.SubAccount" title="Domain.Entities.SubAccount.SubAccount"><span class="pre">SubAccount</span></a></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">dict</span></span></span><a class="headerlink" href="#Domain.ISubAccountService.ISubAccountService.UpdateSubAccountById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Updates an existing subaccount by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subaccountId (uuid.UUID): The ID of the subaccount to be updated.
+new_subaccount (SubAccount): The new subaccount data to replace the existing one.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: The updated subaccount entity.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 

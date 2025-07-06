@@ -100,54 +100,109 @@
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.GetAllLocalUserByIdNotFoundException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">GetAllLocalUserByIdNotFoundException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'No</span> <span class="pre">local</span> <span class="pre">users</span> <span class="pre">found</span> <span class="pre">for</span> <span class="pre">the</span> <span class="pre">given</span> <span class="pre">main</span> <span class="pre">user</span> <span class="pre">ID'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.GetAllLocalUserByIdNotFoundException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when no local users are found for a given main user ID.
+This exception is typically raised when the retrieval process does not find any local users associated with the specified main user ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “No local users found for the given main user ID”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.GetAllLocalUserByIdRetrivalException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">GetAllLocalUserByIdRetrivalException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Error</span> <span class="pre">retrieving</span> <span class="pre">local</span> <span class="pre">users</span> <span class="pre">by</span> <span class="pre">ID'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.GetAllLocalUserByIdRetrivalException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when there is an error retrieving local users by their ID.
+This exception is typically raised when the retrieval process encounters an issue, such as a database error or a failure to find the user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “Error retrieving local users by ID</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserAlreadyExistsException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">LocalUserAlreadyExistsException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'LocalUser</span> <span class="pre">already</span> <span class="pre">exists'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserAlreadyExistsException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when a local user already exists in the database.
+This exception is typically raised when trying to create a user with a Keycloak ID that already exists in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “LocalUser already exists”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserCreationFailedException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">LocalUserCreationFailedException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'User</span> <span class="pre">creation</span> <span class="pre">failed'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserCreationFailedException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when the creation of a local user fails.
+This exception is typically raised when there is an error during the creation process of a local user in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “User creation failed”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserDeleteException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">LocalUserDeleteException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Error</span> <span class="pre">deleting</span> <span class="pre">local</span> <span class="pre">user'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserDeleteException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when there is an error deleting a local user.
+This exception is typically raised when the deletion process encounters an issue, such as a database error or a failure to find the user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “Error deleting local user”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserNotFoundException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">LocalUserNotFoundException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Local</span> <span class="pre">user</span> <span class="pre">not</span> <span class="pre">found'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserNotFoundException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when a local user is not found in the database.
+This exception is typically raised when trying to retrieve or update a user that does not exist in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “Local user not found”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserUpdatePasswordException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">LocalUserUpdatePasswordException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'Error</span> <span class="pre">updating</span> <span class="pre">local</span> <span class="pre">user</span> <span class="pre">password'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.LocalUserUpdatePasswordException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised when there is an error updating the password of a local user.
+This exception is typically raised when the update process encounters an issue, such as a database error or a failure to find the user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “Error updating local user password”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.PostgreSqlConnectionException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">PostgreSqlConnectionException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PostgreSQL</span> <span class="pre">connection</span> <span class="pre">error</span> <span class="pre">occurred'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.PostgreSqlConnectionException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised for errors in the PostgreSQL connection.
+This exception is typically raised when there is an issue connecting to the PostgreSQL database.
+It can be used to handle connection errors specifically in the context of PostgreSQL operations.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “PostgreSQL connection error occurred”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 <dl class="py exception">
 <dt class="sig sig-object py" id="Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.PostgreSqlException">
 <em class="property"><span class="k"><span class="pre">exception</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.</span></span><span class="sig-name descname"><span class="pre">PostgreSqlException</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">message</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'PostgreSQL</span> <span class="pre">error</span> <span class="pre">occurred'</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions.PostgreSqlException" title="Link to this definition"></a></dt>
 <dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>Exception raised for general PostgreSQL errors.
+This exception is typically raised when there is an error during PostgreSQL operations.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>message (str): Explanation of the error. Defaults to “PostgreSQL error occurred”.</p>
+</dd>
+</dl>
 </dd></dl>
 
 </section>

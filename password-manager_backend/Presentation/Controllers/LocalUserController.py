@@ -7,7 +7,6 @@ from config import Container
 from Application.DTO.LocalUserDTO import CreateLocalUser, UpdateLocalUser
 from Infrastructure.Repositories.LocalUserPostgreSQL import LocalUserService, get_db
 
-# Crea un router FastAPI per raggruppare gli endpoint relativi agli utenti locali
 router = APIRouter()
 
 @router.post("/")
@@ -31,16 +30,15 @@ async def ApiCreateUser(
     Raises:
         HTTPException: Errore con status 400 in caso di fallimento.
     """
-    # Ottieni il container delle dipendenze dall'app FastAPI
+
     container: Container = request.app.container
-    # Risolvi il caso d'uso per creare un utente usando il database corrente
+
     create_user_use_case = container.local_user().CreateLocalUserProvider(LocalUserRepository__db=db)
 
     try:
         created_user = create_user_use_case.execute(localUser)
         return {"message": "User created successfully", "user": created_user}
     except Exception as e:
-        # In caso di errore, ritorna un HTTP 400 con il messaggio dell'eccezione
         raise HTTPException(status_code=400, detail=str(e))
 
 

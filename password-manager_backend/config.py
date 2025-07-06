@@ -3,7 +3,7 @@ from dependency_injector import containers, providers
 from Infrastructure.Repositories.LocalUserPostgreSQL import LocalUserService
 from Infrastructure.Repositories.SubAccountPostgreSQL import SubAccountService
 
-from Application.UseCase.LocalUserUseCase import CreateLocalUserUseCase, GetAllLocalUsersByMainUserIdUseCase, UpdateLocalUserByIdUseCase, DeleteLocalUserByIdUseCase
+from Application.UseCase.LocalUserUseCase import CreateLocalUserUseCase, GetLocalUsersByMainUserIdUseCase, UpdateLocalUserByIdUseCase, DeleteLocalUserByIdUseCase
 from Application.UseCase.SubAccountUseCases import CreateSubAccountUseCase, GetAllSubAccountsByLocalUserIdUseCase, UpdateSubAccountByIdUseCase, DeleteSubAccountByIdUseCase
 
 class LocalUserContainer(containers.DeclarativeContainer):
@@ -14,7 +14,7 @@ class LocalUserContainer(containers.DeclarativeContainer):
         LocalUserRepository=LocalUserRepositoryFactory,
     )
     GetAllLocalUsersByMainUserIdProvider = providers.Factory(
-        GetAllLocalUsersByMainUserIdUseCase,
+        GetLocalUsersByMainUserIdUseCase,
         LocalUserRepository=LocalUserRepositoryFactory,
     )
     UpdateLocalUserByIdProvider = providers.Factory(

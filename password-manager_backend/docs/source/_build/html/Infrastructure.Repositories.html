@@ -103,29 +103,83 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.CreateLocalUser">
 <span class="sig-name descname"><span class="pre">CreateLocalUser</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">localuser_create</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generatedHash</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">generatedSalt</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.CreateLocalUser" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates a new local user in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>localuser_create (CreateLocalUser): DTO containing the data for creating the user.
+generatedHash (str): The hash of the master password.
+generatedSalt (str): The salt used for hashing the master password.</p>
+</dd>
+<dt>Returns:</dt><dd><p>LocalUser: The created local user entity.</p>
+</dd>
+<dt>Raises:</dt><dd><p>LocalUserAlreadyExistsException: If a local user with the same Keycloak ID already exists
+LocalUserCreationFailedException: If there is an error creating the local user.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.DeleteLocalUserById">
 <span class="sig-name descname"><span class="pre">DeleteLocalUserById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.DeleteLocalUserById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Deletes a local user by their ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the local user to delete.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A message indicating the success of the deletion.</p>
+</dd>
+<dt>Raises:</dt><dd><p>LocalUserNotFoundException: If the local user with the given ID does not exist.
+LocalUserDeleteException: If there is an error deleting the local user.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.GetAllLocalUserById">
 <span class="sig-name descname"><span class="pre">GetAllLocalUserById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">IdKeycloak</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.GetAllLocalUserById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves all local users associated with a given Keycloak user ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>IdKeycloak (uuid.UUID): The Keycloak user ID to search for.</p>
+</dd>
+<dt>Returns:</dt><dd><p>List[LocalUser]: A list of LocalUser entities associated with the given Keycloak user ID.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GetAllLocalUserByIdNotFoundException: If no local users are found for the given Keycloak user ID.
+GetAllLocalUserByIdRetrivalException: If there is an error retrieving the local users.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.UpdateLocalUserById">
 <span class="sig-name descname"><span class="pre">UpdateLocalUserById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">localUserId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_hash</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.LocalUserPostgreSQL.LocalUserService.UpdateLocalUserById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Updates the master password hash of a local user by their ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>localUserId (uuid.UUID): The ID of the local user to update.
+new_hash (str): The new hash for the master password.</p>
+</dd>
+<dt>Returns:</dt><dd><p>LocalUser: The updated local user entity.</p>
+</dd>
+<dt>Raises:</dt><dd><p>LocalUserNotFoundException: If the local user with the given ID does not exist.
+LocalUserUpdatePasswordException: If there is an error updating the local user.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.LocalUserPostgreSQL.get_db">
 <span class="sig-prename descclassname"><span class="pre">Infrastructure.Repositories.LocalUserPostgreSQL.</span></span><span class="sig-name descname"><span class="pre">get_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.LocalUserPostgreSQL.get_db" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Dependency that provides a database session.
+This function is used to create a new database session for each request.
+It yields a session object that can be used in the application.
+If an exception occurs, it logs the error and raises a custom exception.
+Finally, it ensures that the session is closed after use.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Session: A SQLAlchemy session object for database operations.</p>
+</dd>
+<dt>Raises:</dt><dd><p>PostgreSqlConnectionException: If there is an error connecting to the PostgreSQL database.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-Infrastructure.Repositories.SubAccountPostgreSQL">
@@ -137,29 +191,81 @@
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.CreateSubAccount">
 <span class="sig-name descname"><span class="pre">CreateSubAccount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccount</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.CreateSubAccount" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Creates a new subaccount in the database.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subaccount (SubAccount): The subaccount data to be created.</p>
+</dd>
+<dt>Returns:</dt><dd><p>SubAccount: The created subaccount entity.</p>
+</dd>
+<dt>Raises:</dt><dd><p>SubAccountAlreadyExistsException: If a subaccount with the same name already exists.
+SubAccountCreationFailedException: If the creation fails for any other reason.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.DeleteSubAccountById">
 <span class="sig-name descname"><span class="pre">DeleteSubAccountById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccountId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.DeleteSubAccountById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Deletes a subaccount by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subaccountId (uuid.UUID): The ID of the subaccount to be deleted.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A message indicating the success of the deletion.</p>
+</dd>
+<dt>Raises:</dt><dd><p>SubAccountNotFoundException: If the subaccount with the given ID does not exist.
+SubAccountDeletionException: If there is an error deleting the subaccount.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.GetAllSubAccountsByUserId">
 <span class="sig-name descname"><span class="pre">GetAllSubAccountsByUserId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.GetAllSubAccountsByUserId" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieves all subaccounts associated with a given user ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the user whose subaccounts are to be retrieved.</p>
+</dd>
+<dt>Returns:</dt><dd><p>list[SubAccount]: A list of subaccount entities associated with the user ID.</p>
+</dd>
+<dt>Raises:</dt><dd><p>GetAllSubAccountsByUserIdNotFoundException: If no subaccounts are found for the given user ID.
+SubAccountRetrievalException: If there is an error retrieving the subaccounts.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py method">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.UpdateSubAccountById">
 <span class="sig-name descname"><span class="pre">UpdateSubAccountById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccountId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">new_subaccount</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Domain.Entities.html#Domain.Entities.SubAccount.SubAccount" title="Domain.Entities.SubAccount.SubAccount"><span class="pre">SubAccount</span></a></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.SubAccountPostgreSQL.SubAccountService.UpdateSubAccountById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Updates an existing subaccount by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subaccountId (uuid.UUID): The ID of the subaccount to be updated.
+new_subaccount (SubAccount): The new subaccount data to be applied.</p>
+</dd>
+<dt>Returns:</dt><dd><p>SubAccount: The updated subaccount entity.</p>
+</dd>
+<dt>Raises:</dt><dd><p>SubAccountNotFoundException: If the subaccount with the given ID does not exist.
+SubAccountUpdateException: If there is an error updating the subaccount.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Infrastructure.Repositories.SubAccountPostgreSQL.get_db">
 <span class="sig-prename descclassname"><span class="pre">Infrastructure.Repositories.SubAccountPostgreSQL.</span></span><span class="sig-name descname"><span class="pre">get_db</span></span><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#Infrastructure.Repositories.SubAccountPostgreSQL.get_db" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Dependency that provides a database session.
+This function is used to create a new database session for each request.
+It yields a session object that can be used in the application.
+If an exception occurs, it logs the error and raises a custom exception.
+Finally, it ensures that the session is closed after use.</p>
+<dl class="simple">
+<dt>Returns:</dt><dd><p>Session: A SQLAlchemy session object for database operations.</p>
+</dd>
+<dt>Raises:</dt><dd><p>PostgreSqlConnectionException: If there is an error connecting to the PostgreSQL database.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-Infrastructure.Repositories">

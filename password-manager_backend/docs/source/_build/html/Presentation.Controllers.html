@@ -167,22 +167,71 @@ request (Request, opzionale): Oggetto request per container DI.</p>
 <dl class="py function">
 <dt class="sig sig-object py" id="Presentation.Controllers.SubAccountController.CreateSubAccount">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Presentation.Controllers.SubAccountController.</span></span><span class="sig-name descname"><span class="pre">CreateSubAccount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">subaccountObj</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Application.DTO.html#Application.DTO.SubAccountDTO.CreateSubAccountDTO" title="Application.DTO.SubAccountDTO.CreateSubAccountDTO"><span class="pre">CreateSubAccountDTO</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">salt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Presentation.Controllers.SubAccountController.CreateSubAccount" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Create a new subaccount for a user.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>subaccountObj (CreateSubAccountDTO): The subaccount data to be created.
+db (Session): The database session.
+request (Request): The FastAPI request object.
+salt (str): Optional salt for password hashing.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A message indicating success or failure.</p>
+</dd>
+<dt>Raises: </dt><dd><p>HTTPException: If the subaccount creation fails.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Presentation.Controllers.SubAccountController.DeleteSubAccount">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Presentation.Controllers.SubAccountController.</span></span><span class="sig-name descname"><span class="pre">DeleteSubAccount</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subaccountId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Presentation.Controllers.SubAccountController.DeleteSubAccount" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Delete a subaccount by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the user who owns the subaccount.
+subaccountId (uuid.UUID): The ID of the subaccount to be deleted.
+db (Session): The database session.
+request (Request): The FastAPI request object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A message indicating success or failure.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the subaccount deletion fails.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Presentation.Controllers.SubAccountController.GetAllSubAccountsByUserId">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Presentation.Controllers.SubAccountController.</span></span><span class="sig-name descname"><span class="pre">GetAllSubAccountsByUserId</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Presentation.Controllers.SubAccountController.GetAllSubAccountsByUserId" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Retrieve all subaccounts for a given user ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the user whose subaccounts are to be retrieved
+db (Session): The database session.
+request (Request): The FastAPI request object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A message indicating success and the list of subaccounts.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the subaccounts are not found or an error occurs.</p>
+</dd>
+</dl>
+</dd></dl>
 
 <dl class="py function">
 <dt class="sig sig-object py" id="Presentation.Controllers.SubAccountController.UpdateSubAccountById">
 <em class="property"><span class="k"><span class="pre">async</span></span><span class="w"> </span></em><span class="sig-prename descclassname"><span class="pre">Presentation.Controllers.SubAccountController.</span></span><span class="sig-name descname"><span class="pre">UpdateSubAccountById</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">userId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">subaccountId</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">UUID</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">updated_data</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference internal" href="Application.DTO.html#Application.DTO.SubAccountDTO.UpdateSubAccountDTO" title="Application.DTO.SubAccountDTO.UpdateSubAccountDTO"><span class="pre">UpdateSubAccountDTO</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">db</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Session</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">Depends(get_db)</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">salt</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">str</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">''</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">request</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Request</span></span><span class="w"> </span><span class="o"><span class="pre">=</span></span><span class="w"> </span><span class="default_value"><span class="pre">None</span></span></em><span class="sig-paren">)</span><a class="headerlink" href="#Presentation.Controllers.SubAccountController.UpdateSubAccountById" title="Link to this definition"></a></dt>
-<dd></dd></dl>
+<dd><p>Update a subaccount by its ID.</p>
+<dl class="simple">
+<dt>Args:</dt><dd><p>userId (uuid.UUID): The ID of the user who owns the subaccount.
+subaccountId (uuid.UUID): The ID of the subaccount to be updated.
+updated_data (UpdateSubAccountDTO): The new data for the subaccount.
+db (Session): The database session.
+salt (str): Optional salt for password hashing.
+request (Request): The FastAPI request object.</p>
+</dd>
+<dt>Returns:</dt><dd><p>dict: A message indicating success and the updated subaccount data.</p>
+</dd>
+<dt>Raises:</dt><dd><p>HTTPException: If the subaccount update fails.</p>
+</dd>
+</dl>
+</dd></dl>
 
 </section>
 <section id="module-Presentation.Controllers">
