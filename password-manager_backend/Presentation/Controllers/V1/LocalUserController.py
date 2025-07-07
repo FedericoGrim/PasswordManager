@@ -41,7 +41,7 @@ async def ApiCreateUser(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@routerV1.get("/{user_id}")
+@routerV1.get("/{keycloakUserId}")
 @inject
 async def ApiGetUser(
     keycloakUserId: UUID, 
@@ -63,7 +63,7 @@ async def ApiGetUser(
         HTTPException: Errore 404 se l'utente non è trovato.
     """
     container: Container = request.app.container
-    get_user_use_case = container.local_user().GetAllLocalUsersByMainUserIdProvider(LocalUserRepository__db=db)
+    get_user_use_case = container.local_user().GetLocalUsersByMainUserIdProvider(LocalUserRepository__db=db)
     
     try:
         user = get_user_use_case.execute(keycloakUserId)
