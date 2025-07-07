@@ -4,7 +4,7 @@ import uuid
 from dependency_injector.wiring import inject
 from config import Container
 
-from Infrastructure.Repositories.LocalUserPostgreSQL import get_db
+from Infrastructure.Repositories.Database import get_db
 from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
 
 routerV1 = APIRouter()
