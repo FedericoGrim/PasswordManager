@@ -48,7 +48,7 @@ class GetLocalUsersByMainUserIdUseCase():
         Executes the use case to retrieve all local users by main user ID.
         """
         try:
-            return self.LocalUserRepository.GetAllLocalUserById(mainUserId)
+            return self.LocalUserRepository.GetLocalUserById(mainUserId)
         except Exception as e:
             raise LocalUserRetrievalException(str(e)) from e
         

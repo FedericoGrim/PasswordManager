@@ -13,7 +13,7 @@ class LocalUserContainer(containers.DeclarativeContainer):
         CreateLocalUserUseCase,
         LocalUserRepository=LocalUserRepositoryFactory,
     )
-    GetAllLocalUsersByMainUserIdProvider = providers.Factory(
+    GetLocalUsersByMainUserIdProvider = providers.Factory(
         GetLocalUsersByMainUserIdUseCase,
         LocalUserRepository=LocalUserRepositoryFactory,
     )
