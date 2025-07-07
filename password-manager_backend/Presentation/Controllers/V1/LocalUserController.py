@@ -5,7 +5,7 @@ from dependency_injector.wiring import inject
 
 from config import Container
 from Application.DTO.LocalUserDTO import CreateLocalUser, UpdateLocalUser
-from Infrastructure.Repositories.LocalUserPostgreSQL import get_db
+from Infrastructure.Repositories.Database import get_db
 
 routerV1 = APIRouter()
 
