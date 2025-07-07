@@ -1,29 +1,3 @@
-class PostgreSqlConnectionException(Exception):
-    """
-    Exception raised for errors in the PostgreSQL connection.
-    This exception is typically raised when there is an issue connecting to the PostgreSQL database.
-    It can be used to handle connection errors specifically in the context of PostgreSQL operations.
-
-    Args:
-        message (str): Explanation of the error. Defaults to "PostgreSQL connection error occurred".
-    """
-    def __init__(self, message="PostgreSQL connection error occurred"):
-        self.message = message
-        super().__init__(self.message)
-
-class PostgreSqlException(Exception):
-    """
-    Exception raised for general PostgreSQL errors.
-    This exception is typically raised when there is an error during PostgreSQL operations.
-
-    Args:
-        message (str): Explanation of the error. Defaults to "PostgreSQL error occurred".
-    """
-    def __init__(self, message="PostgreSQL error occurred"):
-        self.message = message
-        super().__init__(self.message)
-
-
 class LocalUserAlreadyExistsException(Exception):
     """
     Exception raised when a local user already exists in the database.
