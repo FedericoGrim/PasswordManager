@@ -1,0 +1,27 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: password_manager_db
+    environment:
+      POSTGRES_USER: PostgresUser
+      POSTGRES_PASSWORD: PostgresPassword
+      POSTGRES_DB: postgres
+    networks:
+      - pm_network
+
+  backend:
+    build:
+      context: /password-manager_backend
+    container_name: password_manager_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - /password-manager_backend/.env
+    depends_on:
+      - db
+    networks:
+      - pm_network
+
+networks:
+  pm_network:
+    driver: bridge
