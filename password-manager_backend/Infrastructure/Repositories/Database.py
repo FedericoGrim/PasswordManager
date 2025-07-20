@@ -30,10 +30,11 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
-        
+    except PostgreSqlConnectionException as e:
+        logging.error(f"Database connection error: {e}")
+        raise
     except Exception as e:
-        logging.error(f"Error: {e}")
-        raise PostgreSqlConnectionException()
-    
+        logging.error(f"Database error: {e}")
+        raise  # rilancia l'eccezione originale
     finally:
         db.close()

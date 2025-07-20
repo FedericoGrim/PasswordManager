@@ -55,28 +55,19 @@ class LocalUserService(ILocalUserService):
             raise LocalUserCreationFailedException()
 
         
-    def GetLocalUserById(self, IdKeycloak: uuid.UUID):
-        '''        
-        Retrieves a local users associated with a given Keycloak user ID.
-
-        Args:
-            IdKeycloak (uuid.UUID): The Keycloak user ID to search for.
-
-        Returns:
-            List[LocalUser]: A list of LocalUser entities associated with the given Keycloak user ID.
-
-        Raises:
-            GetAllLocalUserByIdNotFoundException: If no local users are found for the given Keycloak user ID.
-            GetAllLocalUserByIdRetrivalException: If there is an error retrieving the local users.'''
+    def GetLocalUserById(self, UserIdKeycloak: uuid.UUID):
+        '''
+        Retrieves a local user associated with a given Keycloak user ID.
+        '''
         try:
-            local_users = self.Db.query(LocalUser).filter(LocalUser.IdKeycloak == IdKeycloak).all()
-            if not local_users:
-                raise GetAllLocalUserByIdNotFoundException("No local users found for the given main user ID.")
-            return local_users
-            
+            local_user = self.Db.query(LocalUser).filter(LocalUser.IdKeycloak == UserIdKeycloak).first()
+            if not local_user:
+                raise GetAllLocalUserByIdNotFoundException("No local user found for the given Keycloak user ID.")
+            return local_user
         except Exception as e:
             logging.error(f"Error: {e}")
             raise GetAllLocalUserByIdRetrivalException()
+
         
     def UpdateLocalUserById(self, localUserId: uuid.UUID, new_hash: str):
         '''        

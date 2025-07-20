@@ -1,3 +1,4 @@
+import uuid
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from uuid import UUID
@@ -41,10 +42,10 @@ async def ApiCreateUser(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@routerV1.get("/{user_id}")
+@routerV1.get("/{keycloak_user_id}")
 @inject
 async def ApiGetUser(
-    keycloakUserId: UUID, 
+    keycloak_user_id: uuid.UUID, 
     db: Session = Depends(get_db), 
     request: Request = None
 ):
@@ -66,7 +67,7 @@ async def ApiGetUser(
     get_user_use_case = container.local_user().GetAllLocalUsersByMainUserIdProvider(LocalUserRepository__db=db)
     
     try:
-        user = get_user_use_case.execute(keycloakUserId)
+        user = get_user_use_case.execute(keycloak_user_id)
         return {"message": "User retrieved successfully", "user": user}
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")

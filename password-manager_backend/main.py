@@ -29,13 +29,24 @@ app.include_router(
 @app.middleware("http")
 async def DbSessionMiddleware(request: Request, call_next):
     response = Response("Internal server error", status_code=500)
+    request.state.db = SessionLocal()
     try:
-        request.state.db = SessionLocal()
         response = await call_next(request)
-        request.state.db.commit()
+        if request.method != "GET":
+            request.state.db.commit()
     except Exception as e:
         request.state.db.rollback()
         raise e
     finally:
         request.state.db.close()
     return response
+
+@app.middleware("http")
+async def LogExceptionsMiddleware(request: Request, call_next):
+    try:
+        response = await call_next(request)
+        return response
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise e
