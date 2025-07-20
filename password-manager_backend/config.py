@@ -1,36 +1,51 @@
 from dependency_injector import containers, providers
-from Infrastructure.Repositories.UserPostgreSQL import UserService
-from Application.UseCase.UserUseCase import CreateUserUseCase, GetUserByEmailUseCase, UpdateUserUsernameUseCase, UpdateUserEmailUseCase, UpdateUserPasswordUseCase, DeleteUserUseCase
+
+from Infrastructure.Repositories.LocalUserPostgreSQL import LocalUserService
+from Infrastructure.Repositories.SubAccountPostgreSQL import SubAccountService
+
+from Application.UseCase.LocalUserUseCase import CreateLocalUserUseCase, GetLocalUsersByMainUserIdUseCase, UpdateLocalUserByIdUseCase, DeleteLocalUserByIdUseCase
+from Application.UseCase.SubAccountUseCases import CreateSubAccountUseCase, GetAllSubAccountsByLocalUserIdUseCase, UpdateSubAccountByIdUseCase, DeleteSubAccountByIdUseCase
+
+class LocalUserContainer(containers.DeclarativeContainer):
+    LocalUserRepositoryFactory = providers.Factory(LocalUserService, db=providers.Dependency())
+
+    CreateLocalUserProvider = providers.Factory(
+        CreateLocalUserUseCase,
+        LocalUserRepository=LocalUserRepositoryFactory,
+    )
+    GetAllLocalUsersByMainUserIdProvider = providers.Factory(
+        GetLocalUsersByMainUserIdUseCase,
+        LocalUserRepository=LocalUserRepositoryFactory,
+    )
+    UpdateLocalUserByIdProvider = providers.Factory(
+        UpdateLocalUserByIdUseCase,
+        LocalUserRepository=LocalUserRepositoryFactory,
+    )
+    DeleteLocalUserByIdProvider = providers.Factory(
+        DeleteLocalUserByIdUseCase,
+        LocalUserRepository=LocalUserRepositoryFactory,
+    )
+
+class SubAccountContainer(containers.DeclarativeContainer):
+    SubAccountRepositoryFactory = providers.Factory(SubAccountService, db=providers.Dependency())
+    
+    CreateSubAccountProvider = providers.Factory(
+        CreateSubAccountUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    GetAllSubAccountsByUserIdProvider = providers.Factory(
+        GetAllSubAccountsByLocalUserIdUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    UpdateSubAccountByIdProvider = providers.Factory(
+        UpdateSubAccountByIdUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    DeleteSubAccountByIdProvider = providers.Factory(
+        DeleteSubAccountByIdUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
 
 class Container(containers.DeclarativeContainer):
-    UserRepositoryFactory = providers.Factory(UserService)
-
-    CreateUserUseCaseProvider = providers.Factory(
-        CreateUserUseCase,
-        UserRepository=UserRepositoryFactory
-    )
-
-    GetUserUseCaseProvider = providers.Factory(
-        GetUserByEmailUseCase,
-        UserRepository=UserRepositoryFactory
-    )
-
-    UpdateUserUsernameUseCaseProvider = providers.Factory(
-        UpdateUserUsernameUseCase,
-        UserRepository=UserRepositoryFactory
-    )
-
-    UpdateUserEmailUseCaseProvider = providers.Factory(
-        UpdateUserEmailUseCase,
-        UserRepository=UserRepositoryFactory
-    )
-
-    UpdateUserPasswrordUseCaseProvider = providers.Factory(
-        UpdateUserPasswordUseCase,
-        UserRepository=UserRepositoryFactory
-    )
-
-    DeleteUserUseCaseProvider = providers.Factory(
-        DeleteUserUseCase,
-        UserRepository=UserRepositoryFactory
-    )
+    local_user = providers.Container(LocalUserContainer)
+    subaccount = providers.Container(SubAccountContainer)
