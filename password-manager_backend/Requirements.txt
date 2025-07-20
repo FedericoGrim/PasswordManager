@@ -2,9 +2,9 @@
 pydantic
 python-multipart
 pydantic[email]
-pyscopg2
-psycopg2-binary
+psycopg2
 python-dotenv
+argon2
 
 #Apis
 FastAPI
@@ -12,7 +12,17 @@ uvicorn
 
 #DB
 SQLAlchemy
-alembic
 
 #Injection
 dependency_injector
+
+#Testing
+pytest
+pytest-asyncio
+
+#Migration
+alembic
+
+#Docs
+sphinx
+sphinx-autobuild
