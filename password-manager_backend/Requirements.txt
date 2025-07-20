@@ -2,9 +2,9 @@
 pydantic
 python-multipart
 pydantic[email]
-pyscopg2
 psycopg2-binary
 python-dotenv
+argon2-cffi
 
 #Apis
 FastAPI
