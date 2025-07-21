@@ -31,14 +31,12 @@ async def ApiCreateUser(
     Raises:
         HTTPException: Errore con status 400 in caso di fallimento.
     """
-
     container: Container = request.app.container
-
     create_user_use_case = container.local_user().CreateLocalUserProvider(LocalUserRepository__db=db)
 
     try:
-        created_user = create_user_use_case.execute(localUser)
-        return {"message": "User created successfully", "user": created_user}
+        if create_user_use_case.execute(localUser):
+            return {"message": "User created successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -64,7 +62,7 @@ async def ApiGetUser(
         HTTPException: Errore 404 se l'utente non è trovato.
     """
     container: Container = request.app.container
-    get_user_use_case = container.local_user().GetAllLocalUsersByMainUserIdProvider(LocalUserRepository__db=db)
+    get_user_use_case = container.local_user().GetLocalUserByKeycloakIdProvider(LocalUserRepository__db=db)
     
     try:
         user = get_user_use_case.execute(keycloak_user_id)
@@ -101,8 +99,8 @@ async def ApiUpdateLocalUser(
     update_user_username_use_case = container.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
-        user_username_updated = update_user_username_use_case.execute(localUserId, newLocalUser, salt)
-        return {"message": "User updated successfully"}
+        if update_user_username_use_case.execute(localUserId, newLocalUser, salt):
+            return {"message": "User updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
