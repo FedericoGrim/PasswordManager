@@ -35,17 +35,19 @@ async def CreateSubAccount(
     create_subaccount_use_case = container.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
 
     try:
-        create_subaccount = create_subaccount_use_case.execute(subaccountObj, salt)
-        return {"message": "SubAccount created successfully"}
+        if create_subaccount_use_case.execute(subaccountObj, salt):
+            return {"message": "SubAccount created successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
 @routerV1.get("/{user_id}")
 @inject
-async def GetAllSubAccountsByUserId(userId: uuid.UUID, 
-                                    db: Session = Depends(get_db), 
-                                    request: Request = None):
+async def GetAllSubAccountsByUserId(
+    userId: uuid.UUID, 
+    db: Session = Depends(get_db), 
+    request: Request = None
+):
     '''
     Retrieve all subaccounts for a given user ID.
 
@@ -71,12 +73,14 @@ async def GetAllSubAccountsByUserId(userId: uuid.UUID,
 
 @routerV1.put("/{user_id}/{subaccount_id}")
 @inject
-async def UpdateSubAccountById(userId: uuid.UUID, 
-                               subaccountId: uuid.UUID, 
-                               updated_data: UpdateSubAccountDTO, 
-                               db: Session = Depends(get_db), 
-                               salt: str = "",
-                               request: Request = None):
+async def UpdateSubAccountById(
+    userId: uuid.UUID, 
+    subaccountId: uuid.UUID, 
+    updated_data: UpdateSubAccountDTO, 
+    db: Session = Depends(get_db), 
+    salt: str = "",
+    request: Request = None
+):
     '''
     Update a subaccount by its ID.
     
@@ -99,17 +103,19 @@ async def UpdateSubAccountById(userId: uuid.UUID,
     update_subaccount_use_case = container.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
 
     try:
-        updated_subaccount = update_subaccount_use_case.execute(userId, subaccountId, updated_data, salt)
-        return {"message": "SubAccount updated successfully", "subaccount": updated_subaccount}
+        if update_subaccount_use_case.execute(userId, subaccountId, updated_data, salt):
+            return {"message": "SubAccount updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 @routerV1.delete("/{user_id}/{subaccount_id}")
 @inject
-async def DeleteSubAccount(userId: uuid.UUID, 
-                           subaccountId: uuid.UUID, 
-                           db: Session = Depends(get_db), 
-                           request: Request = None):
+async def DeleteSubAccount(
+    userId: uuid.UUID, 
+    subaccountId: uuid.UUID, 
+    db: Session = Depends(get_db), 
+    request: Request = None
+):
     '''
     Delete a subaccount by its ID.
     
@@ -129,7 +135,7 @@ async def DeleteSubAccount(userId: uuid.UUID,
     delete_subaccount_use_case = container.subaccount().DeleteSubAccountByIdProvider(SubAccountRepository__db=db)
 
     try:
-        delete_subaccount = delete_subaccount_use_case.execute(userId, subaccountId)
-        return {"message": "SubAccount deleted successfully"}
+        if delete_subaccount_use_case.execute(userId, subaccountId):
+            return {"message": "SubAccount deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
