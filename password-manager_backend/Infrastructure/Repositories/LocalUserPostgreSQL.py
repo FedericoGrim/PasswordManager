@@ -53,7 +53,6 @@ class LocalUserService(ILocalUserService):
         except Exception as e:
             logging.error(f"Error: {e}")
             raise LocalUserCreationFailedException()
-
         
     def GetLocalUserById(self, UserIdKeycloak: uuid.UUID):
         '''
@@ -67,7 +66,6 @@ class LocalUserService(ILocalUserService):
         except Exception as e:
             logging.error(f"Error: {e}")
             raise GetAllLocalUserByIdRetrivalException()
-
         
     def UpdateLocalUserById(self, localUserId: uuid.UUID, new_hash: str):
         '''        
