@@ -1,25 +1,47 @@
-name: Deploy Develop
+name: CI Pipeline
 
 on:
   push:
-    branches:
-      - develop
+    branches: [ develop, main ]
+  pull_request:
+    branches: [ develop, main ]
 
 jobs:
-  deploy:
+  build-and-test:
     runs-on: ubuntu-latest
 
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: testdb
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U testuser"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
     steps:
-      - name: Checkout repo
-        uses: actions/checkout@v3
+      - name: Checkout codice
+        uses: actions/checkout@v4
 
-      - name: Set up Docker Buildx (opzionale, utile per build multiarch)
-        uses: docker/setup-buildx-action@v2
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
 
-      - name: Start containers with docker-compose
-        run: |
-          docker-compose down
-          docker-compose up -d --build
+      - name: Restore dipendenze
+        run: dotnet restore ./backend/PasswordManager.csproj
 
-      - name: Verify containers are running
-        run: docker ps
+      - name: Build progetto
+        run: dotnet build ./backend/PasswordManager.csproj --no-restore
+
+      - name: Esegui test
+        run: dotnet test ./tests/PasswordManager.Tests.csproj --no-build --logger:trx
+
+      - name: (Opzionale) Build docker image
+        run: docker build -t passwordmanager-backend ./backend
