@@ -14,9 +14,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Docker Compose
+      - name: Avvia i container con Docker Compose
         run: |
-          docker-compose up -d
+          docker compose up -d
           sleep 10  # Attendi che i container siano pronti
 
       - name: Verifica container attivi
