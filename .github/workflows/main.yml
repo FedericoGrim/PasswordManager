@@ -7,41 +7,38 @@ on:
     branches: [ develop, main ]
 
 jobs:
-  build-and-test:
+  build:
     runs-on: ubuntu-latest
 
     services:
       postgres:
         image: postgres:15
         env:
-          POSTGRES_USER: testuser
-          POSTGRES_PASSWORD: testpass
-          POSTGRES_DB: testdb
+          POSTGRES_USER: myuser
+          POSTGRES_PASSWORD: mypassword
+          POSTGRES_DB: mydb
         ports:
           - 5432:5432
         options: >-
-          --health-cmd="pg_isready -U testuser"
+          --health-cmd="pg_isready"
           --health-interval=10s
           --health-timeout=5s
           --health-retries=5
 
     steps:
-      - name: Checkout codice
-        uses: actions/checkout@v4
+      - name: Checkout repo
+        uses: actions/checkout@v3
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          dotnet-version: '8.0.x'
+          python-version: "3.11"
 
-      - name: Restore dipendenze
-        run: dotnet restore ./backend/PasswordManager.csproj
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      - name: Build progetto
-        run: dotnet build ./backend/PasswordManager.csproj --no-restore
-
-      - name: Esegui test
-        run: dotnet test ./tests/PasswordManager.Tests.csproj --no-build --logger:trx
-
-      - name: (Opzionale) Build docker image
-        run: docker build -t passwordmanager-backend ./backend
+      - name: Run unit tests
+        run: |
+          pytest  # o il comando che usi per testare
