@@ -1,0 +1,25 @@
+name: Deploy Develop
+
+on:
+  push:
+    branches:
+      - develop
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Docker Buildx (opzionale, utile per build multiarch)
+        uses: docker/setup-buildx-action@v2
+
+      - name: Start containers with docker-compose
+        run: |
+          docker-compose down
+          docker-compose up -d --build
+
+      - name: Verify containers are running
+        run: docker ps
