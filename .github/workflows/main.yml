@@ -1,44 +1,26 @@
-name: CI Pipeline
+name: Docker Compose Python CI
 
 on:
   push:
-    branches: [ develop, main ]
+    branches: ["develop"]
   pull_request:
-    branches: [ develop, main ]
+    branches: ["develop"]
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
-    services:
-      postgres:
-        image: postgres:15
-        env:
-          POSTGRES_USER: myuser
-          POSTGRES_PASSWORD: mypassword
-          POSTGRES_DB: mydb
-        ports:
-          - 5432:5432
-        options: >-
-          --health-cmd="pg_isready"
-          --health-interval=10s
-          --health-timeout=5s
-          --health-retries=5
-
     steps:
-      - name: Checkout repo
+      - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Python
-        uses: actions/setup-python@v4
-        with:
-          python-version: "3.11"
-
-      - name: Install dependencies
+      - name: Set up Docker Compose
         run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
+          docker-compose up -d
+          sleep 10  # Attendi che i container siano pronti
 
-      - name: Run unit tests
-        run: |
-          pytest  # o il comando che usi per testare
+      - name: Verifica container attivi
+        run: docker ps -a
+
+      - name: Esegui i test (opzionale)
+        run: docker exec password_manager_api pytest  # se usi pytest
