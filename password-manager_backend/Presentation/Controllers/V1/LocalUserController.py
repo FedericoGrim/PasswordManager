@@ -40,7 +40,7 @@ async def ApiCreateUser(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@routerV1.get("/{keycloak_user_id}")
+@routerV1.get("/{kid}")
 @inject
 async def ApiGetUser(
     keycloak_user_id: uuid.UUID, 
@@ -70,7 +70,7 @@ async def ApiGetUser(
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")
 
-@routerV1.put("/{user_id}")
+@routerV1.put("/{id}")
 @inject
 async def ApiUpdateLocalUser(
     localUserId: UUID, 
@@ -104,7 +104,7 @@ async def ApiUpdateLocalUser(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@routerV1.delete("/{user_id}")
+@routerV1.delete("/{id}")
 @inject
 async def ApiDeleteUser(
     localUserId: UUID, 
