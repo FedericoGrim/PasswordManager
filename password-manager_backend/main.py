@@ -1,5 +1,6 @@
 # main.py
 from fastapi import FastAPI, Response, Request
+from fastapi.middleware.cors import CORSMiddleware
 
 from config import Container
 from Presentation.Controllers.V1.LocalUserController import routerV1 as local_user_router_V1
@@ -10,6 +11,13 @@ container = Container()
 container.wire(modules=["Presentation.Controllers.V1.LocalUserController", "Presentation.Controllers.V1.SubAccountController"])
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000"], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],)
 
 # Assegno i container al FastAPI app per accedervi dal controller
 app.container = container
