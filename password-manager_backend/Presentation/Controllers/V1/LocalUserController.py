@@ -40,7 +40,7 @@ async def ApiCreateUser(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@routerV1.get("/{kid}")
+@routerV1.get("/{keycloak_user_id}")
 @inject
 async def ApiGetUser(
     keycloak_user_id: uuid.UUID, 
