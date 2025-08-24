@@ -1,13 +1,13 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getMainUserById } from "../api/apis";
+import { getMainUserByKeycloakId } from "../api/apis";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
-    getMainUserById("3fa85f64-5717-4562-b3fc-2c963f66afa6").then(setUser);
+    getMainUserByKeycloakId("3fa85f64-5717-4562-b3fc-2c963f66afa6").then(setUser);
   }, []);
 
   if (!user) return <div>Loading...</div>;

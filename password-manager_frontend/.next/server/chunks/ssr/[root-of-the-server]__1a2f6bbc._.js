@@ -182,7 +182,7 @@ __turbopack_context__.s({
     "createSubAccount": (()=>createSubAccount),
     "deleteMainUser": (()=>deleteMainUser),
     "deleteSubAccount": (()=>deleteSubAccount),
-    "getMainUserById": (()=>getMainUserById),
+    "getMainUserByKeycloakId": (()=>getMainUserByKeycloakId),
     "getSubAccountsByUserId": (()=>getSubAccountsByUserId),
     "updateMainUser": (()=>updateMainUser),
     "updateSubAccount": (()=>updateSubAccount)
@@ -198,9 +198,9 @@ const createMainUser = async (user)=>{
         throw error;
     }
 };
-const getMainUserByKeycloakId = async (id)=>{
+const getMainUserByKeycloakId = async (keycloak_id)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get(`/api/V1/localuser/${keycloak_user_id}`);
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get(`/api/V1/localuser/${keycloak_id}`);
         return response.data;
     } catch (error) {
         console.error('Error fetching main user:', error);
@@ -209,7 +209,7 @@ const getMainUserByKeycloakId = async (id)=>{
 };
 const updateMainUser = async (user)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`/mainUser/${user.Id}`, user);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`/api/V1/localuser/${user.Id}`, user);
     } catch (error) {
         console.error('Error updating main user:', error);
         throw error;
@@ -217,7 +217,7 @@ const updateMainUser = async (user)=>{
 };
 const deleteMainUser = async (id)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].delete(`/mainUser/${id}`);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].delete(`/api/V1/localuser/${id}`);
     } catch (error) {
         console.error('Error deleting main user:', error);
         throw error;
@@ -280,7 +280,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$apis$2e$ts__$5
 function ProfilePage() {
     const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useState"])(null);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["useEffect"])(()=>{
-        (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$apis$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getMainUserById"])("3fa85f64-5717-4562-b3fc-2c963f66afa6").then(setUser);
+        (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$apis$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["getMainUserByKeycloakId"])("3fa85f64-5717-4562-b3fc-2c963f66afa6").then(setUser);
     }, []);
     if (!user) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         children: "Loading..."

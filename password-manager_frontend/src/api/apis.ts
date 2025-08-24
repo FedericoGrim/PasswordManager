@@ -14,9 +14,9 @@ const createMainUser = async (user: mainUser): Promise<void> => {
     }
 }
 
-const getMainUserByKeycloakId = async (id: string): Promise<mainUser | null> => {
+const getMainUserByKeycloakId = async (keycloak_id: string): Promise<mainUser | null> => {
     try {
-        const response = await axiosClient.get(`/api/V1/localuser/${keycloak_user_id}`);
+        const response = await axiosClient.get(`/api/V1/localuser/${keycloak_id}`);
         return response.data as mainUser;
     } catch (error) {
         console.error('Error fetching main user:', error);
@@ -26,7 +26,7 @@ const getMainUserByKeycloakId = async (id: string): Promise<mainUser | null> => 
 
 const updateMainUser = async (user: mainUser): Promise<void> => {
     try {
-        await axiosClient.put(`/mainUser/${user.Id}`, user);
+        await axiosClient.put(`/api/V1/localuser/${user.Id}`, user);
     } catch (error) {
         console.error('Error updating main user:', error);
         throw error;
@@ -35,7 +35,7 @@ const updateMainUser = async (user: mainUser): Promise<void> => {
 
 const deleteMainUser = async (id: string): Promise<void> => {
     try {
-        await axiosClient.delete(`/mainUser/${id}`);
+        await axiosClient.delete(`/api/V1/localuser/${id}`);
     } catch (error) {
         console.error('Error deleting main user:', error);
         throw error;
@@ -81,7 +81,7 @@ const deleteSubAccount = async (id: string): Promise<void> => {
 
 export {
     createMainUser,
-    getMainUserById,
+    getMainUserByKeycloakId,
     updateMainUser,
     deleteMainUser,
     createSubAccount,
