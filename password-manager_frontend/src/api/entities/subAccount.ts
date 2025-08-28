@@ -1,17 +1,19 @@
+import { UUID } from "crypto";
+
 export class subAccount {
-    Id: string;
+    Id: UUID;
     Title: string;
     Username: string;
     PasswordEncrypted: string;
     Url: string;
-    IdMainUser: string;
+    IdMainUser: UUID;
 
-    constructor(id: string, title: string, username: string, passwordEncrypted: string, url: string, idMainUser: string) {
+    constructor(id: UUID, title: string, username: string, passwordEncrypted: string, url: string, user_id: UUID ) {
         this.Id = id;
         this.Title = title;
         this.Username = username;
         this.PasswordEncrypted = passwordEncrypted;
         this.Url = url;
-        this.IdMainUser = idMainUser;
+        this.IdMainUser = user_id;
     }
 }

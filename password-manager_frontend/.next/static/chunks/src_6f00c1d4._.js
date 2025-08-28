@@ -69,10 +69,10 @@ const createMainUser = async (user)=>{
         throw error;
     }
 };
-const getMainUserByKeycloakId = async (keycloak_id)=>{
+const getMainUserByKeycloakId = async (keycloak_user_id)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/api/V1/localuser/${keycloak_id}`);
-        return response.data;
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/api/V1/localuser/${keycloak_user_id}`);
+        return response.data.user;
     } catch (error) {
         console.error('Error fetching main user:', error);
         return null;
@@ -96,7 +96,7 @@ const deleteMainUser = async (id)=>{
 };
 const createSubAccount = async (subAccount)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post('/subAccount', subAccount);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].post('/api/V1/subAccount', subAccount);
     } catch (error) {
         console.error('Error creating sub account:', error);
         throw error;
@@ -104,20 +104,21 @@ const createSubAccount = async (subAccount)=>{
 };
 const getSubAccountsByUserId = async (userId)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/subAccount`, {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].get(`/api/V1/subaccount/${userId}`, {
             params: {
                 userId
             }
         });
-        return response.data;
+        console.log(response.data);
+        return response.data.subaccounts;
     } catch (error) {
-        console.error('Error fetching sub accounts:', error);
+        console.error("Error fetching sub accounts:", error);
         return [];
     }
 };
 const updateSubAccount = async (subAccount)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].put(`/subAccount/${subAccount.Id}`, subAccount);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].put(`/api/V1/subaccount/${subAccount.Id}`, subAccount);
     } catch (error) {
         console.error('Error updating sub account:', error);
         throw error;
@@ -125,7 +126,7 @@ const updateSubAccount = async (subAccount)=>{
 };
 const deleteSubAccount = async (id)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].delete(`/subAccount/${id}`);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["default"].delete(`/api/V1/subaccount/${id}`);
     } catch (error) {
         console.error('Error deleting sub account:', error);
         throw error;
@@ -155,36 +156,60 @@ var _s = __turbopack_context__.k.signature();
 function ProfilePage() {
     _s();
     const [user, setUser] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(null);
+    const [subAccount, setSubAccount] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])([]);
     (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useEffect"])({
         "ProfilePage.useEffect": ()=>{
-            (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$apis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getMainUserByKeycloakId"])("3fa85f64-5717-4562-b3fc-2c963f66afa6").then(setUser);
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$apis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getMainUserByKeycloakId"])("3fa85f64-5717-4562-b3fc-2c963f66afa9").then(setUser);
+            (0, __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$apis$2e$ts__$5b$app$2d$client$5d$__$28$ecmascript$29$__["getSubAccountsByUserId"])("6ff9e31e-0b64-4c7d-a972-37893f98841c").then(setSubAccount);
         }
     }["ProfilePage.useEffect"], []);
     if (!user) return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
         children: "Loading..."
     }, void 0, false, {
         fileName: "[project]/src/app/page.tsx",
-        lineNumber: 13,
+        lineNumber: 18,
         columnNumber: 21
     }, this);
     return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
-            children: [
-                "Benvenuto ",
-                user.Name
-            ]
-        }, void 0, true, {
-            fileName: "[project]/src/app/page.tsx",
-            lineNumber: 17,
-            columnNumber: 7
-        }, this)
-    }, void 0, false, {
+        children: [
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                children: [
+                    "Benvenuto, il tuo ID è: ",
+                    user.Id
+                ]
+            }, void 0, true, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 22,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
+                children: "I tuoi sottoconti:"
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 24,
+                columnNumber: 7
+            }, this),
+            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("ul", {
+                children: subAccount.map((sa, index)=>/*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("li", {
+                        children: JSON.stringify(sa)
+                    }, index, false, {
+                        fileName: "[project]/src/app/page.tsx",
+                        lineNumber: 27,
+                        columnNumber: 11
+                    }, this))
+            }, void 0, false, {
+                fileName: "[project]/src/app/page.tsx",
+                lineNumber: 25,
+                columnNumber: 7
+            }, this)
+        ]
+    }, void 0, true, {
         fileName: "[project]/src/app/page.tsx",
-        lineNumber: 16,
+        lineNumber: 21,
         columnNumber: 5
     }, this);
 }
-_s(ProfilePage, "5s2qRsV95gTJBmaaTh11GoxYeGE=");
+_s(ProfilePage, "Y8WD7TZ8jIiwZK6qoWIrOkLX9vc=");
 _c = ProfilePage;
 var _c;
 __turbopack_context__.k.register(_c, "ProfilePage");

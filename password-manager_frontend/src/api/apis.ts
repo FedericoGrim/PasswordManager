@@ -2,6 +2,7 @@ import axiosClient from './axiosClient';
 import { keycloakFactory } from './keycloakClient';
 import { mainUser } from './entities/mainUser';
 import { subAccount } from './entities/subAccount';
+import { UUID } from 'crypto';
 
 axiosClient.defaults.headers.common['Content-Type'] = 'application/json';
 
@@ -14,10 +15,10 @@ const createMainUser = async (user: mainUser): Promise<void> => {
     }
 }
 
-const getMainUserByKeycloakId = async (keycloak_id: string): Promise<mainUser | null> => {
+const getMainUserByKeycloakId = async (keycloak_user_id: UUID): Promise<mainUser | null> => {
     try {
-        const response = await axiosClient.get(`/api/V1/localuser/${keycloak_id}`);
-        return response.data as mainUser;
+        const response = await axiosClient.get(`/api/V1/localuser/${keycloak_user_id}`);
+        return response.data.user as mainUser;
     } catch (error) {
         console.error('Error fetching main user:', error);
         return null;
@@ -33,7 +34,7 @@ const updateMainUser = async (user: mainUser): Promise<void> => {
     }
 };
 
-const deleteMainUser = async (id: string): Promise<void> => {
+const deleteMainUser = async (id: UUID): Promise<void> => {
     try {
         await axiosClient.delete(`/api/V1/localuser/${id}`);
     } catch (error) {
@@ -44,35 +45,38 @@ const deleteMainUser = async (id: string): Promise<void> => {
 
 const createSubAccount = async (subAccount: subAccount): Promise<void> => {
     try {
-        await axiosClient.post('/subAccount', subAccount);
+        await axiosClient.post('/api/V1/subAccount', subAccount);
     } catch (error) {
         console.error('Error creating sub account:', error);
         throw error;
     }
 }
 
-const getSubAccountsByUserId = async (userId: string): Promise<subAccount[]> => {
-    try {
-        const response = await axiosClient.get(`/subAccount`, { params: { userId } });
-        return response.data as subAccount[];
-    } catch (error) {
-        console.error('Error fetching sub accounts:', error);
-        return [];
-    }
+const getSubAccountsByUserId = async (userId: UUID): Promise<subAccount[]> => {
+  try {
+    const response = await axiosClient.get(`/api/V1/subaccount/${userId}`, {
+      params: { userId }
+    });
+    console.log(response.data);
+    return response.data.subaccounts as subAccount[];
+  } catch (error) {
+    console.error("Error fetching sub accounts:", error);
+    return [];
+  }
 };
 
 const updateSubAccount = async (subAccount: subAccount): Promise<void> => {
     try {
-        await axiosClient.put(`/subAccount/${subAccount.Id}`, subAccount);
+        await axiosClient.put(`/api/V1/subaccount/${subAccount.Id}`, subAccount);
     } catch (error) {
         console.error('Error updating sub account:', error);
         throw error;
     }
 };
 
-const deleteSubAccount = async (id: string): Promise<void> => {
+const deleteSubAccount = async (id: UUID): Promise<void> => {
     try {
-        await axiosClient.delete(`/subAccount/${id}`);
+        await axiosClient.delete(`/api/V1/subaccount/${id}`);
     } catch (error) {
         console.error('Error deleting sub account:', error);
         throw error;
