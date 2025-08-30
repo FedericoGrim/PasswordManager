@@ -1,29 +1,20 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { 
-  updateSubAccount
-} from "../../api/apis";
-import { UUID } from "crypto";
-
+import { updateSubAccount } from "../../api/apis";
 import { subAccount } from "@/api/entities/subAccount";
 import { useRouter } from "next/navigation";
 
 export default function EditSubAccountPage() {
   const [subAcc, setSubAcc] = useState<subAccount | null>(null);
-  const [userId, setUserId] = useState<UUID | null>(null);
   const [salt, setSalt] = useState<string | null>(null);
   const router = useRouter();
 
   useEffect(() => {
     const storedDatas = sessionStorage.getItem("subAccountData");
-    const storedUserId = sessionStorage.getItem("UserId");
     const storedUserSalt = sessionStorage.getItem("userSalt");
-    console.log("subAccountData:", storedDatas);
-    console.log("UserId:", storedUserId);
-    console.log("userSalt:", storedUserSalt);
     if (storedDatas) setSubAcc(JSON.parse(storedDatas));
-    if (storedUserId) setUserId(storedUserId as UUID);
+    if (storedUserSalt) setSalt(storedUserSalt);
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -32,8 +23,8 @@ export default function EditSubAccountPage() {
   };
 
   const handleSave = async () => {
-    if (!subAcc || !userId || !salt) return;
-    await updateSubAccount(subAcc, userId, salt); // aggiungi user_id
+    if (!subAcc || !salt) return;
+    await updateSubAccount(subAcc, subAcc.id, salt);
     alert("Modifiche salvate!");
     router.push("/");
   };
@@ -78,8 +69,8 @@ export default function EditSubAccountPage() {
           Password:
           <input
             type="text"
-            name="password_encrypted"
-            value={subAcc.password_encrypted ?? ""}
+            name="password"
+            value={subAcc.password ?? ""}
             onChange={handleChange}
             className="border rounded px-2 py-1 w-full"
           />

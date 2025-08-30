@@ -33,7 +33,7 @@ export default function ProfilePage() {
 
   const HandleDeleteSubAccount = async (sa: subAccount) => {
       if (!confirm("Sei sicuro di voler eliminare questo subaccount?")) return;
-      await deleteSubAccount(sa.user_id.toString(), sa.id.toString());
+      await deleteSubAccount( sa.id);
       setSubAccounts(prev => prev.filter(s => s.id !== sa.id));
   };
 
@@ -77,9 +77,7 @@ export default function ProfilePage() {
               <div className="flex gap-4 mt-2">
                 <button 
                   onClick={() => {
-                    console.log("user.Id:", user.Id);
                     sessionStorage.setItem("subAccountData", JSON.stringify(sa));
-                    sessionStorage.setItem("UserId", user.Id ?? "");
                     sessionStorage.setItem("userSalt", user.SaltArgon ?? "");
                     router.push("/edit-subaccount");
                   }}
