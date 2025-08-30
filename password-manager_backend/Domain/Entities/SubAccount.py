@@ -14,5 +14,5 @@ class SubAccount(Base):
     user_id = Column(UUID(as_uuid=True), ForeignKey("local_users.Id", ondelete="CASCADE"), nullable=False)
     title = Column(String(100), nullable=False) 
     username = Column(String(100), nullable=True)
-    password_encrypted = Column(String, nullable=False)  
+    password = Column(String, nullable=False)  
     url = Column(String(255), nullable=True)

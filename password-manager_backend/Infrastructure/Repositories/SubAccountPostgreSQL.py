@@ -38,7 +38,7 @@ class SubAccountService(ISubAccountService):
                     user_id = subaccount.user_id,
                     title = subaccount.title,
                     username = subaccount.username,
-                    password_encrypted = subaccount.password_encrypted,
+                    password = subaccount.password,
                     url = subaccount.url
                 )
 
@@ -99,9 +99,10 @@ class SubAccountService(ISubAccountService):
                 if not subaccount:
                     raise SubAccountNotFoundException("SubAccount not found.")
 
-                for key, value in new_subaccount.to_dict().items():
-                    setattr(subaccount, key, value)
-
+                subaccount.title = new_subaccount.title
+                subaccount.username = new_subaccount.username
+                subaccount.password = new_subaccount.password
+                subaccount.url = new_subaccount.url
                 self.Db.flush()
                 self.Db.refresh(subaccount)
             return subaccount
