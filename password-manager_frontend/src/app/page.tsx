@@ -6,7 +6,6 @@ import {
   getSubAccountsByUserId,
   deleteSubAccount
 } from "../api/apis";
-import { UUID } from "crypto";
 
 import { mainUser } from "@/api/entities/mainUser";
 import { subAccount } from "@/api/entities/subAccount";
@@ -46,7 +45,12 @@ export default function ProfilePage() {
       </h1>
 
       <button 
-        onClick={() => router.push("/create-subaccount")}
+        onClick={() => {
+          sessionStorage.setItem("userId", JSON.stringify(user.Id));
+          sessionStorage.setItem("userSalt", user.SaltArgon ?? "");
+          sessionStorage.setItem("masterPassword", JSON.stringify("string"));
+          router.push("/create-subaccount");
+        }}
         className="mb-6 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
       >
         ➕ Crea nuovo subaccount

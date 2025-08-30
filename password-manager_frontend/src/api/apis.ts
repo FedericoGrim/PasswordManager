@@ -43,14 +43,24 @@ const deleteMainUser = async (id: UUID): Promise<void> => {
     }
 };
 
-const createSubAccount = async (subAccount: subAccount): Promise<void> => {
+const createSubAccount = async (UserId: string, SubAccount: subAccount, Salt: string, MasterPassword: string): Promise<void> => {
     try {
-        await axiosClient.post(`/api/V1/subaccount/${subAccount.id}`);
+        await axiosClient.post(
+            `/api/V1/subaccount/${UserId}?salt=${Salt}&master_password=${MasterPassword}`,
+            {
+                user_id: UserId,
+                title: SubAccount.title,
+                username: SubAccount.username,
+                password: SubAccount.password,
+                url: SubAccount.url
+            }
+        );
     } catch (error) {
         console.error('Error creating sub account:', error);
         throw error;
     }
 }
+
 
 const getSubAccountsByUserId = async (userId: UUID): Promise<subAccount[]> => {
   try {
