@@ -18,16 +18,18 @@ export default function ProfilePage() {
   const router = useRouter();
 
   useEffect(() => {
-    getMainUserByKeycloakId("3fa85f64-5717-4562-b3fc-2c963f66afa9").then(setUser);
+    getMainUserByKeycloakId("3fa85f64-5717-4562-b3fc-2c963f66afa6").then(setUser);
   }, []);
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getSubAccountsByUserId("6ff9e31e-0b64-4c7d-a972-37893f98841c");
-      setSubAccounts(data);
+      if (user?.Id) {
+        const data = await getSubAccountsByUserId(user.Id);
+        setSubAccounts(data);
+      }
     };
     fetchData();
-  }, []);
+  }, [user]);
 
   const HandleDeleteSubAccount = async (sa: subAccount) => {
       if (!confirm("Sei sicuro di voler eliminare questo subaccount?")) return;
@@ -51,46 +53,52 @@ export default function ProfilePage() {
       </button>
 
       <h2 className="text-lg font-semibold mb-4">I tuoi sottoconti:</h2>
-      <ul className="space-y-4">
-        {subAccounts.map((sa) => (
-          <li 
-            key={sa.id} 
-            className="p-4 rounded-2xl shadow-md border border-[#005F73] bg-[#0A9396] flex flex-col gap-2 text-[#001219]"
-          >
-            <p><strong>Title:</strong> {sa.title}</p>
-            <p><strong>Username:</strong> {sa.username}</p>
-            <p>
-              <strong>URL:</strong> 
-              <a href={sa.url} target="_blank" rel="noopener noreferrer" className="underline text-blue-700 ml-2">
-                {sa.url}
-              </a>
-            </p>
-            <p><strong>ID:</strong> {sa.id}</p>
+      {subAccounts.length === 0 ? (
+        <div className="text-gray-600 italic mb-4">
+          Nessun subaccount registrato a questo account
+        </div>
+      ) : (
+        <ul className="space-y-4">
+          {subAccounts.map((sa) => (
+            <li 
+              key={sa.id} 
+              className="p-4 rounded-2xl shadow-md border border-[#005F73] bg-[#0A9396] flex flex-col gap-2 text-[#001219]"
+            >
+              <p><strong>Title:</strong> {sa.title}</p>
+              <p><strong>Username:</strong> {sa.username}</p>
+              <p>
+                <strong>URL:</strong> 
+                <a href={sa.url} target="_blank" rel="noopener noreferrer" className="underline text-blue-700 ml-2">
+                  {sa.url}
+                </a>
+              </p>
+              <p><strong>ID:</strong> {sa.id}</p>
 
-            <div className="flex gap-4 mt-2">
-              <button 
-                onClick={() => {
-                  console.log("user.Id:", user.Id);
-                  sessionStorage.setItem("subAccountData", JSON.stringify(sa));
-                  sessionStorage.setItem("UserId", user.Id ?? "");
-                  sessionStorage.setItem("userSalt", user.SaltArgon ?? "");
-                  router.push("/edit-subaccount");
-                }}
-                className="px-3 py-1 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600"
-              >
-                ✏️ Modifica
-              </button>
+              <div className="flex gap-4 mt-2">
+                <button 
+                  onClick={() => {
+                    console.log("user.Id:", user.Id);
+                    sessionStorage.setItem("subAccountData", JSON.stringify(sa));
+                    sessionStorage.setItem("UserId", user.Id ?? "");
+                    sessionStorage.setItem("userSalt", user.SaltArgon ?? "");
+                    router.push("/edit-subaccount");
+                  }}
+                  className="px-3 py-1 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600"
+                >
+                  ✏️ Modifica
+                </button>
 
-              <button 
-                onClick={() => HandleDeleteSubAccount(sa)}
-                className="px-3 py-1 bg-red-600 text-white rounded-lg shadow hover:bg-red-700"
-              >
-                🗑️ Elimina
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+                <button 
+                  onClick={() => HandleDeleteSubAccount(sa)}
+                  className="px-3 py-1 bg-red-600 text-white rounded-lg shadow hover:bg-red-700"
+                >
+                  🗑️ Elimina
+                </button>
+              </div>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
