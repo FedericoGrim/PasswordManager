@@ -1,31 +1,93 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getMainUserByKeycloakId, getSubAccountsByUserId } from "../api/apis";
+import { 
+  getMainUserByKeycloakId, 
+  getSubAccountsByUserId,
+  deleteSubAccount
+} from "../api/apis";
+import { UUID } from "crypto";
 
 import { mainUser } from "@/api/entities/mainUser";
 import { subAccount } from "@/api/entities/subAccount";
+import { useRouter } from "next/navigation";
 
 export default function ProfilePage() {
   const [user, setUser] = useState<mainUser | null>(null);
-  const [subAccount, setSubAccount] = useState<subAccount[]>([]);
+  const [subAccounts, setSubAccounts] = useState<subAccount[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
     getMainUserByKeycloakId("3fa85f64-5717-4562-b3fc-2c963f66afa9").then(setUser);
-    getSubAccountsByUserId("6ff9e31e-0b64-4c7d-a972-37893f98841c").then(setSubAccount);
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await getSubAccountsByUserId("6ff9e31e-0b64-4c7d-a972-37893f98841c");
+      setSubAccounts(data);
+    };
+    fetchData();
+  }, []);
+
+  const HandleDeleteSubAccount = async (sa: subAccount) => {
+      if (!confirm("Sei sicuro di voler eliminare questo subaccount?")) return;
+      await deleteSubAccount(sa.user_id.toString(), sa.id.toString());
+      setSubAccounts(prev => prev.filter(s => s.id !== sa.id));
+  };
 
   if (!user) return <div>Loading...</div>;
 
   return (
-    <div>
-      <h1>Benvenuto, il tuo ID è: {user.Id}</h1>
+    <div className="p-6">
+      <h1 className="text-xl font-bold mb-6">
+        Benvenuto, il tuo ID è: {user.Id}
+      </h1>
 
-      <h2>I tuoi sottoconti:</h2>
-      <ul>
-        {subAccount.map((sa, index) => (
-          <li key={index}>
-            {JSON.stringify(sa)}
+      <button 
+        onClick={() => router.push("/create-subaccount")}
+        className="mb-6 px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+      >
+        ➕ Crea nuovo subaccount
+      </button>
+
+      <h2 className="text-lg font-semibold mb-4">I tuoi sottoconti:</h2>
+      <ul className="space-y-4">
+        {subAccounts.map((sa) => (
+          <li 
+            key={sa.id} 
+            className="p-4 rounded-2xl shadow-md border border-[#005F73] bg-[#0A9396] flex flex-col gap-2 text-[#001219]"
+          >
+            <p><strong>Title:</strong> {sa.title}</p>
+            <p><strong>Username:</strong> {sa.username}</p>
+            <p>
+              <strong>URL:</strong> 
+              <a href={sa.url} target="_blank" rel="noopener noreferrer" className="underline text-blue-700 ml-2">
+                {sa.url}
+              </a>
+            </p>
+            <p><strong>ID:</strong> {sa.id}</p>
+
+            <div className="flex gap-4 mt-2">
+              <button 
+                onClick={() => {
+                  console.log("user.Id:", user.Id);
+                  sessionStorage.setItem("subAccountData", JSON.stringify(sa));
+                  sessionStorage.setItem("UserId", user.Id ?? "");
+                  sessionStorage.setItem("userSalt", user.SaltArgon ?? "");
+                  router.push("/edit-subaccount");
+                }}
+                className="px-3 py-1 bg-yellow-500 text-white rounded-lg shadow hover:bg-yellow-600"
+              >
+                ✏️ Modifica
+              </button>
+
+              <button 
+                onClick={() => HandleDeleteSubAccount(sa)}
+                className="px-3 py-1 bg-red-600 text-white rounded-lg shadow hover:bg-red-700"
+              >
+                🗑️ Elimina
+              </button>
+            </div>
           </li>
         ))}
       </ul>

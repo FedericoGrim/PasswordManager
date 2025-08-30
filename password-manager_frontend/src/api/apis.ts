@@ -65,23 +65,36 @@ const getSubAccountsByUserId = async (userId: UUID): Promise<subAccount[]> => {
   }
 };
 
-const updateSubAccount = async (subAccount: subAccount): Promise<void> => {
+const updateSubAccount = async (subAccount: subAccount, userId: UUID, salt: string): Promise<void> => {
     try {
-        await axiosClient.put(`/api/V1/subaccount/${subAccount.Id}`, subAccount);
+        await axiosClient.put(
+            `/api/V1/subaccount/${userId}/${subAccount.id}`,
+            {
+                title: subAccount.title ?? "",
+                username: subAccount.username ?? "",
+                password_encrypted: subAccount.password_encrypted ?? "",
+                url: subAccount.url ?? ""
+            },
+            {
+                params: { userId: userId, subaccountId: subAccount.id, salt: salt }
+            }
+        );
     } catch (error) {
-        console.error('Error updating sub account:', error);
+        console.error("Error updating sub account:", error);
         throw error;
     }
 };
 
-const deleteSubAccount = async (id: UUID): Promise<void> => {
+const deleteSubAccount = async (user_id: string, subaccount_id: string): Promise<void> => {
+    console.log("Deleting sub account:", { user_id, subaccount_id });
     try {
-        await axiosClient.delete(`/api/V1/subaccount/${id}`);
+        await axiosClient.delete(`/api/V1/subaccount/${user_id}/${subaccount_id}`);
     } catch (error) {
-        console.error('Error deleting sub account:', error);
+        console.error("Error deleting sub account:", error);
         throw error;
     }
 };
+
 
 export {
     createMainUser,
