@@ -70,10 +70,10 @@ async def ApiGetUser(
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")
 
-@routerV1.put("/{id}")
+@routerV1.put("/{user_id}")
 @inject
 async def ApiUpdateLocalUser(
-    localUserId: UUID, 
+    user_id: UUID, 
     salt: str, 
     newLocalUser: UpdateLocalUser,
     db: Session = Depends(get_db), 
@@ -99,15 +99,15 @@ async def ApiUpdateLocalUser(
     update_user_username_use_case = container.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
-        if update_user_username_use_case.execute(localUserId, newLocalUser, salt):
+        if update_user_username_use_case.execute(user_id, newLocalUser, salt):
             return {"message": "User updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@routerV1.delete("/{id}")
+@routerV1.delete("/{user_id}")
 @inject
 async def ApiDeleteUser(
-    localUserId: UUID, 
+    user_id: UUID, 
     db: Session = Depends(get_db), 
     request: Request = None
 ):
@@ -129,7 +129,7 @@ async def ApiDeleteUser(
     delete_user_use_case = container.local_user().DeleteLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
-        if delete_user_use_case.execute(localUserId):
+        if delete_user_use_case.execute(user_id):
             return {"message": "User deleted successfully"}
         else:
             raise HTTPException(status_code=400, detail="User deletion failed")
