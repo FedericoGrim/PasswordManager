@@ -24,7 +24,7 @@ class CreateLocalUserUseCase():
         Executes the use case to create a local user.
         """
         try:
-            generated_hash, generated_salt = HashMasterPassword(localuser_create.MasterPassword)
+            generated_hash, generated_salt = hashPassword(localuser_create.MasterPassword)
             return self.LocalUserRepository.CreateLocalUser(localuser_create, generated_hash, generated_salt)
         except Exception as e:
             raise LocalUserCreationException(str(e)) from e
