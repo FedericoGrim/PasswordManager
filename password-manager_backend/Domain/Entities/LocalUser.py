@@ -12,7 +12,6 @@ class LocalUser(Base):
 
     Id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     IdKeycloak = Column(UUID, unique=True, nullable=False, default=uuid.uuid4)
-    HashMasterPassword = Column(String, nullable=False)
     SaltArgon = Column(String, nullable=False)
 
     SubAccounts = relationship(

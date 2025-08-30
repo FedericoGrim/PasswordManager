@@ -99,7 +99,7 @@ async def ApiUpdateLocalUser(
     update_user_username_use_case = container.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
     
     try:
-        if update_user_username_use_case.execute(user_id, newLocalUser, salt):
+        if update_user_username_use_case.execute(user_id, newLocalUser, salt.encode()):
             return {"message": "User updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

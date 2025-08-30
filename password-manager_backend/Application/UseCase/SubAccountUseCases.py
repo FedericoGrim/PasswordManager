@@ -20,12 +20,12 @@ class CreateSubAccountUseCase():
         """
         self.SubAccountRepository = SubAccountRepository
         
-    def execute(self, subaccount_create: CreateSubAccountDTO, salt = str):
+    def execute(self, subaccount_create: CreateSubAccountDTO, salt = str, masterPassword = str):
         """
         Executes the use case to create a subaccount.
         """
         try:
-            subaccount_create.password = PasswordCripting.hashPassword(subaccount_create.password, salt)
+            subaccount_create.password = PasswordCripting.CriptPassword(masterPassword, subaccount_create.password, salt)
             return self.SubAccountRepository.CreateSubAccount(subaccount_create)
         except Exception as e:
             raise CreateSubAccountException(str(e)) from e
@@ -68,12 +68,12 @@ class UpdateSubAccountByIdUseCase():
         """
         self.SubAccountRepository = SubAccountRepository
         
-    def execute(self, subaccountId: uuid.UUID, new_subaccount: UpdateSubAccountDTO, salt):
+    def execute(self, subaccountId: uuid.UUID, masterpassword, new_subaccount: UpdateSubAccountDTO, salt):
         """
         Executes the use case to update a subaccount by ID.
         """
         try:
-            new_subaccount.password = PasswordCripting.hashPassword(new_subaccount.password, salt)
+            new_subaccount.password = PasswordCripting.CriptPassword(masterpassword, new_subaccount.password, salt)
             return self.SubAccountRepository.UpdateSubAccountById(subaccountId, new_subaccount)
         except Exception as e:
             raise SubAccountUpdateException(str(e)) from e

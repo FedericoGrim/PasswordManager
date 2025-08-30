@@ -19,11 +19,11 @@ class LocalUserService(ILocalUserService):
         """
         self.Db = db
         
-    def CreateLocalUser(self, localuser_create, generatedHash, generatedSalt):
+    def CreateLocalUser(self, localuser_create, generatedSalt):
         '''
         Creates a new local user in the database.
 
-        Converts the `CreateLocalUser` DTO into a `LocalUser` entity using the provided hash and salt
+        Converts the `CreateLocalUser` DTO into a `LocalUser` entity using the provided  salt
         for the master password. Commits the new user to the database.
 
         If a user with the same Keycloak ID already exists, an exception is raised.
@@ -32,7 +32,6 @@ class LocalUserService(ILocalUserService):
         Args:
             localuser_create (CreateLocalUser): DTO containing user data.
             generatedHash (str): Hash of the master password.
-            generatedSalt (str): Salt used to generate the hash.
 
         Returns:
             LocalUser: The newly created local user entity.
@@ -43,7 +42,7 @@ class LocalUserService(ILocalUserService):
         '''
         try:
             with self.Db.begin():
-                newLocalUser = localuser_create.to_entity(generatedHash, generatedSalt)
+                newLocalUser = localuser_create.to_entity(generatedSalt)
                 self.Db.add(newLocalUser)
                 self.Db.flush()
                 self.Db.refresh(newLocalUser)
@@ -67,13 +66,13 @@ class LocalUserService(ILocalUserService):
             logging.error(f"Error: {e}")
             raise GetAllLocalUserByIdRetrivalException()
         
-    def UpdateLocalUserById(self, localUserId: uuid.UUID, new_hash: str):
+    def UpdateLocalUserById(self, localUserId: uuid.UUID, newPassword):
         '''        
-        Updates the master password hash of a local user by their ID.
+        Updates the password of a local user by their ID.
 
         Args:
             localUserId (uuid.UUID): The ID of the local user to update.
-            new_hash (str): The new hash for the master password.
+            newPassword: The new password to set.
 
         Returns:
             LocalUser: The updated local user entity.
@@ -87,8 +86,8 @@ class LocalUserService(ILocalUserService):
                 local_user = self.Db.query(LocalUser).filter(LocalUser.Id == localUserId).first()
                 if not local_user:
                     raise LocalUserNotFoundException("Local user not found.")
-                
-                local_user.HashMasterPassword = new_hash
+                local_user.Password = newPassword
+                self.Db.flush()
                 self.Db.refresh(local_user)
             return local_user
         except Exception as e:

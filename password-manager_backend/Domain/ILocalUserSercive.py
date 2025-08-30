@@ -6,13 +6,12 @@ from Domain.Entities.LocalUser import LocalUser
 @abstractmethod
 class ILocalUserService(ABC):
     @abstractmethod
-    def CreateLocalUser(self, user: LocalUser, hash, salt) -> dict:
+    def CreateLocalUser(self, user: LocalUser, salt) -> dict:
         """
         Creates a new local user in the database.
 
         Args:
-            user (LocalUser): The local user data to be created.
-            hash (str): The hash of the master password.
+            user (LocalUser): The local user data to be created..
             salt (str): The salt used for hashing the master password.
 
         Returns:

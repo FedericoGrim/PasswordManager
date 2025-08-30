@@ -8,6 +8,7 @@ from cryptography.fernet import Fernet
 
 def DeriveKey(password: str, salt: bytes) -> bytes:
     """Deriva una chiave dalla master password e dal salt"""
+    
     kdf = PBKDF2HMAC(
         algorithm=hashes.SHA256(),
         length=32,
@@ -18,8 +19,21 @@ def DeriveKey(password: str, salt: bytes) -> bytes:
     return base64.urlsafe_b64encode(kdf.derive(password.encode()))
 
 
-def hashPassword(masterPassword: str, plainPassword: str, salt: bytes) -> bytes:
+def CriptPassword(masterPassword: str, plainPassword: str, salt: bytes) -> bytes:
     """Cripta una password usando master password + salt"""
     key = DeriveKey(masterPassword, salt)
     fernet = Fernet(key)
     return fernet.encrypt(plainPassword.encode())
+
+def GenerateSalt(length: int = 16) -> str:
+    """
+    Genera un salt casuale e lo restituisce in Base64.
+    
+    Args:
+        length (int): lunghezza del salt in byte (default 16)
+    
+    Returns:
+        str: salt codificato in Base64
+    """
+    salt = os.urandom(length)
+    return salt

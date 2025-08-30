@@ -12,12 +12,11 @@ class CreateLocalUser(BaseModel):
     IdKeycloak: UUID
     MasterPassword: str
 
-    def to_entity(self, generatedHash, generatedSalt):
+    def to_entity(self, generatedSalt):
         """
         Converts the DTO to a LocalUser entity.
 
         Args:
-            generatedHash (str): The hash of the master password.
             generatedSalt (str): The salt used for hashing the master password.
 
         Returns:
@@ -25,7 +24,6 @@ class CreateLocalUser(BaseModel):
         """
         return LocalUser(
             IdKeycloak=self.IdKeycloak,
-            HashMasterPassword=generatedHash,
             SaltArgon=generatedSalt,
         )
 

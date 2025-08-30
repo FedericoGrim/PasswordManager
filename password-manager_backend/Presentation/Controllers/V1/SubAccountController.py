@@ -14,7 +14,8 @@ async def CreateSubAccount(
     subaccountObj: CreateSubAccountDTO,
     db: Session = Depends(get_db),
     request: Request = None,
-    salt: str = ""
+    salt: str = "",
+    master_password = str
 ):
     '''
     Create a new subaccount for a user.
@@ -35,7 +36,7 @@ async def CreateSubAccount(
     create_subaccount_use_case = container.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
 
     try:
-        if create_subaccount_use_case.execute(subaccountObj, salt):
+        if create_subaccount_use_case.execute(subaccountObj, salt.encode(), master_password):
             return {"message": "SubAccount created successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -78,6 +79,7 @@ async def UpdateSubAccountById(
     updated_data: UpdateSubAccountDTO, 
     db: Session = Depends(get_db), 
     salt: str = "",
+    master_password: str = "",
     request: Request = None
 ):
     '''
@@ -102,7 +104,7 @@ async def UpdateSubAccountById(
     update_subaccount_use_case = container.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
 
     try:
-        if update_subaccount_use_case.execute( subaccount_id, updated_data, salt):
+        if update_subaccount_use_case.execute( subaccount_id, master_password, updated_data, salt.encode()):
             return {"message": "SubAccount updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

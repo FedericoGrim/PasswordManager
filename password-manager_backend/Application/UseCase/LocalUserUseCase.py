@@ -7,7 +7,6 @@ from Application.Exceptions.LocalUserUseCaseExceptions import *
 class CreateLocalUserUseCase():
     """
     Use case for creating a local user.
-    This class handles the creation of a local user by generating a hash and salt for the master password.
     It interacts with the LocalUserRepository to persist the user data.
 
     Attributes:
@@ -24,8 +23,9 @@ class CreateLocalUserUseCase():
         Executes the use case to create a local user.
         """
         try:
-            generated_hash, generated_salt = hashPassword(localuser_create.MasterPassword)
-            return self.LocalUserRepository.CreateLocalUser(localuser_create, generated_hash, generated_salt)
+            salt = GenerateSalt()
+            localuser_create.MasterPassword = CriptPassword(localuser_create.MasterPassword, localuser_create.MasterPassword, salt)
+            return self.LocalUserRepository.CreateLocalUser(localuser_create, salt)
         except Exception as e:
             raise LocalUserCreationException(str(e)) from e
 
@@ -55,8 +55,6 @@ class GetLocalUsersByMainUserIdUseCase():
 class UpdateLocalUserByIdUseCase():
     """
     Use case for updating a local user by ID.
-    This class handles the update of a local user by generating a new hash for the master password and interacting with the LocalUserRepository to persist the changes.
-
     Attributes:
         LocalUserRepository (ILocalUserService): The repository interface for local user operations.
     """
@@ -66,13 +64,13 @@ class UpdateLocalUserByIdUseCase():
         """
         self.LocalUserRepository = LocalUserRepository
         
-    def execute(self, localUserId: uuid.UUID, new_local_user: UpdateLocalUser, salt: str):
+    def execute(self, localUserId: uuid.UUID, new_local_user: UpdateLocalUser, salt: bytes):
         """
         Executes the use case to update a local user by ID.
         """
         try:
-            new_generated_hash = hashPassword(new_local_user.NewMasterPassword, salt)
-            return self.LocalUserRepository.UpdateLocalUserById(localUserId, new_generated_hash)
+            newCriptedPassword = CriptPassword(new_local_user.NewMasterPassword, new_local_user.NewMasterPassword, salt)
+            return self.LocalUserRepository.UpdateLocalUserById(localUserId, newCriptedPassword)
         except Exception as e:
             raise LocalUserUpdateException(str(e)) from e        
 
