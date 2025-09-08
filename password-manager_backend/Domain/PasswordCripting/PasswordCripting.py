@@ -19,7 +19,7 @@ def DeriveKey(password: str, salt: bytes) -> bytes:
     return kdf.derive(password.encode())
 
 
-def EncryptPassword(masterPassword: str, plainPassword: str, salt: bytes) -> str:
+def CriptPassword(masterPassword: str, plainPassword: str, salt: bytes) -> str:
     """Cripta la password con AES-CBC compatibile con CryptoJS"""
     key = DeriveKey(masterPassword, salt)
 
@@ -37,6 +37,6 @@ def EncryptPassword(masterPassword: str, plainPassword: str, salt: bytes) -> str
     return base64.b64encode(iv + ciphertext).decode()
 
 
-def GenerateSalt(length: int = 16) -> str:
+def GenerateSalt(length: int = 16) -> bytes:
     """Genera salt casuale in hex stile Postgres (con prefisso \\x)"""
     return "\\x" + os.urandom(length).hex()

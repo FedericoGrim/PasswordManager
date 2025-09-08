@@ -5,17 +5,15 @@ from dependency_injector.wiring import inject
 from config import Container
 
 from Infrastructure.Repositories.Database import get_db
-from Application.DTO.V1.SubAccountDTO import CreateSubAccountDTOV1, UpdateSubAccountDTOV1
+from Application.DTO.V2.SubAccountDTO import CreateSubAccountDTOV2, UpdateSubAccountDTOV2
 
-routerV1 = APIRouter()
+routerV2 = APIRouter()
 
-@routerV1.post("/{user_id}")
+@routerV2.post("/{user_id}")
 async def CreateSubAccount(
-    subaccountObj: CreateSubAccountDTOV1,
+    subaccountObj: CreateSubAccountDTOV2,
     db: Session = Depends(get_db),
     request: Request = None,
-    salt: str = "",
-    master_password = str
 ):
     '''
     Create a new subaccount for a user.
@@ -33,16 +31,16 @@ async def CreateSubAccount(
         HTTPException: If the subaccount creation fails.
     '''
     container: Container = request.app.container
-    create_subaccount_use_case = container.V1.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
+    create_subaccount_use_case = container.V2.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
 
     try:
-        if create_subaccount_use_case.execute(subaccountObj, salt.encode(), master_password):
+        if create_subaccount_use_case.execute(subaccountObj):
             return {"message": "SubAccount created successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
-@routerV1.get("/{user_id}")
+@routerV2.get("/{user_id}")
 @inject
 async def GetAllSubAccountsByUserId(
     user_id: uuid.UUID, 
@@ -64,7 +62,7 @@ async def GetAllSubAccountsByUserId(
         HTTPException: If the subaccounts are not found or an error occurs.
     '''
     container: Container = request.app.container
-    get_subaccounts_use_case = container.V1.subaccount().GetAllSubAccountsByUserIdProvider(SubAccountRepository__db=db)
+    get_subaccounts_use_case = container.V2.subaccount().GetAllSubAccountsByUserIdProvider(SubAccountRepository__db=db)
 
     try:
         subaccounts = get_subaccounts_use_case.execute(user_id)
@@ -72,14 +70,12 @@ async def GetAllSubAccountsByUserId(
     except Exception as e:
         raise HTTPException(status_code=404, detail="SubAccounts not found")
 
-@routerV1.put("/{subaccount_id}")
+@routerV2.put("/{subaccount_id}")
 @inject
 async def UpdateSubAccountById(
     subaccount_id: uuid.UUID, 
-    updated_data: UpdateSubAccountDTOV1, 
+    updated_data: UpdateSubAccountDTOV2, 
     db: Session = Depends(get_db), 
-    salt: str = "",
-    master_password: str = "",
     request: Request = None
 ):
     '''
@@ -101,15 +97,15 @@ async def UpdateSubAccountById(
     '''
 
     container: Container = request.app.container
-    update_subaccount_use_case = container.V1.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
+    update_subaccount_use_case = container.V2.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
 
     try:
-        if update_subaccount_use_case.execute( subaccount_id, master_password, updated_data, salt.encode()):
+        if update_subaccount_use_case.execute( subaccount_id, updated_data):
             return {"message": "SubAccount updated successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-@routerV1.delete("/{subaccount_id}")
+@routerV2.delete("/{subaccount_id}")
 @inject
 async def DeleteSubAccount(
     subaccount_id: uuid.UUID, 
@@ -132,7 +128,7 @@ async def DeleteSubAccount(
         HTTPException: If the subaccount deletion fails.
     '''
     container: Container = request.app.container
-    delete_subaccount_use_case = container.V1.subaccount().DeleteSubAccountByIdProvider(SubAccountRepository__db=db)
+    delete_subaccount_use_case = container.V2.subaccount().DeleteSubAccountByIdProvider(SubAccountRepository__db=db)
 
     try:
         if delete_subaccount_use_case.execute(subaccount_id):

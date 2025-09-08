@@ -5,6 +5,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from config import Container
 from Presentation.Controllers.V1.LocalUserController import routerV1 as local_user_router_V1
 from Presentation.Controllers.V1.SubAccountController import routerV1 as subaccount_router_V1
+from Presentation.Controllers.V2.LocalUserController import routerV2 as local_user_router_V2
+from Presentation.Controllers.V2.SubAccountController import routerV2 as subaccount_router_V2
 from Infrastructure.Repositories.Database import SessionLocal
 
 container = Container()
@@ -19,7 +21,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],)
 
-# Assegno i container al FastAPI app per accedervi dal controller
 app.container = container
 
 app.include_router(
@@ -31,6 +32,18 @@ app.include_router(
 app.include_router(
     subaccount_router_V1,
     prefix="/api/V1/subaccount",
+    tags=["SubAccount"]
+)
+
+app.include_router(
+    local_user_router_V2,
+    prefix="/api/V2/localuser",
+    tags=["LocalUser"]
+)
+
+app.include_router(
+    subaccount_router_V2,
+    prefix="/api/V2/subaccount",
     tags=["SubAccount"]
 )
 

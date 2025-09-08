@@ -4,13 +4,14 @@ from uuid import UUID
 
 from Domain.Entities.LocalUser import LocalUser
 
-class CreateLocalUser(BaseModel):
+class CreateLocalUserDTOV2(BaseModel):
     """
     DTO for creating a local user.
     This class is used to transfer data for creating a new local user.
     """
     IdKeycloak: UUID
     MasterPassword: str
+    Salt: str
 
     def to_entity(self, generatedSalt):
         """
@@ -28,7 +29,7 @@ class CreateLocalUser(BaseModel):
         )
 
 
-class UpdateLocalUser(BaseModel):
+class UpdateLocalUserDTOV2(BaseModel):
     """
     DTO for updating a local user.
     This class is used to transfer data for updating an existing local user.
