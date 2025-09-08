@@ -4,29 +4,67 @@ import { useEffect, useState } from "react";
 import { updateSubAccount } from "../../api/apis";
 import { subAccount } from "@/api/entities/subAccount";
 import { useRouter } from "next/navigation";
+import { Decrypt, DeriveKey, Encrypt } from "../crypto/decript";
 
 export default function EditSubAccountPage() {
   const [subAcc, setSubAcc] = useState<subAccount | null>(null);
   const [salt, setSalt] = useState<string | null>(null);
+  const [KeyBuffer, SetKeyBuffer] = useState<Buffer | null>(null);
   const router = useRouter();
+
+  const MASTER_PASSWORD = "string";
 
   useEffect(() => {
     const storedDatas = sessionStorage.getItem("subAccountData");
-    const storedUserSalt = sessionStorage.getItem("userSalt");
-    if (storedDatas) setSubAcc(JSON.parse(storedDatas));
-    if (storedUserSalt) setSalt(storedUserSalt);
+    const storedUserSalt = sessionStorage.getItem("Salt");
+    const storedUserKey = sessionStorage.getItem("Key");
+
+    if (storedDatas && storedUserSalt && storedUserKey) {
+      try {
+        const parsedSubAcc: subAccount = JSON.parse(storedDatas);
+
+        // Decifra la password
+        const derivedKey = DeriveKey(MASTER_PASSWORD, Buffer.from(storedUserSalt, "hex"));
+        parsedSubAcc.password = Decrypt(parsedSubAcc.password, derivedKey);
+
+        setSubAcc(parsedSubAcc);
+        setSalt(storedUserSalt);
+
+        // Crea il buffer per le future cifrature
+        const buf = Buffer.from(storedUserKey.match(/.{1,2}/g)!.map(b => parseInt(b, 16)));
+        SetKeyBuffer(buf);
+      } catch (error) {
+        console.error("Errore nel parsing o decrypt:", error);
+      }
+    }
   }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!subAcc) return;
-    setSubAcc({ ...subAcc, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setSubAcc(prev => prev ? { ...prev, [name]: value } : prev);
   };
 
   const handleSave = async () => {
-    if (!subAcc || !salt) return;
-    await updateSubAccount(subAcc, subAcc.id, salt);
-    alert("Modifiche salvate!");
-    router.push("/");
+    if (!subAcc || !salt || !KeyBuffer) {
+      alert("Chiave o dati mancanti. Impossibile salvare.");
+      return;
+    }
+
+    try {
+      // Non modificare direttamente lo stato
+      const updatedSubAcc: subAccount = {
+        ...subAcc,
+        password: Encrypt(subAcc.password, KeyBuffer)
+      };
+
+      await updateSubAccount(updatedSubAcc, updatedSubAcc.id);
+      alert("Modifiche salvate!");
+      router.push("/home");
+    } catch (error) {
+      console.error("Errore nel salvataggio:", error);
+      alert("Errore durante il salvataggio");
+    }
   };
 
   if (!subAcc) return <div>Caricamento dati...</div>;
@@ -34,47 +72,22 @@ export default function EditSubAccountPage() {
   return (
     <div className="p-6 max-w-lg mx-auto">
       <h1 className="text-xl font-bold mb-6">Modifica Subaccount</h1>
-      <form className="flex flex-col gap-4" onSubmit={e => { e.preventDefault(); handleSave(); }}>
-        <label>
-          Titolo:
-          <input
-            type="text"
-            name="title"
-            value={subAcc.title}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-          />
-        </label>
-        <label>
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={subAcc.username}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-          />
-        </label>
-        <label>
-          URL:
-          <input
-            type="text"
-            name="url"
-            value={subAcc.url}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type="text"
-            name="password"
-            value={subAcc.password ?? ""}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-          />
-        </label>
+      <form
+        className="flex flex-col gap-4"
+        onSubmit={e => { e.preventDefault(); handleSave(); }}
+      >
+        {["title", "username", "url", "password"].map(field => (
+          <label key={field}>
+            {field.charAt(0).toUpperCase() + field.slice(1)}:
+            <input
+              type={field === "password" ? "password" : "text"}
+              name={field}
+              value={subAcc[field as keyof subAccount] as string}
+              onChange={handleChange}
+              className="border rounded px-2 py-1 w-full"
+            />
+          </label>
+        ))}
         <button
           type="submit"
           className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"

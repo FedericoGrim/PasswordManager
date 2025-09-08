@@ -1,19 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { createSubAccount } from "../../api/apis";
 import { useRouter } from "next/navigation";
 import { subAccount } from "@/api/entities/subAccount";
 import { v4 as uuidv4 } from "uuid";
+import { UUID } from "crypto";
+import { Encrypt } from "../crypto/decript";
 
 export default function CreateSubAccountPage() {
+  const [UserId, SetUserId] = useState<UUID | null>(null);
+  const [KeyBuffer, SetKeyBuffer] = useState<Buffer | null>(null);
+
   const [form, setForm] = useState<Partial<subAccount>>({
     title: "",
     username: "",
     url: "",
     password: ""
   });
+
   const router = useRouter();
+
+  useEffect(() => {
+    const storedUserId = sessionStorage.getItem("UserId") as UUID | null;
+    const KeyRaw = sessionStorage.getItem("Key");
+
+    SetUserId(storedUserId);
+
+    if (KeyRaw) {
+      const Buf = Buffer.from(
+        KeyRaw.match(/.{1,2}/g)!.map(b => parseInt(b, 16))
+      );
+      SetKeyBuffer(Buf);
+    }
+  }, []);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -21,27 +41,30 @@ export default function CreateSubAccountPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const userId = JSON.parse(sessionStorage.getItem("userId") ?? '""');
-    const salt = sessionStorage.getItem("userSalt") ?? "";
-    const masterPassword = JSON.parse(sessionStorage.getItem("masterPassword") ?? '""');
-    if (!userId) {
+
+    if (!UserId) {
       alert("UserId mancante!");
       return;
     }
+    if (!KeyBuffer) {
+      alert("Chiave di cifratura mancante!");
+      return;
+    }
+
     const newSubAccount: subAccount = {
       ...form,
       id: uuidv4(),
-      user_id: userId,
-      password: form.password ?? "",
+      user_id: UserId,
+      password: Encrypt(form.password ?? "", KeyBuffer),
       url: form.url ?? "",
       title: form.title ?? "",
       username: form.username ?? ""
     } as subAccount;
 
     try {
-      await createSubAccount(userId, newSubAccount, salt, masterPassword);
+      await createSubAccount(UserId, newSubAccount);
       alert("Subaccount creato!");
-      router.push("/");
+      router.push("/home");
     } catch (err) {
       alert("Errore nella creazione del subaccount");
       console.error(err);

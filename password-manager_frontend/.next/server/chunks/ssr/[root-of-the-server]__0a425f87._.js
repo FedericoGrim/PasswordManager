@@ -162,7 +162,7 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e
 __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].defaults.headers.common['Content-Type'] = 'application/json';
 const createMainUser = async (user)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post('/mainUser', user);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post('/api/V2/localuser/', user);
     } catch (error) {
         console.error('Error creating main user:', error);
         throw error;
@@ -170,7 +170,7 @@ const createMainUser = async (user)=>{
 };
 const getMainUserByKeycloakId = async (keycloak_user_id)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get(`/api/V1/localuser/${keycloak_user_id}`);
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get(`/api/V2/localuser/${keycloak_user_id}`);
         return response.data.user;
     } catch (error) {
         console.error('Error fetching main user:', error);
@@ -179,7 +179,7 @@ const getMainUserByKeycloakId = async (keycloak_user_id)=>{
 };
 const updateMainUser = async (user)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`/api/V1/localuser/${user.Id}`, user);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`/api/V2/localuser/${user.Id}`, user);
     } catch (error) {
         console.error('Error updating main user:', error);
         throw error;
@@ -187,15 +187,15 @@ const updateMainUser = async (user)=>{
 };
 const deleteMainUser = async (id)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].delete(`/api/V1/localuser/${id}`);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].delete(`/api/V2/localuser/${id}`);
     } catch (error) {
         console.error('Error deleting main user:', error);
         throw error;
     }
 };
-const createSubAccount = async (UserId, SubAccount, Salt, MasterPassword)=>{
+const createSubAccount = async (UserId, SubAccount)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post(`/api/V1/subaccount/${UserId}?salt=${Salt}&master_password=${MasterPassword}`, {
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].post(`/api/V2/subaccount/${UserId}`, {
             user_id: UserId,
             title: SubAccount.title,
             username: SubAccount.username,
@@ -209,7 +209,7 @@ const createSubAccount = async (UserId, SubAccount, Salt, MasterPassword)=>{
 };
 const getSubAccountsByUserId = async (userId)=>{
     try {
-        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get(`/api/V1/subaccount/${userId}`, {
+        const response = await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].get(`/api/V2/subaccount/${userId}`, {
             params: {
                 userId
             }
@@ -221,17 +221,13 @@ const getSubAccountsByUserId = async (userId)=>{
         return [];
     }
 };
-const updateSubAccount = async (subaccount, subaccount_id, salt)=>{
+const updateSubAccount = async (subaccount, subaccount_id)=>{
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`/api/V1/subaccount/${subaccount_id}`, {
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].put(`/api/V2/subaccount/${subaccount_id}`, {
             title: subaccount.title ?? "",
             username: subaccount.username ?? "",
             password: subaccount.password ?? "",
             url: subaccount.url ?? ""
-        }, {
-            params: {
-                salt: salt
-            }
         });
     } catch (error) {
         console.error("Error updating sub account:", error);
@@ -243,7 +239,7 @@ const deleteSubAccount = async (subaccount_id)=>{
         subaccount_id
     });
     try {
-        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].delete(`/api/V1/subaccount/${subaccount_id}`);
+        await __TURBOPACK__imported__module__$5b$project$5d2f$src$2f$api$2f$axiosClient$2e$ts__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["default"].delete(`/api/V2/subaccount/${subaccount_id}`);
     } catch (error) {
         console.error("Error deleting sub account:", error);
         throw error;
@@ -291,9 +287,9 @@ function CreateSubAccountPage() {
     };
     const handleSubmit = async (e)=>{
         e.preventDefault();
-        const userId = JSON.parse(sessionStorage.getItem("userId") ?? '""');
-        const salt = sessionStorage.getItem("userSalt") ?? "";
-        const masterPassword = JSON.parse(sessionStorage.getItem("masterPassword") ?? '""');
+        const userId = sessionStorage.getItem("UserId");
+        const salt = sessionStorage.getItem("Salt") ?? "";
+        const masterPassword = "string";
         if (!userId) {
             alert("UserId mancante!");
             return;
@@ -324,7 +320,7 @@ function CreateSubAccountPage() {
                 children: "Crea nuovo subaccount"
             }, void 0, false, {
                 fileName: "[project]/src/app/create-subaccount/page.tsx",
-                lineNumber: 53,
+                lineNumber: 54,
                 columnNumber: 7
             }, this),
             /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
@@ -343,13 +339,13 @@ function CreateSubAccountPage() {
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/create-subaccount/page.tsx",
-                                lineNumber: 57,
+                                lineNumber: 58,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/create-subaccount/page.tsx",
-                        lineNumber: 55,
+                        lineNumber: 56,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -364,13 +360,13 @@ function CreateSubAccountPage() {
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/create-subaccount/page.tsx",
-                                lineNumber: 68,
+                                lineNumber: 69,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/create-subaccount/page.tsx",
-                        lineNumber: 66,
+                        lineNumber: 67,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -384,13 +380,13 @@ function CreateSubAccountPage() {
                                 className: "border rounded px-2 py-1 w-full"
                             }, void 0, false, {
                                 fileName: "[project]/src/app/create-subaccount/page.tsx",
-                                lineNumber: 79,
+                                lineNumber: 80,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/create-subaccount/page.tsx",
-                        lineNumber: 77,
+                        lineNumber: 78,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("label", {
@@ -405,13 +401,13 @@ function CreateSubAccountPage() {
                                 required: true
                             }, void 0, false, {
                                 fileName: "[project]/src/app/create-subaccount/page.tsx",
-                                lineNumber: 89,
+                                lineNumber: 90,
                                 columnNumber: 11
                             }, this)
                         ]
                     }, void 0, true, {
                         fileName: "[project]/src/app/create-subaccount/page.tsx",
-                        lineNumber: 87,
+                        lineNumber: 88,
                         columnNumber: 9
                     }, this),
                     /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$node_modules$2f$next$2f$dist$2f$server$2f$route$2d$modules$2f$app$2d$page$2f$vendored$2f$ssr$2f$react$2d$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$ssr$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
@@ -420,19 +416,19 @@ function CreateSubAccountPage() {
                         children: "Crea subaccount"
                     }, void 0, false, {
                         fileName: "[project]/src/app/create-subaccount/page.tsx",
-                        lineNumber: 98,
+                        lineNumber: 99,
                         columnNumber: 9
                     }, this)
                 ]
             }, void 0, true, {
                 fileName: "[project]/src/app/create-subaccount/page.tsx",
-                lineNumber: 54,
+                lineNumber: 55,
                 columnNumber: 7
             }, this)
         ]
     }, void 0, true, {
         fileName: "[project]/src/app/create-subaccount/page.tsx",
-        lineNumber: 52,
+        lineNumber: 53,
         columnNumber: 5
     }, this);
 }

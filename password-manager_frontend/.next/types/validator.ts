@@ -48,10 +48,16 @@ type LayoutConfig<Route extends LayoutRoutes = LayoutRoutes> = {
   handler satisfies AppPageConfig<"/edit-subaccount">
 }
 
-// Validate ../../src/app/page.tsx
+// Validate ../../src/app/home/page.tsx
 {
-  const handler = {} as typeof import("../../src/app/page.js")
-  handler satisfies AppPageConfig<"/">
+  const handler = {} as typeof import("../../src/app/home/page.js")
+  handler satisfies AppPageConfig<"/home">
+}
+
+// Validate ../../src/app/login-singin/page.tsx
+{
+  const handler = {} as typeof import("../../src/app/login-singin/page.js")
+  handler satisfies AppPageConfig<"/login-singin">
 }
 
 
