@@ -63,10 +63,17 @@ export default function ProfilePage() {
   }, []);
 
   useEffect(() => {
-    if (!IsLoading && !UserId) {
-      router.push("/login-singin");
-    }
-  }, [IsLoading, UserId, router]);
+    // Legge il code dalla query string
+    const params = new URLSearchParams(window.location.search);
+    const code = params.get("code");
+
+    console.log("Code ricevuto da Keycloak:", code);
+
+    // Per ottenere il sub, serve inviare il code al backend e scambiare con token
+    // fetch("/api/auth", { method: "POST", body: JSON.stringify({ code }) })
+    //   .then(res => res.json())
+    //   .then(data => console.log("ID Keycloak (sub):", data.sub));
+  }, []);
 
   const HandleDeleteSubAccount = async (sa: subAccount) => {
     if (!confirm("Sei sicuro di voler eliminare questo subaccount?")) return;
