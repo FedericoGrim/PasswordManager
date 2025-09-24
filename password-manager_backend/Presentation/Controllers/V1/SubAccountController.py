@@ -5,13 +5,13 @@ from dependency_injector.wiring import inject
 from config import Container
 
 from Infrastructure.Repositories.Database import get_db
-from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
+from Application.DTO.V1.SubAccountDTO import CreateSubAccountDTOV1, UpdateSubAccountDTOV1
 
 routerV1 = APIRouter()
 
 @routerV1.post("/{user_id}")
 async def CreateSubAccount(
-    subaccountObj: CreateSubAccountDTO,
+    subaccountObj: CreateSubAccountDTOV1,
     db: Session = Depends(get_db),
     request: Request = None,
     salt: str = "",
@@ -33,7 +33,7 @@ async def CreateSubAccount(
         HTTPException: If the subaccount creation fails.
     '''
     container: Container = request.app.container
-    create_subaccount_use_case = container.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
+    create_subaccount_use_case = container.V1.subaccount().CreateSubAccountProvider(SubAccountRepository__db=db)
 
     try:
         if create_subaccount_use_case.execute(subaccountObj, salt.encode(), master_password):
@@ -64,7 +64,7 @@ async def GetAllSubAccountsByUserId(
         HTTPException: If the subaccounts are not found or an error occurs.
     '''
     container: Container = request.app.container
-    get_subaccounts_use_case = container.subaccount().GetAllSubAccountsByUserIdProvider(SubAccountRepository__db=db)
+    get_subaccounts_use_case = container.V1.subaccount().GetAllSubAccountsByUserIdProvider(SubAccountRepository__db=db)
 
     try:
         subaccounts = get_subaccounts_use_case.execute(user_id)
@@ -76,7 +76,7 @@ async def GetAllSubAccountsByUserId(
 @inject
 async def UpdateSubAccountById(
     subaccount_id: uuid.UUID, 
-    updated_data: UpdateSubAccountDTO, 
+    updated_data: UpdateSubAccountDTOV1, 
     db: Session = Depends(get_db), 
     salt: str = "",
     master_password: str = "",
@@ -101,7 +101,7 @@ async def UpdateSubAccountById(
     '''
 
     container: Container = request.app.container
-    update_subaccount_use_case = container.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
+    update_subaccount_use_case = container.V1.subaccount().UpdateSubAccountByIdProvider(SubAccountRepository__db=db)
 
     try:
         if update_subaccount_use_case.execute( subaccount_id, master_password, updated_data, salt.encode()):
@@ -132,7 +132,7 @@ async def DeleteSubAccount(
         HTTPException: If the subaccount deletion fails.
     '''
     container: Container = request.app.container
-    delete_subaccount_use_case = container.subaccount().DeleteSubAccountByIdProvider(SubAccountRepository__db=db) 
+    delete_subaccount_use_case = container.V1.subaccount().DeleteSubAccountByIdProvider(SubAccountRepository__db=db)
 
     try:
         if delete_subaccount_use_case.execute(subaccount_id):

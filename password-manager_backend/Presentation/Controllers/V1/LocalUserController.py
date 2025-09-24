@@ -5,7 +5,7 @@ from uuid import UUID
 from dependency_injector.wiring import inject
 
 from config import Container
-from Application.DTO.LocalUserDTO import CreateLocalUser, UpdateLocalUser
+from Application.DTO.V1.LocalUserDTO import CreateLocalUserDTOV1, UpdateLocalUserDTOV1
 from Infrastructure.Repositories.Database import get_db
 
 routerV1 = APIRouter()
@@ -13,7 +13,7 @@ routerV1 = APIRouter()
 @routerV1.post("/")
 @inject
 async def ApiCreateUser(
-    localUser: CreateLocalUser, 
+    localUser: CreateLocalUserDTOV1, 
     db: Session = Depends(get_db), 
     request: Request = None
 ):
@@ -32,7 +32,7 @@ async def ApiCreateUser(
         HTTPException: Errore con status 400 in caso di fallimento.
     """
     container: Container = request.app.container
-    create_user_use_case = container.local_user().CreateLocalUserProvider(LocalUserRepository__db=db)
+    create_user_use_case = container.V1.local_user().CreateLocalUserProvider(LocalUserRepository__db=db)
 
     try:
         if create_user_use_case.execute(localUser):
@@ -62,8 +62,8 @@ async def ApiGetUser(
         HTTPException: Errore 404 se l'utente non è trovato.
     """
     container: Container = request.app.container
-    get_user_use_case = container.local_user().GetLocalUserByKeycloakIdProvider(LocalUserRepository__db=db)
-    
+    get_user_use_case = container.V1.local_user().GetLocalUserByKeycloakIdProvider(LocalUserRepository__db=db)
+
     try:
         user = get_user_use_case.execute(keycloak_user_id)
         return {"message": "User retrieved successfully", "user": user}
@@ -75,7 +75,7 @@ async def ApiGetUser(
 async def ApiUpdateLocalUser(
     user_id: UUID, 
     salt: str, 
-    newLocalUser: UpdateLocalUser,
+    newLocalUser: UpdateLocalUserDTOV1,
     db: Session = Depends(get_db), 
     request: Request = None
 ):
@@ -96,8 +96,8 @@ async def ApiUpdateLocalUser(
         HTTPException: Errore 400 in caso di problemi durante l'aggiornamento.
     """
     container: Container = request.app.container
-    update_user_username_use_case = container.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
-    
+    update_user_username_use_case = container.V1.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
+
     try:
         if update_user_username_use_case.execute(user_id, newLocalUser, salt.encode()):
             return {"message": "User updated successfully"}
@@ -126,8 +126,8 @@ async def ApiDeleteUser(
         HTTPException: Errore 400 se l'eliminazione fallisce.
     """
     container: Container = request.app.container
-    delete_user_use_case = container.local_user().DeleteLocalUserByIdProvider(LocalUserRepository__db=db)
-    
+    delete_user_use_case = container.V1.local_user().DeleteLocalUserByIdProvider(LocalUserRepository__db=db)
+
     try:
         if delete_user_use_case.execute(user_id):
             return {"message": "User deleted successfully"}

@@ -1,6 +1,6 @@
 import uuid
 
-from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
+from Application.DTO.V1.SubAccountDTO import CreateSubAccountDTOV1, UpdateSubAccountDTOV1
 from Application.Exceptions.SubAccountUseCaseException import *
 
 from Domain.PasswordCripting import PasswordCripting
@@ -20,7 +20,7 @@ class CreateSubAccountUseCase():
         """
         self.SubAccountRepository = SubAccountRepository
         
-    def execute(self, subaccount_create: CreateSubAccountDTO, salt = str, masterPassword = str):
+    def execute(self, subaccount_create: CreateSubAccountDTOV1, salt = str, masterPassword = str):
         """
         Executes the use case to create a subaccount.
         """
@@ -68,7 +68,7 @@ class UpdateSubAccountByIdUseCase():
         """
         self.SubAccountRepository = SubAccountRepository
         
-    def execute(self, subaccountId: uuid.UUID, masterpassword, new_subaccount: UpdateSubAccountDTO, salt):
+    def execute(self, subaccountId: uuid.UUID, masterpassword, new_subaccount: UpdateSubAccountDTOV1, salt):
         """
         Executes the use case to update a subaccount by ID.
         """
