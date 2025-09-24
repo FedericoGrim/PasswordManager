@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getSubAccountsByUserId, deleteSubAccount } from "../../api/apis";
-import { Decrypt } from "../crypto/decript";
+import { createMainUser, getMainUserByKeycloakId, getSubAccountsByUserId, deleteSubAccount } from "../../api/apis";
+import { Decrypt, DeriveKey, GenerateSalt } from "../crypto/decript";
 import { subAccount } from "@/api/entities/subAccount";
 import { useRouter } from "next/navigation";
 import { UUID } from "crypto";
@@ -11,69 +11,86 @@ export default function ProfilePage() {
   const [UserId, SetUserId] = useState<UUID | null>(null);
   const [KeyBuffer, SetKeyBuffer] = useState<Buffer | null>(null);
   const [subAccounts, setSubAccounts] = useState<subAccount[]>([]);
+  const [IsLoading, SetIsLoading] = useState(true);
+  const [showMasterPassword, setShowMasterPassword] = useState(true);
+  const [masterPassword, setMasterPassword] = useState("");
+  const [error, setError] = useState("");
   const router = useRouter();
 
   useEffect(() => {
-    const Id = sessionStorage.getItem("UserId") as UUID | null;
-    const KeyRaw = sessionStorage.getItem("Key");
-    console.log("Retrieved Key from sessionStorage:", KeyRaw);
-
-    SetUserId(Id);
-
-    if (KeyRaw) {
-      const Buf = Buffer.from(
-        KeyRaw.match(/.{1,2}/g)!.map(b => parseInt(b, 16))
-      );
-      SetKeyBuffer(Buf);
+    const token = sessionStorage.getItem("IdToken");
+    if (!token) {
+      router.replace("/login-register");
+      return;
     }
-  }, []);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      if (UserId) {
-        const data = await getSubAccountsByUserId(UserId);
+    let keycloakId: UUID | null = null;
+    try {
+      const payloadBase64 = token.split(".")[1];
+      const payloadJson = JSON.parse(atob(payloadBase64));
+      keycloakId = payloadJson.sub ?? null;
+    } catch {
+      router.replace("/login-register");
+      return;
+    }
 
-        // Salva nel sessionStorage il primo subaccount (o quello che vuoi modificare)
-        if (data.length > 0) {
-          sessionStorage.setItem("subAccountData", JSON.stringify(data[0]));
+    (async () => {
+      try {
+        if (!keycloakId) {
+          router.replace("/login-register");
+          return;
+        }
+        let user = await getMainUserByKeycloakId(keycloakId);
+        if (!user) {
+          const salt = GenerateSalt();
+          await createMainUser(keycloakId, Buffer.from(salt).toString("hex"));
+          user = await getMainUserByKeycloakId(keycloakId);
         }
 
-        setSubAccounts(data);
+        if (!user?.Id) {
+          router.replace("/login-register");
+          return;
+        }
+
+        sessionStorage.setItem("UserId", user.Id);
+        sessionStorage.setItem("Salt", user.SaltArgon);
+        SetUserId(user.Id);
+        SetIsLoading(false);
+      } catch {
+        router.replace("/login-register");
       }
+    })();
+  }, [router]);
+
+  useEffect(() => {
+    if (!UserId) return;
+    const fetchData = async () => {
+      const data = await getSubAccountsByUserId(UserId);
+      if (data.length > 0) sessionStorage.setItem("subAccountData", JSON.stringify(data[0]));
+      setSubAccounts(data);
     };
     fetchData();
   }, [UserId]);
 
-  const [IsLoading, SetIsLoading] = useState(true);
-
-  useEffect(() => {
-    const Id = sessionStorage.getItem("UserId") as UUID | null;
-    const KeyRaw = sessionStorage.getItem("Key");
-
-    SetUserId(Id);
-
-    if (KeyRaw) {
-      const Buf = Buffer.from(
-        KeyRaw.match(/.{1,2}/g)!.map(b => parseInt(b, 16))
-      );
-      SetKeyBuffer(Buf);
+  const handleMasterPasswordSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const salt = sessionStorage.getItem("Salt");
+    if (!salt) {
+      setError("Salt non disponibile, ricaricare la pagina.");
+      return;
     }
 
-    SetIsLoading(false); // lettura completata
-  }, []);
-
-  useEffect(() => {
-    // Legge il code dalla query string
-    const params = new URLSearchParams(window.location.search);
-    const code = params.get("code");
-
-    console.log("Code ricevuto da Keycloak:", code);
-
-    // Per ottenere il sub, serve inviare il code al backend e scambiare con token
-    // fetch("/api/auth", { method: "POST", body: JSON.stringify({ code }) })
-    //   .then(res => res.json())
-    //   .then(data => console.log("ID Keycloak (sub):", data.sub));
-  }, []);
+    try {
+      const key = await DeriveKey(masterPassword, Buffer.from(salt, "utf-8"));
+      sessionStorage.setItem("Key", key.toString("hex"));
+      SetKeyBuffer(key);
+      setShowMasterPassword(false);
+      setMasterPassword("");
+      setError("");
+    } catch {
+      setError("Errore nella derivazione della chiave. Riprova.");
+    }
+  };
 
   const HandleDeleteSubAccount = async (sa: subAccount) => {
     if (!confirm("Sei sicuro di voler eliminare questo subaccount?")) return;
@@ -81,8 +98,37 @@ export default function ProfilePage() {
     setSubAccounts(prev => prev.filter(s => s.id !== sa.id));
   };
 
+  if (IsLoading) return <div>Caricamento...</div>;
+
   return (
     <div className="p-6">
+      {showMasterPassword && (
+        <div className="fixed inset-0 bg-black bg-opacity-40 flex items-center justify-center z-50">
+          <form
+            onSubmit={handleMasterPasswordSubmit}
+            className="bg-white rounded-lg shadow-lg p-8 flex flex-col gap-4 min-w-[320px]"
+          >
+            <h2 className="text-lg font-bold">Inserisci la tua Master Password</h2>
+            <input
+              type="password"
+              value={masterPassword}
+              onChange={e => setMasterPassword(e.target.value)}
+              className="border p-2 rounded"
+              placeholder="Master Password"
+              required
+              autoFocus
+            />
+            {error && <div className="text-red-600">{error}</div>}
+            <button
+              type="submit"
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Sblocca
+            </button>
+          </form>
+        </div>
+      )}
+
       <div className="flex justify-between items-center mb-4">
         <button
           onClick={() => router.push("/create-subaccount")}
@@ -98,7 +144,10 @@ export default function ProfilePage() {
       ) : (
         <ul className="space-y-4">
           {subAccounts.map(sa => (
-            <li key={sa.id} className="p-4 rounded-2xl shadow-md border bg-[#0A9396] flex flex-col gap-2 text-[#001219]">
+            <li
+              key={sa.id}
+              className="p-4 rounded-2xl shadow-md border bg-[#0A9396] flex flex-col gap-2 text-[#001219]"
+            >
               <p><strong>Title:</strong> {sa.title}</p>
               <p><strong>Username:</strong> {sa.username}</p>
               <p>

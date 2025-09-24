@@ -6,9 +6,12 @@ import { UUID } from 'crypto';
 
 axiosClient.defaults.headers.common['Content-Type'] = 'application/json';
 
-const createMainUser = async (user: mainUser): Promise<void> => {
+const createMainUser = async (KeycloakId: UUID, SaltArgon: string): Promise<void> => {
     try {
-        await axiosClient.post('/api/V2/localuser/', user);
+        await axiosClient.post('/api/V2/localuser/', {
+            IdKeycloak: KeycloakId,
+            Salt: SaltArgon
+        });
     } catch (error) {
         console.error('Error creating main user:', error);
         throw error;

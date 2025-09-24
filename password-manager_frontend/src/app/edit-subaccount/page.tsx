@@ -23,15 +23,12 @@ export default function EditSubAccountPage() {
       try {
         const parsedSubAcc: subAccount = JSON.parse(storedDatas);
 
-        // Decifra la password
-        const derivedKey = DeriveKey(MASTER_PASSWORD, Buffer.from(storedUserSalt, "hex"));
-        parsedSubAcc.password = Decrypt(parsedSubAcc.password, derivedKey);
+        // Usa la chiave già derivata e salvata in sessionStorage
+        const buf = Buffer.from(storedUserKey.match(/.{1,2}/g)!.map(b => parseInt(b, 16)));
+        parsedSubAcc.password = Decrypt(parsedSubAcc.password, buf);
 
         setSubAcc(parsedSubAcc);
         setSalt(storedUserSalt);
-
-        // Crea il buffer per le future cifrature
-        const buf = Buffer.from(storedUserKey.match(/.{1,2}/g)!.map(b => parseInt(b, 16)));
         SetKeyBuffer(buf);
       } catch (error) {
         console.error("Errore nel parsing o decrypt:", error);
@@ -52,7 +49,6 @@ export default function EditSubAccountPage() {
     }
 
     try {
-      // Non modificare direttamente lo stato
       const updatedSubAcc: subAccount = {
         ...subAcc,
         password: Encrypt(subAcc.password, KeyBuffer)
