@@ -10,7 +10,6 @@ class CreateLocalUserDTOV2(BaseModel):
     This class is used to transfer data for creating a new local user.
     """
     IdKeycloak: UUID
-    MasterPassword: str
     Salt: str
 
     def to_entity(self, generatedSalt):
