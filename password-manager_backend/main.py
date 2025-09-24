@@ -23,48 +23,6 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 DB_NAME = os.getenv("DB_NAME")
 
-KEYCLOAK_HOST = os.getenv("KEYCLOAK_HOST")
-KEYCLOAK_PORT = os.getenv("KEYCLOAK_PORT")
-KEYCLOAK_REALM = os.getenv("KEYCLOAK_REALM")
-KEYCLOAK_CLIENT_ID = os.getenv("KEYCLOAK_CLIENT_ID")
-KEYCLOAK_AUDIENCE = os.getenv("KEYCLOAK_AUDIENCE")
-KEYCLOAK_SECRET = os.getenv("KEYCLOAK_SECRET")
-
-KEYCLOAK_URL = f"http://{KEYCLOAK_HOST}:{KEYCLOAK_PORT}/realms/{KEYCLOAK_REALM}"
-
-# ------------------------------
-# 🔑 Keycloak Config
-# ------------------------------
-
-oauth2_scheme = OAuth2PasswordBearer(tokenUrl="token")
-
-
-def VerifyToken(token: str = Depends(oauth2_scheme)):
-    try:
-        # Scarico chiavi pubbliche Keycloak
-        jwks_url = f"{KEYCLOAK_URL}/protocol/openid-connect/certs"
-        jwks = requests.get(jwks_url).json()
-
-        # Estraggo header per kid
-        header = jwt.get_unverified_header(token)
-        key = next(k for k in jwks["keys"] if k["kid"] == header["kid"])
-
-        # Decodifico token
-        payload = jwt.decode(
-            token,
-            key,
-            algorithms=["RS256"],
-            audience=KEYCLOAK_AUDIENCE,
-            issuer=f"{KEYCLOAK_URL}"
-        )
-        return payload
-    except Exception:
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Token non valido o scaduto",
-            headers={"WWW-Authenticate": "Bearer"},
-        )
-
 # ------------------------------
 # FastAPI App
 # ------------------------------
@@ -83,33 +41,28 @@ app.add_middleware(
 
 app.container = container
 
-# 🔒 Router protetti con Keycloak
 app.include_router(
     local_user_router_V1,
     prefix="/api/V1/localuser",
     tags=["LocalUser"],
-    dependencies=[Depends(VerifyToken)]
 )
 
 app.include_router(
     subaccount_router_V1,
     prefix="/api/V1/subaccount",
     tags=["SubAccount"],
-    dependencies=[Depends(VerifyToken)]
 )
 
 app.include_router(
     local_user_router_V2,
     prefix="/api/V2/localuser",
     tags=["LocalUser"],
-    dependencies=[Depends(VerifyToken)]
 )
 
 app.include_router(
     subaccount_router_V2,
     prefix="/api/V2/subaccount",
     tags=["SubAccount"],
-    dependencies=[Depends(VerifyToken)]
 )
 
 # ------------------------------
@@ -140,20 +93,3 @@ async def LogExceptionsMiddleware(request: Request, call_next):
         import traceback
         traceback.print_exc()
         raise e
-
-@app.middleware("http")
-async def AuthMiddleware(request: Request, call_next):
-    if request.url.path in ["/docs", "/openapi.json", "/redoc"]:
-        return await call_next(request)
-
-    token = request.headers.get("Authorization")
-    if not token or not token.startswith("Bearer "):
-        return Response("Token mancante", status_code=401)
-
-    try:
-        payload = VerifyToken(token.split(" ")[1])
-        request.state.user = payload
-    except HTTPException:
-        return Response("Token non valido", status_code=401)
-
-    return await call_next(request)
