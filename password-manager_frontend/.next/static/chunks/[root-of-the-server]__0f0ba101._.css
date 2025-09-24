@@ -143,8 +143,11 @@
     --color-yellow-600: #cd8900;
     --color-green-600: #00a544;
     --color-green-700: #008138;
+    --color-blue-600: #155dfc;
+    --color-blue-700: #1447e6;
     --color-gray-200: #e5e7eb;
     --color-gray-600: #4a5565;
+    --color-black: #000;
     --color-white: #fff;
     --spacing: .25rem;
     --container-lg: 32rem;
@@ -168,6 +171,8 @@
       --color-yellow-600: color(display-p3 .776342 .542492 .041709);
       --color-green-600: color(display-p3 .243882 .640824 .294808);
       --color-green-700: color(display-p3 .198355 .501799 .245335);
+      --color-blue-600: color(display-p3 .174493 .358974 .950247);
+      --color-blue-700: color(display-p3 .1379 .274983 .867624);
       --color-gray-200: color(display-p3 .899787 .906171 .92106);
       --color-gray-600: color(display-p3 .297358 .332176 .39043);
     }
@@ -181,6 +186,8 @@
       --color-yellow-600: lab(62.7799% 22.4198 86.1544);
       --color-green-600: lab(59.0978% -58.6621 41.2579);
       --color-green-700: lab(47.0329% -47.0239 31.4788);
+      --color-blue-600: lab(44.0605% 29.0279 -86.0352);
+      --color-blue-700: lab(36.9089% 35.0961 -85.6872);
       --color-gray-200: lab(91.6229% -.159085 -2.26791);
       --color-gray-600: lab(35.6337% -1.58697 -10.8425);
     }
@@ -535,6 +542,10 @@
     position: fixed;
   }
 
+  .inset-0 {
+    inset: calc(var(--spacing) * 0);
+  }
+
   .top-4 {
     top: calc(var(--spacing) * 4);
   }
@@ -580,6 +591,10 @@
     max-width: var(--container-lg);
   }
 
+  .min-w-\[320px\] {
+    min-width: 320px;
+  }
+
   .flex-col {
     flex-direction: column;
   }
@@ -590,6 +605,10 @@
 
   .justify-between {
     justify-content: space-between;
+  }
+
+  .justify-center {
+    justify-content: center;
   }
 
   .gap-2 {
@@ -627,6 +646,14 @@
     background-color: #0a9396;
   }
 
+  .bg-black {
+    background-color: var(--color-black);
+  }
+
+  .bg-blue-600 {
+    background-color: var(--color-blue-600);
+  }
+
   .bg-gray-200 {
     background-color: var(--color-gray-200);
   }
@@ -639,8 +666,16 @@
     background-color: var(--color-red-600);
   }
 
+  .bg-white {
+    background-color: var(--color-white);
+  }
+
   .bg-yellow-500 {
     background-color: var(--color-yellow-500);
+  }
+
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
   }
 
   .p-4 {
@@ -649,6 +684,10 @@
 
   .p-6 {
     padding: calc(var(--spacing) * 6);
+  }
+
+  .p-8 {
+    padding: calc(var(--spacing) * 8);
   }
 
   .px-2 {
@@ -699,6 +738,10 @@
     color: var(--color-gray-600);
   }
 
+  .text-red-600 {
+    color: var(--color-red-600);
+  }
+
   .text-white {
     color: var(--color-white);
   }
@@ -717,9 +760,20 @@
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
   }
 
+  .shadow-lg {
+    --tw-shadow: 0 10px 15px -3px var(--tw-shadow-color, rgba(0, 0, 0, .1)), 0 4px 6px -4px var(--tw-shadow-color, rgba(0, 0, 0, .1));
+    box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
   .shadow-md {
     --tw-shadow: 0 4px 6px -1px var(--tw-shadow-color, rgba(0, 0, 0, .1)), 0 2px 4px -2px var(--tw-shadow-color, rgba(0, 0, 0, .1));
     box-shadow: var(--tw-inset-shadow), var(--tw-inset-ring-shadow), var(--tw-ring-offset-shadow), var(--tw-ring-shadow), var(--tw-shadow);
+  }
+
+  @media (hover: hover) {
+    .hover\:bg-blue-700:hover {
+      background-color: var(--color-blue-700);
+    }
   }
 
   @media (hover: hover) {
