@@ -26,5 +26,14 @@ export default function LoginPage() {
     window.location.href = KeycloakUrl.toString();
   }, [router]);
 
-  return <h1>Reindirizzamento a Keycloak...</h1>;
+  return (
+    <div className="min-h-screen bg-[#778da9] text-[#0d1b2a] flex items-center justify-center">
+      <div className="bg-[#e0e1dd] rounded-xl shadow-lg p-8 border border-[#415a77]">
+        <h1 className="text-2xl font-bold mb-2">
+          Reindirizzamento a Keycloak...
+        </h1>
+        <p className="text-[#415a77]">Attendi qualche secondo</p>
+      </div>
+    </div>
+  );
 }

@@ -24,6 +24,7 @@ export default function AuthCallback() {
         .then(data => {
           if (data.id_token) {
             sessionStorage.setItem("IdToken", data.id_token);
+            sessionStorage.setItem("Username", data.username);
             router.replace("/home");
           } else {
             alert("Errore autenticazione");

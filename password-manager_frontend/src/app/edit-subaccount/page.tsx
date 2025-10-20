@@ -4,15 +4,14 @@ import { useEffect, useState } from "react";
 import { updateSubAccount } from "../../api/apis";
 import { subAccount } from "@/api/entities/subAccount";
 import { useRouter } from "next/navigation";
-import { Decrypt, DeriveKey, Encrypt } from "../crypto/decript";
+import { Decrypt, DeriveKey, Encrypt } from "../../Functions/Cripting-Decripting/Cript-Dectipr";
 
 export default function EditSubAccountPage() {
   const [subAcc, setSubAcc] = useState<subAccount | null>(null);
   const [salt, setSalt] = useState<string | null>(null);
   const [KeyBuffer, SetKeyBuffer] = useState<Buffer | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
-
-  const MASTER_PASSWORD = "string";
 
   useEffect(() => {
     const storedDatas = sessionStorage.getItem("subAccountData");
@@ -66,31 +65,52 @@ export default function EditSubAccountPage() {
   if (!subAcc) return <div>Caricamento dati...</div>;
 
   return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold mb-6">Modifica Subaccount</h1>
-      <form
-        className="flex flex-col gap-4"
-        onSubmit={e => { e.preventDefault(); handleSave(); }}
-      >
-        {["title", "username", "url", "password"].map(field => (
-          <label key={field}>
-            {field.charAt(0).toUpperCase() + field.slice(1)}:
-            <input
-              type={field === "password" ? "password" : "text"}
-              name={field}
-              value={subAcc[field as keyof subAccount] as string}
-              onChange={handleChange}
-              className="border rounded px-2 py-1 w-full"
-            />
-          </label>
-        ))}
-        <button
-          type="submit"
-          className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+    <div className="min-h-screen bg-[#415a77] text-[#e0e1dd] p-6 flex items-center justify-center">
+      <div className="max-w-lg w-full bg-[#1b263b] rounded-xl shadow-lg p-8 border border-[#778da9]">
+        <h1 className="text-2xl font-bold mb-6 text-[#e0e1dd]">Modifica Subaccount</h1>
+        <form
+          className="flex flex-col gap-4"
+          onSubmit={e => { e.preventDefault(); handleSave(); }}
         >
-          Salva modifiche
-        </button>
-      </form>
+          {["title", "username", "url"].map(field => (
+            <label key={field}>
+              {field.charAt(0).toUpperCase() + field.slice(1)}:
+              <input
+                type="text"
+                name={field}
+                value={subAcc[field as keyof subAccount] as string}
+                onChange={handleChange}
+                className="border rounded px-2 py-1 w-full"
+              />
+            </label>
+          ))}
+          <label>
+            Password:
+            <div className="flex items-center gap-2">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={subAcc.password}
+                onChange={handleChange}
+                className="border rounded px-2 py-1 w-full"
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(prev => !prev)}
+                className="px-2 py-1 bg-gray-300 rounded hover:bg-gray-400"
+              >
+                {showPassword ? "Nascondi" : "Mostra"}
+              </button>
+            </div>
+          </label>
+          <button
+            type="submit"
+            className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+          >
+            Salva modifiche
+          </button>
+        </form>
+      </div>
     </div>
   );
 }

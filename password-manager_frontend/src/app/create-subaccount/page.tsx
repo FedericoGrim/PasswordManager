@@ -6,13 +6,13 @@ import { useRouter } from "next/navigation";
 import { subAccount } from "@/api/entities/subAccount";
 import { v4 as uuidv4 } from "uuid";
 import { UUID } from "crypto";
-import { Encrypt } from "../crypto/decript";
+import { Encrypt } from "../../Functions/Cripting-Decripting/Cript-Dectipr";
 
 export default function CreateSubAccountPage() {
   const [UserId, SetUserId] = useState<UUID | null>(null);
   const [KeyBuffer, SetKeyBuffer] = useState<Buffer | null>(null);
 
-  const [form, setForm] = useState<Partial<subAccount>>({
+  const [form, SetForm] = useState<Partial<subAccount>>({
     title: "",
     username: "",
     url: "",
@@ -35,11 +35,11 @@ export default function CreateSubAccountPage() {
     }
   }, []);
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
+  const HandleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    SetForm({ ...form, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const HandleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     if (!UserId) {
@@ -72,59 +72,75 @@ export default function CreateSubAccountPage() {
   };
 
   return (
-    <div className="p-6 max-w-lg mx-auto">
-      <h1 className="text-xl font-bold mb-6">Crea nuovo subaccount</h1>
-      <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
-        <label>
-          Titolo:
-          <input
-            type="text"
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-            required
-          />
-        </label>
-        <label>
-          Username:
-          <input
-            type="text"
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-            required
-          />
-        </label>
-        <label>
-          URL:
-          <input
-            type="text"
-            name="url"
-            value={form.url}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-          />
-        </label>
-        <label>
-          Password:
-          <input
-            type="text"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            className="border rounded px-2 py-1 w-full"
-            required
-          />
-        </label>
+    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-6">
+      <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md text-white border border-white/20">
+        <h1 className="text-2xl font-bold mb-6 text-center">
+          Crea nuovo subaccount
+        </h1>
+
+        <form className="flex flex-col gap-5" onSubmit={HandleSubmit}>
+          <div>
+            <label className="block text-sm font-medium mb-1">Titolo</label>
+            <input
+              type="text"
+              name="title"
+              value={form.title}
+              onChange={HandleChange}
+              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Username</label>
+            <input
+              type="text"
+              name="username"
+              value={form.username}
+              onChange={HandleChange}
+              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">URL</label>
+            <input
+              type="text"
+              name="url"
+              value={form.url}
+              onChange={HandleChange}
+              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+            />
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium mb-1">Password</label>
+            <input
+              type="text"
+              name="password"
+              value={form.password}
+              onChange={HandleChange}
+              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
+              required
+            />
+          </div>
+
+          <button
+            type="submit"
+            className="mt-2 bg-green-600 hover:bg-green-700 transition-all rounded-lg py-2 font-semibold shadow-lg hover:shadow-green-500/30"
+          >
+            Crea Subaccount
+          </button>
+        </form>
+
         <button
-          type="submit"
-          className="px-4 py-2 bg-green-600 text-white rounded-lg shadow hover:bg-green-700"
+          onClick={() => router.push("/home")}
+          className="mt-4 text-sm text-gray-300 hover:text-white transition underline-offset-2 hover:underline w-full text-center"
         >
-          Crea subaccount
+          ← Torna alla Home
         </button>
-      </form>
+      </div>
     </div>
   );
 }
