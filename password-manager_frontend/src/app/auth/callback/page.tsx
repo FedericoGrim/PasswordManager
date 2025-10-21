@@ -24,7 +24,14 @@ export default function AuthCallback() {
         .then(data => {
           if (data.id_token) {
             sessionStorage.setItem("IdToken", data.id_token);
-            sessionStorage.setItem("Username", data.username);
+
+            // decodifica payload JWT
+            const payloadBase64 = data.id_token.split(".")[1];
+            const payloadJson = JSON.parse(atob(payloadBase64));
+            const username = payloadJson.preferred_username || payloadJson.name || "U";
+
+            sessionStorage.setItem("Username", username);
+
             router.replace("/home");
           } else {
             alert("Errore autenticazione");

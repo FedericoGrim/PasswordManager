@@ -9,6 +9,11 @@ import { UUID } from "crypto";
 
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import VisibilityOffIcon from '@mui/icons-material/VisibilityOff';
+import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import Person from "@mui/icons-material/Person";
+import LinkIcon from "@mui/icons-material/Link";
+import AddIcon from "@mui/icons-material/Add";
 
 export default function Home() {
   const [UserId, SetUserId] = useState<UUID | null>(null);
@@ -167,7 +172,7 @@ export default function Home() {
               onClick={() => router.push("/create-subaccount")}
               className="flex flex-col items-center justify-center bg-white/10 border border-white/20 rounded-2xl p-6 shadow-lg hover:shadow-gray-500/40 transition-all backdrop-blur-md cursor-pointer text-white"
             >
-              <div className="text-4xl font-bold mb-2">➕</div>
+              <AddIcon sx={{ fontSize: 50, fontWeight: 800 }} className="mb-2" />
               <div className="text-lg font-semibold">Crea nuovo</div>
             </div>
 
@@ -175,41 +180,78 @@ export default function Home() {
             {subAccounts.map(sa => (
               <div
                 key={sa.id}
-                className="bg-white/10 border border-white/20 rounded-2xl p-5 shadow-lg hover:shadow-gray-500/30 transition-all backdrop-blur-md"
+                className="relative bg-white/10 border border-white/20 rounded-2xl p-5 shadow-lg hover:shadow-gray-500/30 transition-all backdrop-blur-md flex flex-col justify-between"
               >
-                <p className="text-white text-sm font-semibold">{sa.title}</p>
-                <p className="mt-1 text-sm text-gray-300"><strong>👤</strong> {sa.username}</p>
-                <p className="truncate text-sm mt-1 text-gray-300">
-                  <strong>🔑</strong>{" "}
-                  {KeyBuffer
-                    ? showPasswords[sa.id]
-                      ? Decrypt(sa.password, KeyBuffer)
-                      : "••••••••"
-                    : "Chiave non disponibile"}
-                  {KeyBuffer && (
-                    <button
-                      type="button"
-                      onClick={() => TogglePassword(sa.id)}
-                      className="ml-2 text-white hover:underline text-xs"
-                    >
-                      {showPasswords[sa.id] ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
-                    </button>
-                  )}
-                </p>
-
-                <div className="flex gap-3 mt-4">
+                {/* Pulsanti azione a destra, centrati verticalmente */}
+                <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-3">
                   <button
-                    onClick={() => router.push("/edit-subaccount")}
-                    className="flex-1 bg-yellow-500 text-white py-1.5 rounded-lg hover:bg-yellow-600 transition-all shadow hover:shadow-yellow-500/30"
+                    onClick={() => {
+                      sessionStorage.setItem("subAccountData", JSON.stringify(sa));
+                      router.push(`/edit-subaccount?id=${sa.id}`);
+                    }}
+                    className="p-2 bg-bg-white/10 text-yellow-500 rounded-lg hover:text-white hover:bg-yellow-700 transition-all shadow hover:shadow-yellow-500/30 border border-white/20"
+                    title="Modifica"
                   >
-                    ✏️ Modifica
+                    <EditIcon fontSize="small"/>
                   </button>
                   <button
                     onClick={() => HandleDeleteSubAccount(sa)}
-                    className="flex-1 bg-red-600 text-white py-1.5 rounded-lg hover:bg-red-700 transition-all shadow hover:shadow-red-500/30"
+                    className="p-2 bg-bg-white/10 text-red-500 rounded-lg hover:bg-red-700 hover:text-white transition-all shadow hover:shadow-red-500/30 border border-white/20"
+                    title="Elimina"
                   >
-                    🗑️ Elimina
+                    <DeleteIcon fontSize="small"/>
                   </button>
+                </div>
+
+                {/* Contenuto principale */}
+                <div className="pr-14"> {/* spazio riservato ai pulsanti laterali */}
+                  <p className="text-blue-300 text-lg font-semibold">{sa.title}</p>
+                  <p className="mt-1 text-sm text-white"><Person></Person> {sa.username}</p>
+
+                  {/* URL cliccabile */}
+                  {sa.url && (
+                    <p className="mt-1 text-sm">
+                      <a
+                        href={sa.url.startsWith("http://") || sa.url.startsWith("https://") ? sa.url : `https://${sa.url}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        title={sa.url} // mostra l'URL completo al passaggio del mouse
+                        className="text-white hover:text-blue-300 underline underline-offset-2 block truncate max-w-full"
+                      >
+                        <LinkIcon></LinkIcon> {sa.url}
+                      </a>
+                    </p>
+                  )}
+
+                  {/* Campo password con bottone mostra/nascondi */}
+                  <div className="mt-2 flex items-center gap-2">
+                    <div className="relative flex-1">
+                      <input
+                        type="text"
+                        readOnly
+                        value={
+                          KeyBuffer
+                            ? showPasswords[sa.id]
+                              ? Decrypt(sa.password, KeyBuffer)
+                              : "••••••••••••••"
+                            : "Chiave non disponibile"
+                        }
+                        className="w-full bg-[#1b263b] text-white text-base font-mono px-3 py-2 rounded-lg border border-gray-600 focus:outline-none cursor-default select-text"
+                      />
+                    </div>
+                    {KeyBuffer && (
+                      <button
+                        type="button"
+                        onClick={() => TogglePassword(sa.id)}
+                        className="p-2 rounded-lg bg-[#1b263b] border border-gray-600 hover:bg-[#243447] text-white transition"
+                        title={showPasswords[sa.id] ? "Nascondi password" : "Mostra password"}
+                      >
+                        {showPasswords[sa.id]
+                          ? <VisibilityOffIcon fontSize="small" />
+                          : <VisibilityIcon fontSize="small" />}
+                      </button>
+                    )}
+                  </div>
                 </div>
               </div>
             ))}

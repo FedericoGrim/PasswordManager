@@ -8,9 +8,15 @@ import { v4 as uuidv4 } from "uuid";
 import { UUID } from "crypto";
 import { Encrypt } from "../../Functions/Cripting-Decripting/Cript-Dectipr";
 
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import CasinoIcon from "@mui/icons-material/Casino"
+
 export default function CreateSubAccountPage() {
   const [UserId, SetUserId] = useState<UUID | null>(null);
   const [KeyBuffer, SetKeyBuffer] = useState<Buffer | null>(null);
+  const [showPassword, setShowPassword] = useState(false);
+  const [passwordLength, setPasswordLength] = useState(12);
 
   const [form, SetForm] = useState<Partial<subAccount>>({
     title: "",
@@ -71,59 +77,73 @@ export default function CreateSubAccountPage() {
     }
   };
 
+  const GenerateRandomPassword = (length: number) => {
+    const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789#@!";
+    let password = "";
+    for (let i = 0; i < length; i++) {
+      password += chars.charAt(Math.floor(Math.random() * chars.length));
+    }
+    SetForm({ ...form, password });
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-b from-gray-900 via-gray-800 to-gray-900 flex items-center justify-center p-6">
-      <div className="bg-white/10 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md text-white border border-white/20">
-        <h1 className="text-2xl font-bold mb-6 text-center">
-          Crea nuovo subaccount
-        </h1>
+    <div className="min-h-screen bg-[#0D1B2A] flex items-center justify-center p-6">
+      <div className="bg-[#1B263B]/90 backdrop-blur-lg rounded-2xl shadow-2xl p-8 w-full max-w-md text-white border border-white/20">
+        <h1 className="text-2xl font-bold mb-6 text-center">Crea nuovo subaccount</h1>
 
         <form className="flex flex-col gap-5" onSubmit={HandleSubmit}>
-          <div>
-            <label className="block text-sm font-medium mb-1">Titolo</label>
-            <input
-              type="text"
-              name="title"
-              value={form.title}
-              onChange={HandleChange}
-              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
-          </div>
+          {["title", "username", "url"].map(field => (
+            <div key={field}>
+              <label className="block text-sm font-medium mb-1 capitalize">{field}</label>
+              <input
+                type="text"
+                name={field}
+                value={form[field as keyof typeof form] || ""}
+                onChange={HandleChange}
+                className="w-full rounded-lg px-3 py-2 bg-[#0D1B2A] border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
+                placeholder={`Inserisci ${field}`}
+                required
+              />
+            </div>
+          ))}
 
-          <div>
-            <label className="block text-sm font-medium mb-1">Username</label>
-            <input
-              type="text"
-              name="username"
-              value={form.username}
-              onChange={HandleChange}
-              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">URL</label>
-            <input
-              type="text"
-              name="url"
-              value={form.url}
-              onChange={HandleChange}
-              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-            />
-          </div>
-
-          <div>
-            <label className="block text-sm font-medium mb-1">Password</label>
-            <input
-              type="text"
-              name="password"
-              value={form.password}
-              onChange={HandleChange}
-              className="w-full rounded-lg px-3 py-2 bg-gray-800 border border-gray-700 focus:outline-none focus:ring-2 focus:ring-green-500"
-              required
-            />
+          {/* Password con mostra/nascondi e genera casuale */}
+          <div className="flex flex-col">
+            <label className="block text-sm font-medium mb-1 capitalize">Password</label>
+            <div className="flex items-center gap-2">
+              <input
+                type={showPassword ? "text" : "password"}
+                name="password"
+                value={form.password || ""}
+                onChange={HandleChange}
+                className="flex-1 rounded-lg px-3 py-2 bg-[#0D1B2A] border border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-green-500 placeholder-gray-400"
+                placeholder="••••••••"
+                required
+              />
+              <button
+                type="button"
+                onClick={() => setShowPassword(prev => !prev)}
+                className="p-2 bg-[#243447] rounded-lg hover:bg-[#2c3e50] transition border border-gray-500"
+              >
+                {showPassword ? <VisibilityOffIcon fontSize="small" /> : <VisibilityIcon fontSize="small" />}
+              </button>
+              <input
+                type="number"
+                min={4}
+                max={64}
+                value={passwordLength}
+                onChange={e => setPasswordLength(Number(e.target.value))}
+                className="w-16 text-wjite rounded-lg px-2 py-1 border border-gray-500"
+                title="Lunghezza password"
+              />
+              <button
+                type="button"
+                onClick={() => GenerateRandomPassword(passwordLength)}
+                className="p-2 bg-[#243447] rounded-lg hover:bg-[#2c3e50] transition text-white text-sm font-semibold border border-gray-500"
+              >
+                <CasinoIcon></CasinoIcon>
+              </button>
+            </div>
           </div>
 
           <button
