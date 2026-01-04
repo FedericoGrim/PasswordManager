@@ -5,7 +5,7 @@ import logging
 
 from Infrastructure.Exceptions.LocalUserPostgreSQL_Exceptions import *
 
-from Domain.ILocalUserSercive import ILocalUserService
+from Domain.Interfaces.ILocalUserSercive import ILocalUserService
 from Domain.Entities.LocalUser import LocalUser
 
 class LocalUserService(ILocalUserService):
@@ -66,7 +66,7 @@ class LocalUserService(ILocalUserService):
             logging.error(f"Error: {e}")
             raise GetAllLocalUserByIdRetrivalException()
         
-    def UpdateLocalUserById(self, localUserId: uuid.UUID, newPassword):
+    def UpdateLocalUserById(self, localUserId: uuid.UUID):
         '''        
         Updates the password of a local user by their ID.
 
@@ -86,7 +86,6 @@ class LocalUserService(ILocalUserService):
                 local_user = self.Db.query(LocalUser).filter(LocalUser.Id == localUserId).first()
                 if not local_user:
                     raise LocalUserNotFoundException("Local user not found.")
-                local_user.Password = newPassword
                 self.Db.flush()
                 self.Db.refresh(local_user)
             return local_user

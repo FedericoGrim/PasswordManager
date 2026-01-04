@@ -1,7 +1,6 @@
 import uuid
 
-from Application.DTO.V1.LocalUserDTO import CreateLocalUserDTOV1, UpdateLocalUserDTOV1
-from Domain.PasswordCripting.PasswordCripting import *
+from Application.DTO.LocalUserDTO import CreateLocalUserDTO
 from Application.Exceptions.LocalUserUseCaseExceptions import *
 
 class CreateLocalUserUseCase():
@@ -18,14 +17,12 @@ class CreateLocalUserUseCase():
         """
         self.LocalUserRepository = LocalUserRepository
         
-    def execute(self, localuser_create: CreateLocalUserDTOV1):
+    def execute(self, localuser_create: CreateLocalUserDTO):
         """
         Executes the use case to create a local user.
         """
         try:
-            salt = GenerateSalt()
-            localuser_create.MasterPassword = CriptPassword(localuser_create.MasterPassword, localuser_create.MasterPassword, bytes.fromhex(salt[2:]))
-            return self.LocalUserRepository.CreateLocalUser(localuser_create, salt)
+            return self.LocalUserRepository.CreateLocalUser(localuser_create, localuser_create.Salt)
         except Exception as e:
             raise LocalUserCreationException(str(e)) from e
 
@@ -64,13 +61,12 @@ class UpdateLocalUserByIdUseCase():
         """
         self.LocalUserRepository = LocalUserRepository
         
-    def execute(self, localUserId: uuid.UUID, new_local_user: UpdateLocalUserDTOV1, salt: bytes):
+    def execute(self, localUserId: uuid.UUID):
         """
         Executes the use case to update a local user by ID.
         """
         try:
-            newCriptedPassword = CriptPassword(new_local_user.NewMasterPassword, new_local_user.NewMasterPassword, salt)
-            return self.LocalUserRepository.UpdateLocalUserById(localUserId, newCriptedPassword)
+            return self.LocalUserRepository.UpdateLocalUserById(localUserId)
         except Exception as e:
             raise LocalUserUpdateException(str(e)) from e        
 

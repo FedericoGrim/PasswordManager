@@ -5,7 +5,7 @@ import logging
 
 from Infrastructure.Exceptions.SubAccountPostgreSQL_Exceptions import *
 
-from Domain.ISubAccountService import ISubAccountService
+from Domain.Interfaces.ISubAccountService import ISubAccountService
 from Domain.Entities.SubAccount import SubAccount
 
 class SubAccountService(ISubAccountService):
