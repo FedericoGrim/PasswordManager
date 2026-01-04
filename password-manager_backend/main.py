@@ -1,16 +1,11 @@
 # main.py
-from fastapi import FastAPI, Response, Request, Depends, HTTPException, status
+from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.security import OAuth2PasswordBearer
-from jose import jwt
-import requests
 
 from config import Container
-from Presentation.Controllers.V1.LocalUserController import routerV1 as local_user_router_V1
-from Presentation.Controllers.V1.SubAccountController import routerV1 as subaccount_router_V1
-from Presentation.Controllers.V2.LocalUserController import routerV2 as local_user_router_V2
-from Presentation.Controllers.V2.SubAccountController import routerV2 as subaccount_router_V2
-from Infrastructure.Repositories.Database import SessionLocal
+from Presentation.Controllers.LocalUserController import router as local_user_router
+from Presentation.Controllers.SubAccountController import router as subaccount_router
+from Infrastructure.Databases.SQL.Database import SessionLocal
 
 from dotenv import load_dotenv
 import os
@@ -27,7 +22,7 @@ DB_NAME = os.getenv("DB_NAME")
 # FastAPI App
 # ------------------------------
 container = Container()
-container.wire(modules=["Presentation.Controllers.V1.LocalUserController", "Presentation.Controllers.V1.SubAccountController"])
+container.wire(modules=["Presentation.Controllers.LocalUserController", "Presentation.Controllers.SubAccountController"])
 
 app = FastAPI()
 
@@ -42,26 +37,14 @@ app.add_middleware(
 app.container = container
 
 app.include_router(
-    local_user_router_V1,
-    prefix="/api/V1/localuser",
+    local_user_router,
+    prefix="/api/localuser",
     tags=["LocalUser"],
 )
 
 app.include_router(
-    subaccount_router_V1,
-    prefix="/api/V1/subaccount",
-    tags=["SubAccount"],
-)
-
-app.include_router(
-    local_user_router_V2,
-    prefix="/api/V2/localuser",
-    tags=["LocalUser"],
-)
-
-app.include_router(
-    subaccount_router_V2,
-    prefix="/api/V2/subaccount",
+    subaccount_router,
+    prefix="/api/subaccount",
     tags=["SubAccount"],
 )
 

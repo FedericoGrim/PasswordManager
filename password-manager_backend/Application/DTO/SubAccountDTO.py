@@ -2,7 +2,7 @@ from pydantic import BaseModel, UUID4, StringConstraints
 from typing import Optional, Annotated
 
 
-class CreateSubAccountDTOV1(BaseModel):
+class CreateSubAccountDTO(BaseModel):
     """
     DTO for creating a subaccount.
     This class is used to transfer data for creating a new subaccount.
@@ -13,7 +13,7 @@ class CreateSubAccountDTOV1(BaseModel):
     password: str
     url: str
 
-class UpdateSubAccountDTOV1(BaseModel):
+class UpdateSubAccountDTO(BaseModel):
     """
     DTO for updating a subaccount.
     This class is used to transfer data for updating an existing subaccount.
