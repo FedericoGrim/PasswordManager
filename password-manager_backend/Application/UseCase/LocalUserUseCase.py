@@ -1,94 +1,85 @@
 import uuid
-
 from Application.DTO.LocalUserDTO import CreateLocalUserDTO
 from Application.Exceptions.LocalUserUseCaseExceptions import *
 
-class CreateLocalUserUseCase():
-    """
-    Use case for creating a local user.
-    It interacts with the LocalUserRepository to persist the user data.
-
-    Attributes:
-        LocalUserRepository (ILocalUserService): The repository interface for local user operations.
-    """
-    def __init__(self, LocalUserRepository):
-        """
-        Initializes the CreateLocalUserUseCase with a LocalUserRepository.
-        """
+class CreateLocalUserUseCase:
+    def __init__(self, LocalUserRepository, EventRepository=None):
         self.LocalUserRepository = LocalUserRepository
-        
-    def execute(self, localuser_create: CreateLocalUserDTO):
-        """
-        Executes the use case to create a local user.
-        """
+        self.EventRepository = EventRepository  # opzionale
+
+    async def execute(self, localuser_create: CreateLocalUserDTO):
         try:
-            return self.LocalUserRepository.CreateLocalUser(localuser_create, localuser_create.Salt)
+            # Creo l'utente nel DB SQL
+            user = self.LocalUserRepository.CreateLocalUser(
+                localuser_create, localuser_create.Salt
+            )
+
+            # Salvo evento nel NoSQL se presente
+            if self.EventRepository:
+                await self.EventRepository.SaveEvent(
+                    EventType="UserCreated",
+                    Payload={
+                        "user_id": str(user.Id),
+                        "keycloak_id": str(localuser_create.IdKeycloak)
+                    }
+                )
+
+            return user
         except Exception as e:
             raise LocalUserCreationException(str(e)) from e
 
-class GetLocalUsersByMainUserIdUseCase():
-    """
-    Use case for retrieving a local users associated with a main user ID.
-    This class interacts with the LocalUserRepository to fetch local users based on the main user ID.
 
-    Attributes:
-        LocalUserRepository (ILocalUserService): The repository interface for local user operations.
-    """
+class GetLocalUsersByMainUserIdUseCase:
     def __init__(self, LocalUserRepository):
-        """
-        Initializes the GetAllLocalUsersByMainUserIdUseCase with a LocalUserRepository.
-        """
         self.LocalUserRepository = LocalUserRepository
-        
+
     def execute(self, mainUserId: uuid.UUID):
-        """
-        Executes the use case to retrieve all local users by main user ID.
-        """
         try:
             return self.LocalUserRepository.GetLocalUserById(mainUserId)
         except Exception as e:
             raise LocalUserRetrievalException(str(e)) from e
-        
-class UpdateLocalUserByIdUseCase():
-    """
-    Use case for updating a local user by ID.
-    Attributes:
-        LocalUserRepository (ILocalUserService): The repository interface for local user operations.
-    """
-    def __init__(self, LocalUserRepository):
-        """
-        Initializes the UpdateLocalUserByIdUseCase with a LocalUserRepository.
-        """
+
+
+class UpdateLocalUserByIdUseCase:
+    def __init__(self, LocalUserRepository, EventRepository=None):
         self.LocalUserRepository = LocalUserRepository
-        
-    def execute(self, localUserId: uuid.UUID):
-        """
-        Executes the use case to update a local user by ID.
-        """
+        self.EventRepository = EventRepository
+
+    async def execute(self, localUserId: uuid.UUID, newSalt: bytes):
         try:
-            return self.LocalUserRepository.UpdateLocalUserById(localUserId)
+            updated = self.LocalUserRepository.UpdateLocalUserById(localUserId, newSalt)
+
+            if updated and self.EventRepository:
+                await self.EventRepository.SaveEvent(
+                    EventType="UserUpdated",
+                    Payload={
+                        "user_id": str(localUserId),
+                        "new_salt": newSalt.decode()
+                    }
+                )
+
+            return updated
         except Exception as e:
-            raise LocalUserUpdateException(str(e)) from e        
+            raise LocalUserUpdateException(str(e)) from e
 
-class DeleteLocalUserByIdUseCase():
-    """ 
-    Use case for deleting a local user by ID.
-    This class handles the deletion of a local user by interacting with the LocalUserRepository.
 
-    Attributes:
-        LocalUserRepository (ILocalUserService): The repository interface for local user operations.
-    """
-    def __init__(self, LocalUserRepository):
-        """
-        Initializes the DeleteLocalUserByIdUseCase with a LocalUserRepository.
-        """
+class DeleteLocalUserByIdUseCase:
+    def __init__(self, LocalUserRepository, EventRepository=None):
         self.LocalUserRepository = LocalUserRepository
-        
-    def execute(self, user_id: uuid.UUID):
-        """
-        Executes the use case to delete a local user by ID.
-        """
+        self.EventRepository = EventRepository
+
+    async def execute(self, user_id: uuid.UUID):
         try:
-            return self.LocalUserRepository.DeleteLocalUserById(user_id)
+            deleted = self.LocalUserRepository.DeleteLocalUserById(user_id)
+
+            if deleted and self.EventRepository:
+                await self.EventRepository.SaveEvent(
+                    EventType="UserDeleted",
+                    Payload={
+                        "user_id": str(user_id)
+                    }
+                )
+
+            return deleted
         except Exception as e:
             raise LocalUserDeletionException(str(e)) from e
