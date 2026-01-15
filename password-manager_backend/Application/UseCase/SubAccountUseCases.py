@@ -3,6 +3,8 @@ import uuid
 from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
 from Application.Exceptions.SubAccountUseCaseException import *
 
+from Application.UseCase.Publisher import EventPublisher
+
 class CreateSubAccountUseCase():
     """
     Use case for creating a subaccount.
@@ -12,18 +14,30 @@ class CreateSubAccountUseCase():
         SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
         salt (str): The salt used for hashing the password.
     """
-    def __init__(self, SubAccountRepository):
+    def __init__(self, SubAccountRepository, EventRepository=None):
         """
         Initializes the CreateSubAccountUseCase with a SubAccountRepository.
         """
         self.SubAccountRepository = SubAccountRepository
+        self.EventRepository = EventRepository
         
     def execute(self, subaccount_create: CreateSubAccountDTO):
         """
         Executes the use case to create a subaccount.
         """
         try:
-            return self.SubAccountRepository.CreateSubAccount(subaccount_create)
+            result = self.SubAccountRepository.CreateSubAccount(subaccount_create)
+            
+            if self.EventRepository:
+                EventPublisher.Publish(
+                    EventType="SubAccountCreated",
+                    Payload={
+                        "subaccount_id": str(result.Id),
+                        "user_id": str(subaccount_create.UserId)
+                    }
+                )
+            
+            return result
         except Exception as e:
             raise CreateSubAccountException(str(e)) from e
         
@@ -59,18 +73,29 @@ class UpdateSubAccountByIdUseCase():
         SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
         salt (str): The salt used for hashing the password.
     """
-    def __init__(self, SubAccountRepository):
+    def __init__(self, SubAccountRepository, EventRepository=None):
         """
         Initializes the UpdateSubAccountByIdUseCase with a SubAccountRepository.
         """
         self.SubAccountRepository = SubAccountRepository
+        self.EventRepository = EventRepository
         
     def execute(self, subaccountId: uuid.UUID, new_subaccount: UpdateSubAccountDTO):
         """
         Executes the use case to update a subaccount by ID.
         """
         try:
-            return self.SubAccountRepository.UpdateSubAccountById(subaccountId, new_subaccount)
+            result = self.SubAccountRepository.UpdateSubAccountById(subaccountId, new_subaccount)
+            
+            if self.EventRepository:
+                EventPublisher.Publish(
+                    EventType="SubAccountUpdated",
+                    Payload={
+                        "subaccount_id": str(subaccountId)
+                    }
+                )
+            
+            return result
         except Exception as e:
             raise SubAccountUpdateException(str(e)) from e
         
@@ -82,17 +107,28 @@ class DeleteSubAccountByIdUseCase():
     Attributes:
         SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
     """
-    def __init__(self, SubAccountRepository):
+    def __init__(self, SubAccountRepository, EventRepository=None):
         """
         Initializes the DeleteSubAccountByIdUseCase with a SubAccountRepository.
         """
         self.SubAccountRepository = SubAccountRepository
+        self.EventRepository = EventRepository
         
     def execute(self, subaccountId: uuid.UUID):
         """
         Executes the use case to delete a subaccount by ID.
         """
         try:
-            return self.SubAccountRepository.DeleteSubAccountById(subaccountId)
+            result = self.SubAccountRepository.DeleteSubAccountById(subaccountId)
+            
+            if self.EventRepository:
+                EventPublisher.Publish(
+                    EventType="SubAccountDeleted",
+                    Payload={
+                        "subaccount_id": str(subaccountId)
+                    }
+                )
+            
+            return result
         except Exception as e:
             raise SubAccountUpdateException(str(e)) from e

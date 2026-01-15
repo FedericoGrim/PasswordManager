@@ -2,6 +2,8 @@ import uuid
 from Application.DTO.LocalUserDTO import CreateLocalUserDTO
 from Application.Exceptions.LocalUserUseCaseExceptions import *
 
+from Application.UseCase.Publisher import EventPublisher
+
 class CreateLocalUserUseCase:
     def __init__(self, LocalUserRepository, EventRepository=None):
         self.LocalUserRepository = LocalUserRepository
@@ -16,14 +18,13 @@ class CreateLocalUserUseCase:
 
             # Salvo evento nel NoSQL se presente
             if self.EventRepository:
-                await self.EventRepository.SaveEvent(
+                EventPublisher.Publish(
                     EventType="UserCreated",
                     Payload={
                         "user_id": str(user.Id),
                         "keycloak_id": str(localuser_create.IdKeycloak)
                     }
                 )
-
             return user
         except Exception as e:
             raise LocalUserCreationException(str(e)) from e
@@ -50,7 +51,7 @@ class UpdateLocalUserByIdUseCase:
             updated = self.LocalUserRepository.UpdateLocalUserById(localUserId, newSalt)
 
             if updated and self.EventRepository:
-                await self.EventRepository.SaveEvent(
+                EventPublisher.Publish(
                     EventType="UserUpdated",
                     Payload={
                         "user_id": str(localUserId),
@@ -73,7 +74,7 @@ class DeleteLocalUserByIdUseCase:
             deleted = self.LocalUserRepository.DeleteLocalUserById(user_id)
 
             if deleted and self.EventRepository:
-                await self.EventRepository.SaveEvent(
+                EventPublisher.Publish(
                     EventType="UserDeleted",
                     Payload={
                         "user_id": str(user_id)
