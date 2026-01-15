@@ -1,13 +1,13 @@
 from dependency_injector import containers, providers
 
-from Infrastructure.Databases.SQL.LocalUserPostgreSQL import LocalUserService
+from Infrastructure.Databases.SQL.UserPostgreSQL import UserService
 from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
 
-from Application.UseCase.LocalUserUseCase import (
-    CreateLocalUserUseCase,
-    GetLocalUsersByMainUserIdUseCase,
-    UpdateLocalUserByIdUseCase,
-    DeleteLocalUserByIdUseCase,
+from Application.UseCase.UserUseCase import (
+    CreateUserUseCase,
+    GetUsersByMainUserIdUseCase,
+    UpdateUserByIdUseCase,
+    DeleteUserByIdUseCase,
 )
 
 from Application.UseCase.SubAccountUseCases import (
@@ -21,24 +21,24 @@ from Infrastructure.Databases.NoSQL.EventsMongoDB import EventRepository
 
 
 # ------------------- SQL Containers -------------------
-class LocalUserContainer(containers.DeclarativeContainer):
-    LocalUserRepositoryFactory = providers.Factory(LocalUserService, db=providers.Dependency())
+class UserContainer(containers.DeclarativeContainer):
+    UserRepositoryFactory = providers.Factory(UserService, db=providers.Dependency())
 
-    CreateLocalUserProvider = providers.Factory(
-        CreateLocalUserUseCase,
-        LocalUserRepository=LocalUserRepositoryFactory,
+    CreateUserProvider = providers.Factory(
+        CreateUserUseCase,
+        UserRepository=UserRepositoryFactory,
     )
-    GetLocalUserByKeycloakIdProvider = providers.Factory(
-        GetLocalUsersByMainUserIdUseCase,
-        LocalUserRepository=LocalUserRepositoryFactory,
+    GetUserByKeycloakIdProvider = providers.Factory(
+        GetUsersByMainUserIdUseCase,
+        UserRepository=UserRepositoryFactory,
     )
-    UpdateLocalUserByIdProvider = providers.Factory(
-        UpdateLocalUserByIdUseCase,
-        LocalUserRepository=LocalUserRepositoryFactory,
+    UpdateUserByIdProvider = providers.Factory(
+        UpdateUserByIdUseCase,
+        UserRepository=UserRepositoryFactory,
     )
-    DeleteLocalUserByIdProvider = providers.Factory(
-        DeleteLocalUserByIdUseCase,
-        LocalUserRepository=LocalUserRepositoryFactory,
+    DeleteUserByIdProvider = providers.Factory(
+        DeleteUserByIdUseCase,
+        UserRepository=UserRepositoryFactory,
     )
 
 
@@ -71,7 +71,7 @@ class EventsContainer(containers.DeclarativeContainer):
 
 # ------------------- Aggregated Containers -------------------
 class SQLContainer(containers.DeclarativeContainer):
-    local_user = providers.Container(LocalUserContainer)
+    user = providers.Container(UserContainer)
     subaccount = providers.Container(SubAccountContainer)
 
 
