@@ -11,8 +11,11 @@ cryptography
 FastAPI
 uvicorn
 
-#DB
+#SQL DB
 SQLAlchemy
+
+#NoSQL DB
+beanie
 
 #Injection
 dependency_injector
@@ -21,8 +24,11 @@ dependency_injector
 pytest
 pytest-asyncio
 
-#Migration
+#Migration SQL
 alembic
+
+#Migration NoSQL
+pyMongoDB
 
 #Docs
 sphinx

@@ -10,6 +10,7 @@ class CreateLocalUserDTO(BaseModel):
     This class is used to transfer data for creating a new local user.
     """
     IdKeycloak: UUID
+    Id: UUID
     Salt: str
 
     def to_entity(self, generatedSalt):

@@ -1,7 +1,6 @@
 import uuid
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
-from uuid import UUID
 from dependency_injector.wiring import inject
 
 from config import Container
@@ -10,59 +9,40 @@ from Infrastructure.Databases.SQL.Database import get_db
 
 router = APIRouter()
 
+# -------------------- CREATE --------------------
 @router.post("/")
 @inject
 async def ApiCreateUser(
-    localUser: CreateLocalUserDTO, 
-    db: Session = Depends(get_db), 
+    localUser: CreateLocalUserDTO,
+    db: Session = Depends(get_db),
     request: Request = None
 ):
-    """
-    Crea un nuovo utente locale nel database.
-
-    Args:
-        localUser (CreateLocalUser): DTO contenente i dati per creare l'utente.
-        db (Session): Sessione di database fornita da FastAPI tramite Depends.
-        request (Request, opzionale): Oggetto request per accedere al container di dipendenze.
-
-    Returns:
-        dict: Messaggio di conferma e dati utente creato.
-
-    Raises:
-        HTTPException: Errore con status 400 in caso di fallimento.
-    """
     container: Container = request.app.container
-    create_user_use_case = container.SQL.local_user().CreateLocalUserProvider(LocalUserRepository__db=db)
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
+    create_user_use_case = container.SQL.local_user().CreateLocalUserProvider(
+        LocalUserRepository__db=db,
+        EventRepository=event_repo
+    )
 
     try:
-        if create_user_use_case.execute(localUser):
-            return {"message": "User created successfully"}
+        user = await create_user_use_case.execute(localUser)
+        return {"message": "User created successfully", "user_id": str(user.Id)}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
+# -------------------- GET --------------------
 @router.get("/{keycloak_user_id}")
 @inject
 async def ApiGetUser(
-    keycloak_user_id: uuid.UUID, 
-    db: Session = Depends(get_db), 
+    keycloak_user_id: uuid.UUID,
+    db: Session = Depends(get_db),
     request: Request = None
 ):
-    """
-    Recupera un utente locale tramite il suo ID Keycloak.
-
-    Args:
-        keycloakUserId (UUID): Identificativo univoco dell'utente Keycloak.
-        db (Session): Sessione di database fornita da FastAPI.
-        request (Request, opzionale): Oggetto request per il container DI.
-
-    Returns:
-        dict: Messaggio di conferma e dati utente recuperato.
-
-    Raises:
-        HTTPException: Errore 404 se l'utente non è trovato.
-    """
     container: Container = request.app.container
-    get_user_use_case = container.SQL.local_user().GetLocalUserByKeycloakIdProvider(LocalUserRepository__db=db)
+    get_user_use_case = container.SQL.local_user().GetLocalUserByKeycloakIdProvider(
+        LocalUserRepository__db=db
+    )
 
     try:
         user = get_user_use_case.execute(keycloak_user_id)
@@ -70,67 +50,51 @@ async def ApiGetUser(
     except Exception as e:
         raise HTTPException(status_code=404, detail="User not found")
 
+
+# -------------------- UPDATE --------------------
 @router.put("/{user_id}")
 @inject
 async def ApiUpdateLocalUser(
-    user_id: UUID, 
-    salt: str, 
-    db: Session = Depends(get_db), 
+    user_id: uuid.UUID,
+    salt: str,
+    db: Session = Depends(get_db),
     request: Request = None
 ):
-    """
-    Aggiorna i dati di un utente locale specificato dall'ID.
-
-    Args:
-        localUserId (UUID): ID univoco dell'utente locale da aggiornare.
-        salt (str): Valore salt usato per l'hashing della password.
-        newLocalUser (UpdateLocalUser): DTO con i nuovi dati utente.
-        db (Session): Sessione database.
-        request (Request, opzionale): Oggetto request per container DI.
-
-    Returns:
-        dict: Messaggio di conferma aggiornamento.
-
-    Raises:
-        HTTPException: Errore 400 in caso di problemi durante l'aggiornamento.
-    """
     container: Container = request.app.container
-    update_user_username_use_case = container.SQL.local_user().UpdateLocalUserByIdProvider(LocalUserRepository__db=db)
-    
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
+    update_user_use_case = container.SQL.local_user().UpdateLocalUserByIdProvider(
+        LocalUserRepository__db=db,
+        EventRepository=event_repo
+    )
+
     try:
-        if update_user_username_use_case.execute(user_id, salt.encode()):
+        updated = await update_user_use_case.execute(user_id, salt.encode())
+        if updated:
             return {"message": "User updated successfully"}
+        raise HTTPException(status_code=400, detail="User update failed")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+
+# -------------------- DELETE --------------------
 @router.delete("/{user_id}")
 @inject
 async def ApiDeleteUser(
-    user_id: UUID, 
-    db: Session = Depends(get_db), 
+    user_id: uuid.UUID,
+    db: Session = Depends(get_db),
     request: Request = None
 ):
-    """
-    Elimina un utente locale dal database.
-
-    Args:
-        localUserId (UUID): ID dell'utente da eliminare.
-        db (Session): Sessione database.
-        request (Request, opzionale): Oggetto request per container DI.
-
-    Returns:
-        dict: Messaggio di conferma eliminazione.
-
-    Raises:
-        HTTPException: Errore 400 se l'eliminazione fallisce.
-    """
     container: Container = request.app.container
-    delete_user_use_case = container.SQL.local_user().DeleteLocalUserByIdProvider(LocalUserRepository__db=db)
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
+    delete_user_use_case = container.SQL.local_user().DeleteLocalUserByIdProvider(
+        LocalUserRepository__db=db,
+        EventRepository=event_repo
+    )
 
     try:
-        if delete_user_use_case.execute(user_id):
+        deleted = await delete_user_use_case.execute(user_id)
+        if deleted:
             return {"message": "User deleted successfully"}
-        else:
-            raise HTTPException(status_code=400, detail="User deletion failed")
+        raise HTTPException(status_code=400, detail="User deletion failed")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
