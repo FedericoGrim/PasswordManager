@@ -6,6 +6,7 @@ from Domain.Entities.Team import Team
 
 class TeamDTO(BaseModel):
     id: UUID
+    name: str
     salt_argon: str
 
     def to_entity(self):
@@ -15,18 +16,22 @@ class TeamDTO(BaseModel):
         )
     
 class CreateTeamDTO(BaseModel):
+    name: str
     salt_argon: str
 
     def to_entity(self):
         return Team(
+            name=self.name,
             salt_argon=self.salt_argon
         )
 
 class UpdateTeamDTO(BaseModel):
+    name: Optional[str]
     salt_argon: Optional[str]
 
     def to_entity(self, existing_team: Team):
         return Team(
             id=existing_team.id,
+            name=self.name if self.name is not None else existing_team.name,
             salt_argon=self.salt_argon if self.salt_argon is not None else existing_team.salt_argon
         )
