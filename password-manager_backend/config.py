@@ -3,6 +3,8 @@ from dependency_injector import containers, providers
 from Infrastructure.Databases.SQL.UserPostgreSQL import UserService
 from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
 
+from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
+
 from Application.UseCase.UserUseCase import (
     CreateUserUseCase,
     GetUsersByMainUserIdUseCase,
@@ -10,11 +12,19 @@ from Application.UseCase.UserUseCase import (
     DeleteUserByIdUseCase,
 )
 
-from Application.UseCase.SubAccountUseCases import (
+from Application.UseCase.SubAccountUseCase import (
     CreateSubAccountUseCase,
     GetAllSubAccountsByLocalUserIdUseCase,
     UpdateSubAccountByIdUseCase,
     DeleteSubAccountByIdUseCase,
+)
+
+from Application.UseCase.TeamUseCase import (
+    CreateTeamUseCase,
+    GetTeamsByUserIdUseCase,
+    GetTeamsByUserIdUseCase,
+    UpdateTeamByIdUseCase,
+    DeleteTeamByIdUseCase,
 )
 
 from Infrastructure.Databases.NoSQL.EventsMongoDB import EventRepository
@@ -63,6 +73,31 @@ class SubAccountContainer(containers.DeclarativeContainer):
     )
 
 
+class TeamContainer(containers.DeclarativeContainer):
+    TeamRepositoryFactory = providers.Factory(TeamService, db=providers.Dependency())
+
+    CreateTeamProvider = providers.Factory(
+        CreateTeamUseCase,
+        TeamRepository=TeamRepositoryFactory,
+    )
+    GetTeamByIdProvider = providers.Factory(
+        GetTeamsByUserIdUseCase,
+        TeamRepository=TeamRepositoryFactory,
+    )
+    GetTeamsByUserIdProvider = providers.Factory(
+        GetTeamsByUserIdUseCase,
+        TeamRepository=TeamRepositoryFactory,
+    )
+    UpdateTeamByIdProvider = providers.Factory(
+        UpdateTeamByIdUseCase,
+        TeamRepository=TeamRepositoryFactory,
+    )
+    DeleteTeamByIdProvider = providers.Factory(
+        DeleteTeamByIdUseCase,
+        TeamRepository=TeamRepositoryFactory,
+    )
+
+
 # ------------------- NoSQL Container -------------------
 class EventsContainer(containers.DeclarativeContainer):
     mongo_client = providers.Dependency()
@@ -73,6 +108,7 @@ class EventsContainer(containers.DeclarativeContainer):
 class SQLContainer(containers.DeclarativeContainer):
     user = providers.Container(UserContainer)
     subaccount = providers.Container(SubAccountContainer)
+    team = providers.Container(TeamContainer)
 
 
 class NoSQLContainer(containers.DeclarativeContainer):
