@@ -40,10 +40,10 @@ class UserService(IUserService):
             logging.error(f"Error: {e}")
             raise GetAllUserByIdRetrivalException()
         
-    def UpdateUserByUserId(self, UserId: uuid.UUID):
+    def UpdateUserById(self, user_id: uuid.UUID, new_user: str):
         try:
             with self.Db.begin():
-                user = self.Db.query(User).filter(User.id == UserId).first()
+                user = self.Db.query(User).filter(User.id == user_id).first()
                 if not user:
                     raise UserNotFoundException("User not found.")
                 
@@ -56,10 +56,10 @@ class UserService(IUserService):
             logging.error(f"Error: {e}")
             raise UserUpdatePasswordException()
         
-    def DeleteUserByUserId(self, userId: uuid.UUID):
+    def DeleteUserById(self, user_id: uuid.UUID):
         try:
             with self.Db.begin():
-                user = self.Db.query(User).filter(User.id == userId).first()
+                user = self.Db.query(User).filter(User.id == user_id).first()
                 if not user:
                     raise UserNotFoundException("User not found.")
 
