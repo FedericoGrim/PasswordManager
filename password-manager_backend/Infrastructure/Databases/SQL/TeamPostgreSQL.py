@@ -7,6 +7,7 @@ from Infrastructure.Exceptions.TeamPostgreSQL_Exception import *
 
 from Domain.Interfaces.ITeamService import ITeamService
 from Domain.Entities.Team import Team
+from Domain.Entities.TeamMembers import TeamMembers
 
 class TeamService(ITeamService):
     def __init__(self, db: Session):
@@ -42,7 +43,7 @@ class TeamService(ITeamService):
         
     def GetTeamsByUserId(self, userId: uuid.UUID):
         try:
-            teams: list[Team] = self.Db.query(Team).filter(Team.user_id == userId).all()
+            teams: list[Team] = self.Db.query(Team).join(TeamMembers, Team.id == TeamMembers.team_id).filter(TeamMembers.user_id == userId).all()
             if not teams:
                 raise GetTeamsByUserIdNotFoundException("No Teams found for the given User Id.")
             return [team for team in teams]
