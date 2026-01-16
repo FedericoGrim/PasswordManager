@@ -7,7 +7,7 @@ from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
 
 from Application.UseCase.UserUseCase import (
     CreateUserUseCase,
-    GetUsersByMainUserIdUseCase,
+    GetUsersByKeycloakIdUseCase,
     UpdateUserByIdUseCase,
     DeleteUserByIdUseCase,
 )
@@ -21,6 +21,7 @@ from Application.UseCase.SubAccountUseCase import (
 
 from Application.UseCase.TeamUseCase import (
     CreateTeamUseCase,
+    GetTeamByIdUseCase,
     GetTeamsByUserIdUseCase,
     GetTeamsByUserIdUseCase,
     UpdateTeamByIdUseCase,
@@ -39,7 +40,7 @@ class UserContainer(containers.DeclarativeContainer):
         UserRepository=UserRepositoryFactory,
     )
     GetUserByKeycloakIdProvider = providers.Factory(
-        GetUsersByMainUserIdUseCase,
+        GetUsersByKeycloakIdUseCase,
         UserRepository=UserRepositoryFactory,
     )
     UpdateUserByIdProvider = providers.Factory(
@@ -81,7 +82,7 @@ class TeamContainer(containers.DeclarativeContainer):
         TeamRepository=TeamRepositoryFactory,
     )
     GetTeamByIdProvider = providers.Factory(
-        GetTeamsByUserIdUseCase,
+        GetTeamByIdUseCase,
         TeamRepository=TeamRepositoryFactory,
     )
     GetTeamsByUserIdProvider = providers.Factory(
