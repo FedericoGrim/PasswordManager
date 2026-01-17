@@ -1,39 +1,32 @@
 import uuid
 
-from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
+from Application.DTO.SubAccountDTO import SubAccountDTO, CreateSubAccountDTO, UpdateSubAccountDTO
 from Application.Exceptions.SubAccountUseCaseException import *
 
 from Application.UseCase.Publisher import EventPublisher
 
 class CreateSubAccountUseCase():
-    """
-    Use case for creating a subaccount.
-    This class handles the creation of a subaccount by encrypting the password and interacting with the SubAccountRepository to persist the subaccount data.
-
-    Attributes:
-        SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
-        salt (str): The salt used for hashing the password.
-    """
     def __init__(self, SubAccountRepository, EventRepository=None):
-        """
-        Initializes the CreateSubAccountUseCase with a SubAccountRepository.
-        """
         self.SubAccountRepository = SubAccountRepository
         self.EventRepository = EventRepository
         
     def execute(self, subaccount_create: CreateSubAccountDTO):
-        """
-        Executes the use case to create a subaccount.
-        """
         try:
-            result = self.SubAccountRepository.CreateSubAccount(subaccount_create)
+            subaccount_entity = subaccount_create.to_entity()
+            result = self.SubAccountRepository.CreateSubAccount(subaccount_entity)
             
             if self.EventRepository:
-                EventPublisher.Publish(
+                publisher = EventPublisher(self.EventRepository)
+                publisher.Publish(
                     EventType="SubAccountCreated",
                     Payload={
-                        "subaccount_id": str(result.Id),
-                        "user_id": str(subaccount_create.UserId)
+                        "subaccount_id": str(result.id),
+                        "title": subaccount_create.title,
+                        "user_name": subaccount_create.username,
+                        "email": subaccount_create.email,
+                        "password": subaccount_create.password,
+                        "link": subaccount_create.link,
+                        "necessary_role": subaccount_create.necessary_role
                     }
                 )
             
@@ -41,57 +34,37 @@ class CreateSubAccountUseCase():
         except Exception as e:
             raise CreateSubAccountException(str(e)) from e
         
-class GetAllSubAccountsByLocalUserIdUseCase():
-    """
-    Use case for retrieving all subaccounts associated with a user ID.
-    This class interacts with the SubAccountRepository to fetch subaccounts based on the user ID.
-
-    Attributes:
-        SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
-    """
+class GetAllSubAccountsByTeamIdUseCase():
     def __init__(self, SubAccountRepository):
-        """
-        Initializes the GetAllSubAccountsByLocalUserIdUseCase with a SubAccountRepository.
-        """
         self.SubAccountRepository = SubAccountRepository
         
-    def execute(self, userId: uuid.UUID):
-        """
-        Executes the use case to retrieve all subaccounts by user ID.
-        """
+    def execute(self, teamId: uuid.UUID):
         try:
-            return self.SubAccountRepository.GetAllSubAccountsByUserId(userId)
+            return self.SubAccountRepository.GetAllSubAccountsByTeamId(teamId)
         except Exception as e:
             raise SubAccountRetrievalException(str(e)) from e
         
 class UpdateSubAccountByIdUseCase():
-    """
-    Use case for updating a subaccount by ID.
-    This class handles the update of a subaccount by interacting with the SubAccountRepository to persist the changes.
-    
-    Attributes:
-        SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
-        salt (str): The salt used for hashing the password.
-    """
     def __init__(self, SubAccountRepository, EventRepository=None):
-        """
-        Initializes the UpdateSubAccountByIdUseCase with a SubAccountRepository.
-        """
         self.SubAccountRepository = SubAccountRepository
         self.EventRepository = EventRepository
         
-    def execute(self, subaccountId: uuid.UUID, new_subaccount: UpdateSubAccountDTO):
-        """
-        Executes the use case to update a subaccount by ID.
-        """
+    def execute(self, subaccountId: uuid.UUID, new_subaccount: SubAccountDTO):
         try:
             result = self.SubAccountRepository.UpdateSubAccountById(subaccountId, new_subaccount)
             
             if self.EventRepository:
-                EventPublisher.Publish(
+                publisher = EventPublisher(self.EventRepository)
+                publisher.Publish(
                     EventType="SubAccountUpdated",
                     Payload={
-                        "subaccount_id": str(subaccountId)
+                        "subaccount_id": str(subaccountId),
+                        "title": new_subaccount.title,
+                        "username": new_subaccount.username,
+                        "email": new_subaccount.email,
+                        "password": new_subaccount.password,
+                        "link": new_subaccount.link,
+                        "necessary_role": new_subaccount.necessary_role
                     }
                 )
             
@@ -100,32 +73,20 @@ class UpdateSubAccountByIdUseCase():
             raise SubAccountUpdateException(str(e)) from e
         
 class DeleteSubAccountByIdUseCase():
-    """
-    Use case for deleting a subaccount by ID.
-    This class handles the deletion of a subaccount by interacting with the SubAccountRepository.
-    
-    Attributes:
-        SubAccountRepository (ISubAccountService): The repository interface for subaccount operations.
-    """
     def __init__(self, SubAccountRepository, EventRepository=None):
-        """
-        Initializes the DeleteSubAccountByIdUseCase with a SubAccountRepository.
-        """
         self.SubAccountRepository = SubAccountRepository
         self.EventRepository = EventRepository
         
     def execute(self, subaccountId: uuid.UUID):
-        """
-        Executes the use case to delete a subaccount by ID.
-        """
         try:
             result = self.SubAccountRepository.DeleteSubAccountById(subaccountId)
             
             if self.EventRepository:
-                EventPublisher.Publish(
+                publisher = EventPublisher(self.EventRepository)
+                publisher.Publish(
                     EventType="SubAccountDeleted",
                     Payload={
-                        "subaccount_id": str(subaccountId)
+                        "subaccount_id": str(subaccountId),
                     }
                 )
             
