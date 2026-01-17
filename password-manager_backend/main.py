@@ -8,6 +8,7 @@ from config import Container
 from Presentation.Controllers.UserController import router as user_router
 from Presentation.Controllers.SubAccountController import router as subaccount_router
 from Presentation.Controllers.TeamController import router as team_router
+from Presentation.Controllers.TeamMembersController import router as team_members_router
 
 from Infrastructure.Databases.SQL.Database import SessionLocal
 from Infrastructure.Databases.NoSQL.Models import UserEvent
@@ -27,7 +28,10 @@ DB_NAME = os.getenv("DB_NAME")
 # FastAPI App
 # ------------------------------
 container = Container()
-container.wire(modules=["Presentation.Controllers.UserController", "Presentation.Controllers.SubAccountController", "Presentation.Controllers.TeamController"])
+container.wire(modules=["Presentation.Controllers.UserController", 
+                        "Presentation.Controllers.SubAccountController", 
+                        "Presentation.Controllers.TeamController",
+                        "Presentation.Controllers.TeamMembersController"])
 
 app = FastAPI()
 
@@ -59,6 +63,12 @@ app.include_router(
     team_router,
     prefix="/api/team",
     tags=["Team"],
+)
+
+app.include_router(
+    team_members_router,
+    prefix="/api/team-members",
+    tags=["TeamMembers"],
 )
 
 # ------------------------------
