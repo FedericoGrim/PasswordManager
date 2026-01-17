@@ -1,6 +1,6 @@
 import uuid
 
-from Application.DTO.UserDTO import UserDTO
+from Application.DTO.UserDTO import CreateUserDTO
 
 from Application.Exceptions.UserUseCaseExceptions import *
 from Application.UseCase.Publisher import EventPublisher
@@ -10,7 +10,7 @@ class CreateUserUseCase:
         self.UserRepository = UserRepository
         self.EventRepository = EventRepository
 
-    async def execute(self, user_create: UserDTO):
+    async def execute(self, user_create: CreateUserDTO):
         try:
             user_entity = user_create.to_entity()
             user = self.UserRepository.CreateUser(
@@ -22,7 +22,7 @@ class CreateUserUseCase:
                 publisher.Publish(
                     EventType="UserCreated",
                     Payload={
-                        "user_id": str(user_create.id),
+                        "user_id": str(user.id),
                         "keycloak_id": str(user_create.id_keycloak)
                     }
                 )

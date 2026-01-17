@@ -14,22 +14,19 @@ router = APIRouter()
 @inject
 async def ApiCreateUser(
     user: CreateUserDTO,
-    salt: str,
     db: Session = Depends(get_db),
     request: Request = None
 ):
     container: Container = request.app.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    team_repo = container.SQL.team().TeamRepositoryFactory(db=db)
     create_user_use_case = container.SQL.user().CreateUserProvider(
         UserRepository__db=db,
         EventRepository=event_repo,
-        TeamRepository=team_repo,
     )
 
     try:
-        user = await create_user_use_case.execute(user, salt.encode())
-        return {"message": "User created successfully", "user_id": str(user.Id)}
+        user = await create_user_use_case.execute(user)
+        return {"message": "User created successfully", "user_id": str(user.id)}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
