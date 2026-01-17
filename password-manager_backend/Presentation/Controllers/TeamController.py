@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 from dependency_injector.wiring import inject
 
 from config import Container
-from Application.DTO.TeamDTO import CreateTeamDTO
+from Application.DTO.TeamDTO import CreateTeamDTO, UpdateTeamDTO
 from Infrastructure.Databases.SQL.Database import get_db
 
 router = APIRouter()
@@ -15,17 +15,18 @@ router = APIRouter()
 async def ApiCreateTeam(
     team: CreateTeamDTO,
     db: Session = Depends(get_db),
-    user_id: uuid.UUID = None,
     request: Request = None
 ):
     container: Container = request.app.container
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
     create_team_use_case = container.SQL.team().CreateTeamProvider(
-        TeamRepository__db=db
+        TeamRepository__db=db,
+        EventRepository=event_repo
     )
 
     try:
-        new_team = await create_team_use_case.execute(team, user_id)
-        return {"message": "Team created successfully"}
+        new_team = create_team_use_case.execute(team)
+        return {"message": "Team created successfully", "team_id": str(new_team.id)}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
@@ -71,17 +72,19 @@ async def ApiGetTeamsByUserId(
 @inject
 async def ApiUpdateTeam(
     team_id: uuid.UUID,
-    name: str,
+    team_update: UpdateTeamDTO,
     db: Session = Depends(get_db),
     request: Request = None
 ):
     container: Container = request.app.container
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
     update_team_use_case = container.SQL.team().UpdateTeamByIdProvider(
-        TeamRepository__db=db
+        TeamRepository__db=db,
+        EventRepository=event_repo
     )
 
     try:
-        updated_team = await update_team_use_case.execute(team_id, name)
+        updated_team = update_team_use_case.execute(team_id, team_update)
         return {"message": "Team updated successfully", "team": updated_team}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -95,12 +98,14 @@ async def ApiDeleteTeam(
     request: Request = None
 ):
     container: Container = request.app.container
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
     delete_team_use_case = container.SQL.team().DeleteTeamByIdProvider(
-        TeamRepository__db=db
+        TeamRepository__db=db,
+        EventRepository=event_repo
     )
 
     try:
-        deleted = await delete_team_use_case.execute(team_id)
+        deleted = delete_team_use_case.execute(team_id)
         if deleted:
             return {"message": "Team deleted successfully"}
         raise HTTPException(status_code=400, detail="Team deletion failed")
