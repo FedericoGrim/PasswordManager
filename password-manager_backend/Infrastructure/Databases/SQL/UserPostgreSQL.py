@@ -14,10 +14,9 @@ class UserService(IUserService):
         
     def CreateUser(self, new_user):
         try:
-            with self.Db.begin():
-                self.Db.add(new_user)
-                self.Db.flush()
-                self.Db.refresh(new_user)
+            self.Db.add(new_user)
+            self.Db.flush()
+            self.Db.refresh(new_user)
 
             return new_user
         
@@ -42,13 +41,12 @@ class UserService(IUserService):
         
     def UpdateUserById(self, user_id: uuid.UUID, new_user: str):
         try:
-            with self.Db.begin():
-                user = self.Db.query(User).filter(User.id == user_id).first()
-                if not user:
-                    raise UserNotFoundException("User not found.")
-                
-                self.Db.flush()
-                self.Db.refresh(user)
+            user = self.Db.query(User).filter(User.id == user_id).first()
+            if not user:
+                raise UserNotFoundException("User not found.")
+            
+            self.Db.flush()
+            self.Db.refresh(user)
 
             return user
         
@@ -58,12 +56,11 @@ class UserService(IUserService):
         
     def DeleteUserById(self, user_id: uuid.UUID):
         try:
-            with self.Db.begin():
-                user = self.Db.query(User).filter(User.id == user_id).first()
-                if not user:
-                    raise UserNotFoundException("User not found.")
+            user = self.Db.query(User).filter(User.id == user_id).first()
+            if not user:
+                raise UserNotFoundException("User not found.")
 
-                self.Db.delete(user)
+            self.Db.delete(user)
                 
             return {"message": "User deleted successfully."}
         
