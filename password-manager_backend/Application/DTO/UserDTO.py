@@ -15,7 +15,6 @@ class UserDTO(BaseModel):
 
 class CreateUserDTO(BaseModel):
     id_keycloak: UUID
-    id: UUID
 
     def to_entity(self):
         return User(
