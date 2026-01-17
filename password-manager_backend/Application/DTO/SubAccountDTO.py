@@ -10,7 +10,7 @@ class SubAccountDTO(BaseModel):
     username: str
     email: str
     password: str
-    url: str
+    link: str
     necessary_role: str
 
     def to_entity(self):
@@ -20,17 +20,18 @@ class SubAccountDTO(BaseModel):
             username=self.username,
             email=self.email,
             password=self.password,
-            link=self.url,
+            link=self.link,
             necessary_role=self.necessary_role
         )
 
 class CreateSubAccountDTO(BaseModel):
+    
     team_id: UUID4
     title: Annotated[str, StringConstraints(min_length=1)]
     username: str
     email: str
     password: str
-    url: str
+    link: str
     necessary_role: Annotated[str, StringConstraints(min_length=1)]
 
     def to_entity(self):
@@ -40,7 +41,7 @@ class CreateSubAccountDTO(BaseModel):
             username=self.username,
             email=self.email,
             password=self.password,
-            link=self.url,
+            link=self.link,
             necessary_role=self.necessary_role
         )
 
@@ -49,7 +50,7 @@ class UpdateSubAccountDTO(BaseModel):
     username: Optional[str]
     email: Optional[str]
     password: Optional[str]
-    url: Optional[str]
+    link: Optional[str]
     necessary_role: Optional[Annotated[str, StringConstraints(min_length=1)]]
 
     def to_entity(self, existing_sub_account: SubAccount):
@@ -59,6 +60,6 @@ class UpdateSubAccountDTO(BaseModel):
             username=self.username if self.username is not None else existing_sub_account.username,
             email=self.email if self.email is not None else existing_sub_account.email,
             password=self.password if self.password is not None else existing_sub_account.password,
-            link=self.url if self.url is not None else existing_sub_account.link,
+            link=self.link if self.link is not None else existing_sub_account.link,
             necessary_role=self.necessary_role if self.necessary_role is not None else existing_sub_account.necessary_role
         )
