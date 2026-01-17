@@ -2,8 +2,8 @@ from dependency_injector import containers, providers
 
 from Infrastructure.Databases.SQL.UserPostgreSQL import UserService
 from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
-
 from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
+from Infrastructure.Databases.SQL.TeamMembersPostgreSQL import TeamMembersService
 
 from Application.UseCase.UserUseCase import (
     CreateUserUseCase,
@@ -14,7 +14,7 @@ from Application.UseCase.UserUseCase import (
 
 from Application.UseCase.SubAccountUseCase import (
     CreateSubAccountUseCase,
-    GetAllSubAccountsByLocalUserIdUseCase,
+    GetAllSubAccountsByTeamIdUseCase,
     UpdateSubAccountByIdUseCase,
     DeleteSubAccountByIdUseCase,
 )
@@ -26,6 +26,14 @@ from Application.UseCase.TeamUseCase import (
     GetTeamsByUserIdUseCase,
     UpdateTeamByIdUseCase,
     DeleteTeamByIdUseCase,
+)
+
+from Application.UseCase.TeamMembersUseCase import (
+    AddMemberToTeamUseCase,
+    GetTeamMembersByTeamIdUseCase,
+    GetTeamsByMemberIdUseCase,
+    UpdateTeamMemberRoleUseCase,
+    RemoveMemberFromTeamUseCase
 )
 
 from Infrastructure.Databases.NoSQL.EventsMongoDB import EventRepository
@@ -60,8 +68,8 @@ class SubAccountContainer(containers.DeclarativeContainer):
         CreateSubAccountUseCase,
         SubAccountRepository=SubAccountRepositoryFactory,
     )
-    GetAllSubAccountsByUserIdProvider = providers.Factory(
-        GetAllSubAccountsByLocalUserIdUseCase,
+    GetAllSubAccountsByTeamIdProvider = providers.Factory(
+        GetAllSubAccountsByTeamIdUseCase,
         SubAccountRepository=SubAccountRepositoryFactory,
     )
     UpdateSubAccountByIdProvider = providers.Factory(
@@ -98,6 +106,29 @@ class TeamContainer(containers.DeclarativeContainer):
         TeamRepository=TeamRepositoryFactory,
     )
 
+class TeamMembersContainer(containers.DeclarativeContainer):
+    TeamMembersRepositoryFactory = providers.Factory(TeamMembersService, db=providers.Dependency())
+
+    AddMemberToTeamProvider = providers.Factory(
+        AddMemberToTeamUseCase,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
+    )
+    GetTeamMembersByTeamIdProvider = providers.Factory(
+        GetTeamMembersByTeamIdUseCase,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
+    )
+    GetTeamsByMemberIdProvider = providers.Factory(
+        GetTeamsByMemberIdUseCase,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
+    )
+    UpdateTeamMemberRoleProvider = providers.Factory(
+        UpdateTeamMemberRoleUseCase,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
+    )
+    RemoveMemberFromTeamProvider = providers.Factory(
+        RemoveMemberFromTeamUseCase,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
+    )
 
 # ------------------- NoSQL Container -------------------
 class EventsContainer(containers.DeclarativeContainer):
@@ -110,6 +141,7 @@ class SQLContainer(containers.DeclarativeContainer):
     user = providers.Container(UserContainer)
     subaccount = providers.Container(SubAccountContainer)
     team = providers.Container(TeamContainer)
+    team_members = providers.Container(TeamMembersContainer)
 
 
 class NoSQLContainer(containers.DeclarativeContainer):
