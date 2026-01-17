@@ -1,39 +1,26 @@
 from Application.UseCase.Publisher import EventPublisher
 
-from Application.DTO.TeamDTO import TeamDTO
+from Application.DTO.TeamDTO import TeamDTO, CreateTeamDTO, UpdateTeamDTO
 from Application.Exceptions.TeamUseCase_Exception import *
 
 class CreateTeamUseCase:
-    def __init__(self, TeamRepository, TeamMembersRepository=None):
+    def __init__(self, TeamRepository, EventRepository=None):
         self.TeamRepository = TeamRepository
-        self.TeamMembersRepository = TeamMembersRepository
+        self.EventRepository = EventRepository
 
-    def execute(self, team_create: TeamDTO, user_id=None):
+    def execute(self, team_create: CreateTeamDTO):
         try:
-            team = self.TeamRepository.CreateTeam(team_create)
-            team_members = self.TeamMembersRepository.AddMemberToTeam(
-                member_id=user_id,
-                team_id=team_create.id,
-                role="owner"
-            )
+            team_entity = team_create.to_entity()
+            team = self.TeamRepository.CreateTeam(team_entity)
 
-            if self.TeamMembersRepository and user_id:
-                self.TeamMembersRepository.Publish(
-                    EventType="TeamMemberAdded",
-                    Payload={
-                        "member_id": str(user_id),
-                        "team_id": str(team_create.id),
-                        "role": "owner"
-                    }
-                )
-
-            if self.TeamRepository:
-                self.TeamRepository.Publish(
+            if self.EventRepository:
+                publisher = EventPublisher(self.EventRepository)
+                publisher.Publish(
                     EventType="TeamCreated",
                     Payload={
-                        "team_id": str(team_create.id),
-                        "team_name": team_create.name,
-                        "team_salt": team_create.salt_argon
+                        "team_id": str(team.id),
+                        "team_name": team.name,
+                        "team_salt": team.salt_argon
                     }
                 )
             
@@ -67,15 +54,18 @@ class GetTeamsByUserIdUseCase:
             raise TeamsRetrievalByUserIdException(str(e)) from e
     
 class UpdateTeamByIdUseCase:
-    def __init__(self, TeamRepository):
+    def __init__(self, TeamRepository, EventRepository=None):
         self.TeamRepository = TeamRepository
+        self.EventRepository = EventRepository
 
-    def execute(self, teamId, team_update: TeamDTO):
+    def execute(self, teamId, team_update: UpdateTeamDTO):
         try:
-            team = self.TeamRepository.UpdateTeamById(teamId, team_update)
+            team_entity = team_update.to_entity()
+            team = self.TeamRepository.UpdateTeamById(teamId, team_entity)
 
-            if self.TeamRepository:
-                self.TeamRepository.Publish(
+            if self.EventRepository:
+                publisher = EventPublisher(self.EventRepository)
+                publisher.Publish(
                     EventType="TeamUpdated",
                     Payload={
                         "team_id": str(teamId),
@@ -90,15 +80,17 @@ class UpdateTeamByIdUseCase:
             raise TeamUpdateException(str(e)) from e
     
 class DeleteTeamByIdUseCase:    
-    def __init__(self, TeamRepository):
+    def __init__(self, TeamRepository, EventRepository=None):
         self.TeamRepository = TeamRepository
+        self.EventRepository = EventRepository
 
     def execute(self, teamId):
         try:
             self.TeamRepository.DeleteTeamById(teamId)
 
-            if self.TeamRepository:
-                self.TeamRepository.Publish(
+            if self.EventRepository:
+                publisher = EventPublisher(self.EventRepository)
+                publisher.Publish(
                     EventType="TeamDeleted",
                     Payload={
                         "team_id": str(teamId)
