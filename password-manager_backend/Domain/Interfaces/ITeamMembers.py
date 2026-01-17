@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 from Domain.Entities.TeamMembers import TeamMembers
 
 @abstractmethod
-class ITeamMembers(ABC):
+class ITeamMembersService(ABC):
     @abstractmethod
     def AddMemberToTeam(self, member_id: uuid.UUID, team_id: uuid.UUID, role: str) -> dict:
         pass
