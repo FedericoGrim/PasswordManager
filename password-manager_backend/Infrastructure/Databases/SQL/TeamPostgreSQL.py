@@ -15,10 +15,9 @@ class TeamService(ITeamService):
 
     def CreateTeam(self, new_team):
         try:
-            with self.Db.begin():
-                self.Db.add(new_team)
-                self.Db.flush()
-                self.Db.refresh(new_team)
+            self.Db.add(new_team)
+            self.Db.flush()
+            self.Db.refresh(new_team)
 
             return new_team
 
@@ -54,14 +53,13 @@ class TeamService(ITeamService):
         
     def UpdateTeamById(self, teamId: uuid.UUID, new_team: Team):
         try:
-            with self.Db.begin():
-                team: Team = self.Db.query(Team).filter(Team.id == teamId).first()
-                if not team:
-                    raise TeamNotFoundException("Team not found.")
-                
-                team.name = new_team.name
-                self.Db.flush()
-                self.Db.refresh(team)
+            team: Team = self.Db.query(Team).filter(Team.id == teamId).first()
+            if not team:
+                raise TeamNotFoundException("Team not found.")
+            
+            team.name = new_team.name
+            self.Db.flush()
+            self.Db.refresh(team)
 
             return team
         
@@ -71,12 +69,11 @@ class TeamService(ITeamService):
         
     def DeleteTeamById(self, teamId: uuid.UUID):
         try:
-            with self.Db.begin():
-                team = self.Db.query(Team).filter(Team.id == teamId).first()
-                if not team:
-                    raise TeamNotFoundException("Team not found.")
+            team = self.Db.query(Team).filter(Team.id == teamId).first()
+            if not team:
+                raise TeamNotFoundException("Team not found.")
 
-                self.Db.delete(team)
+            self.Db.delete(team)
                 
             return {"message": "Team deleted successfully."}
         
