@@ -14,27 +14,17 @@ engine = create_engine(DATABASE_URL, isolation_level="SERIALIZABLE", pool_size=1
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 
 def get_db():
-    """
-    Dependency that provides a database session.
-    This function is used to create a new database session for each request.
-    It yields a session object that can be used in the application.
-    If an exception occurs, it logs the error and raises a custom exception.
-    Finally, it ensures that the session is closed after use.
-
-    Returns:
-        Session: A SQLAlchemy session object for database operations.
-
-    Raises:
-        PostgreSqlConnectionException: If there is an error connecting to the PostgreSQL database.
-    """
     db = SessionLocal()
     try:
         yield db
+        db.commit()
     except PostgreSqlConnectionException as e:
         logging.error(f"Database connection error: {e}")
+        db.rollback()
         raise
     except Exception as e:
         logging.error(f"Database error: {e}")
+        db.rollback()
         raise  # rilancia l'eccezione originale
     finally:
         db.close()
