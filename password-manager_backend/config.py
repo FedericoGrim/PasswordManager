@@ -4,6 +4,7 @@ from Infrastructure.Databases.SQL.UserPostgreSQL import UserService
 from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
 from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
 from Infrastructure.Databases.SQL.TeamMembersPostgreSQL import TeamMembersService
+from Infrastructure.Databases.SQL.CategoriesPostgreSQL import CategoriesService
 
 from Application.UseCase.UserUseCase import (
     CreateUserUseCase,
@@ -34,6 +35,13 @@ from Application.UseCase.TeamMembersUseCase import (
     GetTeamsByMemberIdUseCase,
     UpdateTeamMemberRoleUseCase,
     RemoveMemberFromTeamUseCase
+)
+
+from Application.UseCase.CategoriesUseCase import (
+    CreateCategoriesUseCase,
+    GetAllCategoriesByTeamIdUseCase,
+    UpdateCategoryByIdUseCase,
+    DeleteCategoryByIdUseCase,
 )
 
 from Infrastructure.Databases.NoSQL.EventsMongoDB import EventRepository
@@ -130,6 +138,25 @@ class TeamMembersContainer(containers.DeclarativeContainer):
         TeamMembersRepository=TeamMembersRepositoryFactory,
     )
 
+class CategoriesContainer(containers.DeclarativeContainer):
+    CategoriesRepositoryFactory = providers.Factory(CategoriesService, db=providers.Dependency())
+
+    CreateCategoriesProvider = providers.Factory(
+        CreateCategoriesUseCase,
+        CategoriesRepository=CategoriesRepositoryFactory,
+    )
+    GetAllCategoriesByTeamIdProvider = providers.Factory(
+        GetAllCategoriesByTeamIdUseCase,
+        CategoriesRepository=CategoriesRepositoryFactory,
+    )
+    UpdateCategoryByIdProvider = providers.Factory(
+        UpdateCategoryByIdUseCase,
+        CategoriesRepository=CategoriesRepositoryFactory,
+    )
+    DeleteCategoryByIdProvider = providers.Factory(
+        DeleteCategoryByIdUseCase,
+        CategoriesRepository=CategoriesRepositoryFactory,
+    )
 # ------------------- NoSQL Container -------------------
 class EventsContainer(containers.DeclarativeContainer):
     mongo_client = providers.Dependency()
@@ -142,6 +169,7 @@ class SQLContainer(containers.DeclarativeContainer):
     subaccount = providers.Container(SubAccountContainer)
     team = providers.Container(TeamContainer)
     team_members = providers.Container(TeamMembersContainer)
+    categories = providers.Container(CategoriesContainer)
 
 
 class NoSQLContainer(containers.DeclarativeContainer):
