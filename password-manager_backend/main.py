@@ -5,8 +5,13 @@ from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie
 
 from config import Container
-from Presentation.Controllers.LocalUserController import router as local_user_router
+from Presentation.Controllers.UserController import router as user_router
 from Presentation.Controllers.SubAccountController import router as subaccount_router
+from Presentation.Controllers.TeamController import router as team_router
+from Presentation.Controllers.TeamMembersController import router as team_members_router
+from Presentation.Controllers.CategoriesController import router as categories_router
+from Presentation.Controllers.SubAccountCategoriesController import router as subacc_categories_router
+
 from Infrastructure.Databases.SQL.Database import SessionLocal
 from Infrastructure.Databases.NoSQL.Models import UserEvent
 
@@ -25,7 +30,13 @@ DB_NAME = os.getenv("DB_NAME")
 # FastAPI App
 # ------------------------------
 container = Container()
-container.wire(modules=["Presentation.Controllers.LocalUserController", "Presentation.Controllers.SubAccountController"])
+container.wire(modules=["Presentation.Controllers.UserController", 
+                        "Presentation.Controllers.SubAccountController", 
+                        "Presentation.Controllers.TeamController",
+                        "Presentation.Controllers.TeamMembersController",
+                        "Presentation.Controllers.CategoriesController",
+                        "Presentation.Controllers.SubAccountCategoriesController"
+                        ])
 
 app = FastAPI()
 
@@ -37,21 +48,44 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Inizializza Motor client e registra nel container DI
 client = AsyncIOMotorClient(os.getenv("MONGO_URI"))
 container.NoSQL.events().mongo_client.override(client)
 app.container = container
 
 app.include_router(
-    local_user_router,
-    prefix="/api/localuser",
-    tags=["LocalUser"],
+    user_router,
+    prefix="/api/user",
+    tags=["User"],
 )
 
 app.include_router(
     subaccount_router,
     prefix="/api/subaccount",
     tags=["SubAccount"],
+)
+
+app.include_router(
+    team_router,
+    prefix="/api/team",
+    tags=["Team"],
+)
+
+app.include_router(
+    team_members_router,
+    prefix="/api/team-members",
+    tags=["TeamMembers"],
+)
+
+app.include_router(
+    categories_router,
+    prefix="/api/categories",
+    tags=["Categories"],
+)
+
+app.include_router(
+    subacc_categories_router,
+    prefix="/api/subaccount-categories",
+    tags=["SubAccountCategories"],
 )
 
 # ------------------------------
@@ -65,11 +99,14 @@ async def DbSessionMiddleware(request: Request, call_next):
         response = await call_next(request)
         if request.method != "GET":
             request.state.db.commit()
+
     except Exception as e:
         request.state.db.rollback()
         raise e
+    
     finally:
         request.state.db.close()
+
     return response
 
 
@@ -78,6 +115,7 @@ async def LogExceptionsMiddleware(request: Request, call_next):
     try:
         response = await call_next(request)
         return response
+    
     except Exception as e:
         import traceback
         traceback.print_exc()
@@ -95,15 +133,12 @@ async def startup_event():
         client = AsyncIOMotorClient(mongo_uri, serverSelectionTimeoutMS=5000)
         db = client.get_database(os.getenv("MONGO_DB_NAME"))
         
-        # Test connection
         await db.command("ping")
         print("✅ MongoDB connected successfully")
         
         await init_beanie(database=db, document_models=[UserEvent])
         print("✅ Beanie initialized successfully")
+
     except Exception as e:
         print(f"❌ MongoDB initialization failed: {str(e)}")
         print("⚠️  Events will not be saved. Check your MONGO_URI in .env")
-        # Non solleva eccezione per permettere all'app di partire anche senza MongoDB
-        # Commenta il return qui sotto se vuoi che l'app fallisca senza MongoDB
-        # raise e

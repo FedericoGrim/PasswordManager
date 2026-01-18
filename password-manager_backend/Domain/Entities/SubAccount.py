@@ -1,18 +1,20 @@
 from sqlalchemy import Column, String, UUID, ForeignKey
+from sqlalchemy.orm import relationship
 import uuid
 
 from Domain.Entities.Base import Base
+from Domain.Entities.Team import Team
 
 class SubAccount(Base):
-    """
-    Represents a subaccount in the password manager system.
-    This entity is used to store subaccount details associated with a local user.
-    """
     __tablename__ = "sub_accounts"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    user_id = Column(UUID(as_uuid=True), ForeignKey("local_users.Id", ondelete="CASCADE"), nullable=False)
+    team_id = Column(UUID(as_uuid=True), ForeignKey("teams.id", ondelete="CASCADE"), nullable=False)
     title = Column(String(100), nullable=False) 
     username = Column(String(100), nullable=True)
+    email = Column(String(255), nullable=True)
     password = Column(String, nullable=False)  
-    url = Column(String(255), nullable=True)
+    link = Column(String(255), nullable=True)
+    necessary_role = Column(String(50), nullable=False)
+
+    Team = relationship("Team", backref="sub_accounts")
