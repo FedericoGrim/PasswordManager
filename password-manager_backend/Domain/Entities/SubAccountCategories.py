@@ -4,9 +4,9 @@ import uuid
 
 from Domain.Entities.Base import Base
 from Domain.Entities.SubAccount import SubAccount
-from Domain.Entities.Categories import Category
+from Domain.Entities.Categories import Categories
 
-class SubAccountCategory(Base):
+class SubAccountCategories(Base):
     __tablename__ = "sub_account_categories"
 
     id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
@@ -14,4 +14,4 @@ class SubAccountCategory(Base):
     category_id = Column(UUID(as_uuid=True), ForeignKey("categories.id", ondelete="CASCADE"), nullable=False)
 
     SubAccount = relationship("SubAccount", backref="sub_account_categories")
-    Category = relationship("Category", backref="sub_account_categories")
+    Category = relationship("Categories", backref="sub_account_categories")
