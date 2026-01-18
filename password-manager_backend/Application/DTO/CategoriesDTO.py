@@ -13,3 +13,21 @@ class CategoriesDTO(BaseModel):
             team_id=self.team_id,
             name=self.name
         )
+    
+class CreateCategoryDTO(BaseModel):
+    team_id: UUID4
+    name: str
+
+    def to_entity(self):
+        return Categories(
+            team_id=self.team_id,
+            name=self.name
+        )
+    
+class UpdateCategoryDTO(BaseModel):
+    name: Optional[str] = None
+
+    def to_entity(self):
+        return Categories(
+            name=self.name
+        )
