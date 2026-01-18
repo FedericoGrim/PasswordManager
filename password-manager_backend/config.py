@@ -5,6 +5,7 @@ from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
 from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
 from Infrastructure.Databases.SQL.TeamMembersPostgreSQL import TeamMembersService
 from Infrastructure.Databases.SQL.CategoriesPostgreSQL import CategoriesService
+from Infrastructure.Databases.SQL.SubAccauntCategoriesPostgreSQL import SubAccauntCategoriesService
 
 from Application.UseCase.UserUseCase import (
     CreateUserUseCase,
@@ -42,6 +43,13 @@ from Application.UseCase.CategoriesUseCase import (
     GetAllCategoriesByTeamIdUseCase,
     UpdateCategoryByIdUseCase,
     DeleteCategoryByIdUseCase,
+)
+
+from Application.UseCase.SubAccountCategoriesUseCase import (
+    CreateSubAccountCategoryUseCase,
+    GetAllCategoriesBySubAccountIdUseCase,
+    UpdateSubAccountCategoryUseCase,
+    DeleteSubAccountCategoryUseCase,
 )
 
 from Infrastructure.Databases.NoSQL.EventsMongoDB import EventRepository
@@ -157,6 +165,26 @@ class CategoriesContainer(containers.DeclarativeContainer):
         DeleteCategoryByIdUseCase,
         CategoriesRepository=CategoriesRepositoryFactory,
     )
+
+class SubAccountCategoriesContainer(containers.DeclarativeContainer):
+    SubAccountCategoriesRepositoryFactory = providers.Factory(SubAccauntCategoriesService, db=providers.Dependency())
+
+    CreateSubAccountCategoryProvider = providers.Factory(
+        CreateSubAccountCategoryUseCase,
+        SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
+    )
+    GetAllCategoriesBySubAccountIdProvider = providers.Factory(
+        GetAllCategoriesBySubAccountIdUseCase,
+        SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
+    )
+    UpdateSubAccountCategoryProvider = providers.Factory(
+        UpdateSubAccountCategoryUseCase,
+        SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
+    )
+    DeleteSubAccountCategoryProvider = providers.Factory(
+        DeleteSubAccountCategoryUseCase,
+        SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
+    )
 # ------------------- NoSQL Container -------------------
 class EventsContainer(containers.DeclarativeContainer):
     mongo_client = providers.Dependency()
@@ -170,6 +198,7 @@ class SQLContainer(containers.DeclarativeContainer):
     team = providers.Container(TeamContainer)
     team_members = providers.Container(TeamMembersContainer)
     categories = providers.Container(CategoriesContainer)
+    sub_account_categories = providers.Container(SubAccountCategoriesContainer)
 
 
 class NoSQLContainer(containers.DeclarativeContainer):
