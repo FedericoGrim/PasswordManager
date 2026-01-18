@@ -10,6 +10,7 @@ from Presentation.Controllers.SubAccountController import router as subaccount_r
 from Presentation.Controllers.TeamController import router as team_router
 from Presentation.Controllers.TeamMembersController import router as team_members_router
 from Presentation.Controllers.CategoriesController import router as categories_router
+from Presentation.Controllers.SubAccountCategoriesController import router as subacc_categories_router
 
 from Infrastructure.Databases.SQL.Database import SessionLocal
 from Infrastructure.Databases.NoSQL.Models import UserEvent
@@ -33,7 +34,9 @@ container.wire(modules=["Presentation.Controllers.UserController",
                         "Presentation.Controllers.SubAccountController", 
                         "Presentation.Controllers.TeamController",
                         "Presentation.Controllers.TeamMembersController",
-                        "Presentation.Controllers.CategoriesController"])
+                        "Presentation.Controllers.CategoriesController",
+                        "Presentation.Controllers.SubAccountCategoriesController"
+                        ])
 
 app = FastAPI()
 
@@ -77,6 +80,12 @@ app.include_router(
     categories_router,
     prefix="/api/categories",
     tags=["Categories"],
+)
+
+app.include_router(
+    subacc_categories_router,
+    prefix="/api/subaccount-categories",
+    tags=["SubAccountCategories"],
 )
 
 # ------------------------------
