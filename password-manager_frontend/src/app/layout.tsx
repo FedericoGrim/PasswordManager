@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
-import Header from "../Components/Header/Header";
+import Sidebar from "../Components/Sidebar/Sidebar";
 import Footer from "@/Components/Footer/footer";
 
 const geistSans = Geist({
@@ -39,9 +39,11 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Header />
-        <main className="pt-[60px] min-h-screen">{children}</main> {/* spaziatura per header fisso */}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased flex flex-col min-h-screen`}>
+        <div className="flex flex-1">
+          <Sidebar />
+          <main className="flex-1">{children}</main>
+        </div>
         <Footer />
       </body>
     </html>

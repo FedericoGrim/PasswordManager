@@ -1,0 +1,148 @@
+.sidebar {
+  height: 90vh;
+  width: 5rem; /* w-20 */
+  background-color: #4465ad;
+  border-radius: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1.5rem 0;
+  gap: 1.25rem;
+  margin-left: 1.5rem;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.logo-link {
+  margin-bottom: 0.5rem;
+  display: inline-block;
+}
+
+.logo-container {
+  width: 4rem;  /* w-16 */
+  height: 6rem; /* h-24 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border-radius: 1rem;
+  transition: background-color 0.3s;
+}
+
+.logo-container:hover {
+  background-color: #d1e8ff;
+}
+
+.logo-inner {
+  width: 4.5rem; /* w-18 */
+  height: 5rem;  /* h-20 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.logo-img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: contain;
+}
+
+.icon-button {
+  width: 3.5rem; /* w-14 */
+  height: 3.5rem;
+  background-color: white;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s;
+}
+
+.icon-button:hover {
+  background-color: #d1e8ff;
+}
+
+.icon {
+  width: 1.5rem; /* w-6 */
+  height: 1.5rem;
+  color: #271d66;
+}
+
+.menu-button-container {
+  position: relative;
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.menu-button {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  position: relative; /* necessario per la freccia */
+}
+
+.menu-button:hover {
+  background-color: #d1e8ff;
+}
+
+/* freccia sempre relativa al pulsante */
+.menu-arrow {
+  position: absolute;
+  top: 50%;
+  right: -1rem;
+  transform: translateY(-50%);
+  width: 2rem;
+  height: 2rem;
+  background-color: white;
+  border-radius: 9999px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.menu-button:hover .menu-arrow {
+  background-color: #d1e8ff;
+}
+
+.menu-arrow .arrow-icon {
+  color: #271d66;
+  transition: color 0.3s;
+}
+
+.menu-button:hover .arrow-icon {
+  color: #1f164d;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 50%;
+  left: 5rem;
+  transform: translateY(-50%);
+  border-radius: 0.75rem;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+  padding: 0.75rem;
+  min-width: 8.75rem; /* 140px */
+  background-color: white;
+  border: 5px solid #4465ad;
+}
+
+.dropdown-link {
+  display: block;
+  background-color: #4465ad;
+  color: white;
+  border-radius: 0.5rem;
+  padding: 0.5rem;
+  text-decoration: none;
+}
+
+.dropdown-link + .dropdown-link {
+  margin-top: 0.5rem;
+}

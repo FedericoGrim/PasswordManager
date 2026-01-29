@@ -1,0 +1,22 @@
+section {
+  height: 100vh; /* occupa tutta l'altezza della pagina */
+  display: flex;
+}
+
+.fav-title {
+  font-size: 3rem; /* più grande */
+  font-weight: bold;
+  margin-top: 40px; /* spinge verso il basso */
+  margin-bottom: 16px; /* spazio dal FavMenu */
+  padding-left: 64px; /* allineamento con il padding del FavMenu */
+  color: #271d66; /* colore del testo */
+}
+
+.divider {
+  width: 10px;
+  height: 90vh;          /* ← questa è la chiave */
+  background-color: #4465ad;
+  border-radius: 999px;  /* super smussato */
+  margin: auto 0;        /* centra verticalmente */
+  flex-shrink: 0;        /* evita che flex lo schiacci */
+}

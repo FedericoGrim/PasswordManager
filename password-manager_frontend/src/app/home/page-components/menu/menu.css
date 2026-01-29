@@ -1,0 +1,140 @@
+.grid-container {
+  min-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 0; /* aggiunge 40px sopra e sotto */
+  box-sizing: border-box; /* importante per includere il padding nella dimensione totale */
+}
+
+.grid-search {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 20px;
+  padding-left: 4vw;
+  align-items: center;
+}
+
+.grid-search input {
+  flex: 1;
+  padding: 8px 12px;
+  border-radius: 10px;
+  border: 3px solid #4f6fbf;
+  font-weight: bold;
+  background-color: white;
+  color: #000000;
+  max-width: 250px;
+}
+
+.filter-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2d267a;
+  color: white;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* perfetto per icone */
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(3, 128px);
+  gap: 24px;
+  justify-content: center;
+  margin: auto 0; /* centra verticalmente il blocco */
+}
+
+
+.grid-card {
+  background-color: #4f6fbf;
+  color: white;
+  height: 128px;
+  width: 128px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.grid-pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* ← QUESTA è la chiave */
+  gap: 12px;
+}
+
+.pagination-page {
+  width: 44px;
+  height: 44px;
+  font-size: 18px;
+  font-weight: bold;
+}
+
+.grid-pagination button {
+  border: none;
+  cursor: pointer;
+  background-color: #2d267a;
+  color: white;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pagination-arrow {
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+}
+
+.grid-pagination button.active {
+  background-color: white;
+  color: #2d267a;
+  font-weight: bold;
+}
+
+.grid-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 24px;
+  border-radius: 12px;
+  min-width: 300px;
+  max-width: 90%;
+  text-align: center;
+}
+
+/* Assicurati che i bottoni-grid abbiano border e cursor */
+.grid-card {
+  background-color: #4f6fbf;
+  color: white;
+  height: 128px;
+  width: 128px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: none;
+  cursor: pointer;
+}

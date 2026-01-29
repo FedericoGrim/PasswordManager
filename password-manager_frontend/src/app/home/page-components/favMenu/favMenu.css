@@ -1,0 +1,105 @@
+.fav-container {
+  min-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  padding: 40px 0;
+  box-sizing: border-box;
+}
+
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 128px);
+  gap: 24px;
+  justify-content: center;
+  margin: auto 0;
+}
+
+.fav-card {
+  background-color: #4f6fbf;
+  color: white;
+  height: 128px;
+  width: 128px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+  border: none;       /* importante per i button */
+  cursor: pointer;    /* cambia il cursore */
+}
+
+
+/* Paginazione */
+.fav-pagination {
+  margin-top: 24px;
+  display: flex;
+  justify-content: center;
+  align-items: center; /* centrato verticalmente */
+  gap: 12px;
+}
+
+/* Frecce */
+.pagination-arrow {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2d267a;
+  color: white;
+  cursor: pointer;
+  font-size: 18px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Numeri */
+.pagination-page {
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  border: none;
+  background-color: #2d267a;
+  color: white;
+  cursor: pointer;
+  font-weight: bold;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Pagina attiva */
+.pagination-page.active {
+  background-color: white;
+  color: #2d267a;
+}
+
+/* Disabled */
+.fav-pagination button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+.popup-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0,0,0,0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.popup-content {
+  background-color: white;
+  padding: 24px;
+  border-radius: 12px;
+  min-width: 300px;
+  max-width: 90%;
+  text-align: center;
+  color: black;
+}
