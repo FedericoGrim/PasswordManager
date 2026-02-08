@@ -4,12 +4,26 @@ section {
 }
 
 .fav-title {
-  font-size: 3rem; /* più grande */
-  font-weight: bold;
-  margin-top: 40px; /* spinge verso il basso */
-  margin-bottom: 16px; /* spazio dal FavMenu */
-  padding-left: 64px; /* allineamento con il padding del FavMenu */
-  color: #271d66; /* colore del testo */
+  font-size: 7rem; /* grandezza aumentata */
+  font-weight: 900; /* massimo peso */
+  line-height: 0.95;
+  color: #271d66;
+  text-shadow:
+    1px 0 #271d66,
+    -1px 0 #271d66,
+    0 1px #271d66,
+    0 -1px #271d66,
+    1px 1px #271d66,
+    -1px -1px #271d66; /* effetto “più spesso” */
+  
+  display: flex;           /* abilita Flexbox */
+  justify-content: center; /* centra orizzontalmente */
+  align-items: center;     /* centra verticalmente */
+  
+  height: 100%; /* oppure l’altezza del div contenitore */
+  width: 100%;  /* occupa tutta la larghezza */
+  margin: 0;    /* rimuove margini precedenti */
+  padding: 0;   /* rimuove padding precedenti */
 }
 
 .divider {
