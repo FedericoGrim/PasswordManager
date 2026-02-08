@@ -14,7 +14,7 @@ export default function Sidebar() {
       <a href="/home" className="logo-link">
         <div className="logo-container">
           <div className="logo-inner">
-            <img src="/KeydenLogo.png" alt="Keyden Logo" className="logo-img" />
+            <img src="/KeydenLogoWhite.png" alt="Keyden Logo" className="logo-img" />
           </div>
         </div>
       </a>
