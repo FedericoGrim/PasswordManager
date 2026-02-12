@@ -1,3 +1,4 @@
+/* --- SIDEBAR GENERALE --- */
 .sidebar {
   height: 90vh;
   width: 8rem;
@@ -11,13 +12,10 @@
   margin-left: 2.5rem;
   margin-top: auto;
   margin-bottom: auto;
+  flex-shrink: 0;
 }
 
-.logo-link {
-  margin-bottom: 1rem;
-  display: inline-block;
-}
-
+/* --- LOGO --- */
 .logo-container {
   width: 6rem;
   height: 9rem;
@@ -25,26 +23,47 @@
   align-items: center;
   justify-content: center;
   border-radius: 1.5rem;
+  transition: all 0.3s ease;
 }
 
 .logo-container:hover {
   background-color: #4e6cac;
+  /* Unifichiamo anche il logo con lo stesso stile di contorno */
+  filter: 
+    drop-shadow(4px 0 0 #271d66) 
+    drop-shadow(-4px 0 0 #271d66) 
+    drop-shadow(0 4px 0 #271d66) 
+    drop-shadow(0 -4px 0 #271d66);
 }
 
-.logo-inner {
-  width: 6.5rem;
-  height: 7.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+/* --- ICONE (Base per tutti i bottoni) --- */
+.icon, .arrow-icon {
+  width: 2.5rem;
+  height: 2.5rem;
+  color: #271d66;
 }
 
-.logo-img {
-  max-width: 100%;
-  max-height: 100%;
-  object-fit: contain;
+/* --- STILE UNIFICATO PER TUTTI I BOTTONI (Semplici e con Freccia) --- */
+
+/* Applichiamo il filtro al container per i tasti con freccia 
+   e direttamente al bottone per quelli semplici */
+.icon-button:hover,
+.menu-button-container:hover {
+  filter: 
+    drop-shadow(4px 0 0 #271d66) 
+    drop-shadow(-4px 0 0 #271d66) 
+    drop-shadow(0 4px 0 #271d66) 
+    drop-shadow(0 -4px 0 #271d66);
 }
 
+/* Cambio colore sfondo all'hover per tutti */
+.icon-button:hover,
+.menu-button-container:hover .menu-button,
+.menu-button-container:hover .menu-arrow {
+  background-color: #e7e7e7;
+}
+
+/* --- PULSANTI ICONA SEMPLICI --- */
 .icon-button {
   width: 5.5rem;
   height: 5.5rem;
@@ -53,23 +72,19 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
 }
 
-.icon-button:hover {
-  background-color: #e7e7e7;
-}
-
-.icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  color: #271d66;
-}
-
+/* --- PULSANTI CON FRECCETTA --- */
 .menu-button-container {
   position: relative;
   width: 5.5rem;
   height: 5.5rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.3s ease;
 }
 
 .menu-button {
@@ -81,12 +96,8 @@
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.3s;
-  position: relative;
-}
-
-.menu-button:hover {
-  background-color: #e7e7e7;
+  transition: all 0.3s ease;
+  z-index: 2;
 }
 
 .menu-arrow {
@@ -101,26 +112,15 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.3s, color 0.3s;
+  transition: all 0.3s ease;
+  z-index: 1;
 }
 
-.menu-button:hover .menu-arrow {
-  background-color: #e7e7e7;
-}
-
-.menu-arrow .arrow-icon {
-  color: #271d66;
-  transition: color 0.3s;
-}
-
-.menu-button:hover .arrow-icon {
-  color: #1f164d;
-}
-
+/* --- DROPDOWN --- */
 .dropdown-menu {
   position: absolute;
   top: 50%;
-  left: 8rem;
+  left: 9.5rem; /* Aumentato leggermente per non toccare il drop-shadow */
   transform: translateY(-50%);
   border-radius: 1.25rem;
   box-shadow: 0 8px 16px rgba(0,0,0,0.25);
@@ -128,6 +128,7 @@
   min-width: 13.5rem;
   background-color: white;
   border: 6px solid #4465ad;
+  z-index: 100;
 }
 
 .dropdown-link {
@@ -137,8 +138,12 @@
   border-radius: 1rem;
   padding: 1rem;
   text-decoration: none;
+  margin-bottom: 1rem;
+  transition: background-color 0.2s;
 }
 
-.dropdown-link + .dropdown-link {
-  margin-top: 1rem;
+.dropdown-link:hover {
+  background-color: #271d66;
 }
+
+.dropdown-link:last-child { margin-bottom: 0; }

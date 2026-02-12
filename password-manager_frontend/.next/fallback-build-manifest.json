@@ -1,33 +1,6 @@
 {
   "pages": {
-    "/_app": [
-      "static/chunks/a7338_next_dist_compiled_next-devtools_index_62877505.js",
-      "static/chunks/a7338_next_dist_compiled_0ed7d8cd._.js",
-      "static/chunks/a7338_next_dist_shared_lib_12d77ff0._.js",
-      "static/chunks/a7338_next_dist_client_27a08c95._.js",
-      "static/chunks/a7338_next_dist_e663ab76._.js",
-      "static/chunks/a7338_next_app_b655b237.js",
-      "static/chunks/[next]_entry_page-loader_ts_6ddace98._.js",
-      "static/chunks/a7338_react-dom_5bbf6d95._.js",
-      "static/chunks/a7338_fc4a63a6._.js",
-      "static/chunks/[root-of-the-server]__88793eed._.js",
-      "static/chunks/password-manager_frontend_pages__app_2da965e7._.js",
-      "static/chunks/turbopack-password-manager_frontend_pages__app_c4d7d7d6._.js"
-    ],
-    "/_error": [
-      "static/chunks/a7338_next_dist_compiled_next-devtools_index_62877505.js",
-      "static/chunks/a7338_next_dist_compiled_0ed7d8cd._.js",
-      "static/chunks/a7338_next_dist_shared_lib_132ac6f1._.js",
-      "static/chunks/a7338_next_dist_client_27a08c95._.js",
-      "static/chunks/a7338_next_dist_2f211793._.js",
-      "static/chunks/a7338_next_error_7078b279.js",
-      "static/chunks/[next]_entry_page-loader_ts_5b3d2cde._.js",
-      "static/chunks/a7338_react-dom_5bbf6d95._.js",
-      "static/chunks/a7338_fc4a63a6._.js",
-      "static/chunks/[root-of-the-server]__6a3760fc._.js",
-      "static/chunks/password-manager_frontend_pages__error_2da965e7._.js",
-      "static/chunks/turbopack-password-manager_frontend_pages__error_4b08124d._.js"
-    ]
+    "/_app": []
   },
   "devFiles": [],
   "ampDevFiles": [],

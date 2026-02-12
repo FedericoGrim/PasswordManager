@@ -14,17 +14,22 @@ const poppins = Poppins({
 
 export default function Home() {
   return (
-    <section className="flex flex-1 gap-0">
-      <div className="flex-1 flex flex-col overflow-auto">
-        <h1 className={`fav-title ${poppins.className}`}>KEYDEN</h1>
-        <FavMenu />
-      </div>
+    <main className="main-layout">
+      <section className="content-area">
+        {/* 2. COLONNA SINISTRA: Titolo + Preferiti */}
+        <div className="column-fav">
+          <h1 className={`fav-title ${poppins.className}`}>KEYDEN</h1>
+          <FavMenu />
+        </div>
 
-      <div className="divider"></div>
+        {/* 3. DIVISORE CENTRALE */}
+        <div className="divider"></div>
 
-      <div className="flex-1 overflow-auto">
-        <Menu />
-      </div>
-    </section>
+        {/* 4. COLONNA DESTRA: Menu Ricerca + Griglia */}
+        <div className="column-menu">
+          <Menu />
+        </div>
+      </section>
+    </main>
   );
 }

@@ -1,105 +1,69 @@
 .fav-container {
-  min-height: 80vh;
   display: flex;
   flex-direction: column;
-  padding: 40px 0;
-  box-sizing: border-box;
+  height: 100%;
+  width: 100%;
 }
 
 .fav-grid {
   display: grid;
-  grid-template-columns: repeat(2, 128px);
-  gap: 24px;
+  grid-template-columns: repeat(2, 150px);
+  gap: 25px;
   justify-content: center;
-  margin: auto 0;
+  margin: auto 0; /* Centra i cubi nello spazio tra titolo e paginazione */
 }
 
 .fav-card {
   background-color: #4f6fbf;
   color: white;
-  height: 128px;
-  width: 128px;
-  border-radius: 10px;
+  height: 150px;
+  width: 150px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1.1rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-weight: bold;
-  border: none;       /* importante per i button */
-  cursor: pointer;    /* cambia il cursore */
+  text-transform: uppercase;
 }
 
-
-/* Paginazione */
 .fav-pagination {
-  margin-top: 24px;
+  margin-top: auto; /* Allineamento al fondo */
   display: flex;
   justify-content: center;
-  align-items: center; /* centrato verticalmente */
+  align-items: center;
   gap: 12px;
+  padding-bottom: 10px;
 }
 
-/* Frecce */
-.pagination-arrow {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  border: none;
+/* Stili comuni bottoni paginazione */
+.pagination-arrow, .pagination-page {
   background-color: #2d267a;
   color: white;
+  border: none;
+  border-radius: 8px;
   cursor: pointer;
-  font-size: 18px;
-  line-height: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-}
-
-/* Numeri */
-.pagination-page {
-  width: 44px;
-  height: 44px;
-  border-radius: 8px;
-  border: none;
-  background-color: #2d267a;
-  color: white;
-  cursor: pointer;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
-/* Pagina attiva */
+.pagination-arrow { width: 32px; height: 32px; font-size: 18px; }
+.pagination-page { width: 44px; height: 44px; font-size: 18px; }
+
 .pagination-page.active {
   background-color: white;
   color: #2d267a;
+  /* Outline di 3px dello stesso colore dei bottoni non attivi */
+  outline: 3px solid #2d267a;
+  /* Opzionale: crea un piccolo spazio tra il bottone e il contorno */
+  outline-offset: -3px; 
 }
 
-/* Disabled */
-.fav-pagination button:disabled {
+button:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.popup-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background-color: rgba(0,0,0,0.5);
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 1000;
-}
-
-.popup-content {
-  background-color: white;
-  padding: 24px;
-  border-radius: 12px;
-  min-width: 300px;
-  max-width: 90%;
-  text-align: center;
-  color: black;
 }
