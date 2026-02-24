@@ -15,7 +15,7 @@ from Presentation.Controllers.CategoriesController import router as categories_r
 from Presentation.Controllers.SubAccountCategoriesController import router as subacc_categories_router
 
 from Infrastructure.Databases.SQL.Database import SessionLocal
-from Infrastructure.Databases.NoSQL.Models import UserEvent
+from Domain.EventsPayload.Models import UserEvent
 
 from dotenv import load_dotenv
 import os
