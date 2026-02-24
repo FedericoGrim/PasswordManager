@@ -2,9 +2,8 @@ import uuid
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 from dependency_injector.wiring import inject
-from typing import cast
 
-from config import Container, UserContainer, EventsContainer
+from config import Container
 from Application.DTO.UserDTO import CreateUserDTO, UpdateUserDTO
 from Infrastructure.Databases.SQL.Database import get_db
 
@@ -19,8 +18,8 @@ async def ApiCreateUser(
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
     container: Container = request.app.state.container
-    event_repo = cast(EventsContainer, container.NoSQL.events).EventRepositoryProvider()
-    create_user_use_case = cast(UserContainer, container.SQL.user).CreateUserProvider(
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
+    create_user_use_case = container.SQL.user().CreateUserProvider(
         UserRepository__db=db,
         EventRepository=event_repo,
     )
