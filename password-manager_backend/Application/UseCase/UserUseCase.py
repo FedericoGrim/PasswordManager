@@ -27,7 +27,8 @@ class CreateUserUseCase:
                     Payload={
                         "user_id": str(user.id),
                         "keycloak_id": str(user_create.id_keycloak)
-                    }
+                    },
+                    user_id=uuid.UUID(str(user.id))
                 )
 
             return user
@@ -63,7 +64,8 @@ class UpdateUserByIdUseCase:
                     EventType="UserUpdated",
                     Payload={
                         "user_id": str(UserId),
-                    }
+                    },
+                    user_id=UserId
                 )
 
             return updated
@@ -86,7 +88,8 @@ class DeleteUserByIdUseCase:
                     EventType="UserDeleted",
                     Payload={
                         "user_id": str(user_id)
-                    }
+                    },
+                    user_id=user_id
                 )
 
             return deleted
