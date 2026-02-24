@@ -1,8 +1,10 @@
 # main.py
 from fastapi import FastAPI, Response, Request
+from fastapi.concurrency import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
-from beanie import init_beanie
+from beanie import init_beanie # type: ignore[misc]
+from starlette.middleware.base import RequestResponseEndpoint
 
 from config import Container
 from Presentation.Controllers.UserController import router as user_router
@@ -48,9 +50,9 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = AsyncIOMotorClient(os.getenv("MONGO_URI"))
-container.NoSQL.events().mongo_client.override(client)
-app.container = container
+client = AsyncIOMotorClient(os.getenv("MONGO_URI")) # type: ignore[misc]
+container.NoSQL.events().mongo_client.override(client)  # type: ignore[misc]
+app.state.container = container
 
 app.include_router(
     user_router,
@@ -92,7 +94,7 @@ app.include_router(
 # Middlewares DB + Log
 # ------------------------------
 @app.middleware("http")
-async def DbSessionMiddleware(request: Request, call_next):
+async def DbSessionMiddleware(request: Request, call_next: RequestResponseEndpoint):
     response = Response("Internal server error", status_code=500)
     request.state.db = SessionLocal()
     try:
@@ -111,7 +113,7 @@ async def DbSessionMiddleware(request: Request, call_next):
 
 
 @app.middleware("http")
-async def LogExceptionsMiddleware(request: Request, call_next):
+async def LogExceptionsMiddleware(request: Request, call_next: RequestResponseEndpoint):
     try:
         response = await call_next(request)
         return response
@@ -121,24 +123,29 @@ async def LogExceptionsMiddleware(request: Request, call_next):
         traceback.print_exc()
         raise e
 
-@app.on_event("startup")
-async def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    # --------- STARTUP ---------
     try:
         mongo_uri = os.getenv("MONGO_URI")
         if not mongo_uri:
             print("⚠️  MONGO_URI not set in .env")
-            return
-        
-        print(f"🔌 Connecting to MongoDB at {mongo_uri}...")
-        client = AsyncIOMotorClient(mongo_uri, serverSelectionTimeoutMS=5000)
-        db = client.get_database(os.getenv("MONGO_DB_NAME"))
-        
-        await db.command("ping")
-        print("✅ MongoDB connected successfully")
-        
-        await init_beanie(database=db, document_models=[UserEvent])
-        print("✅ Beanie initialized successfully")
+        else:
+            print(f"🔌 Connecting to MongoDB at {mongo_uri}...")
+            client = AsyncIOMotorClient(mongo_uri, serverSelectionTimeoutMS=5000)  # type: ignore[misc]
+            db = client.get_database(os.getenv("MONGO_DB_NAME"))  # type: ignore[misc]
+            
+            await db.command("ping")
+            print("✅ MongoDB connected successfully")
+            
+            await init_beanie(database=db, document_models=[UserEvent])  # type: ignore[misc]
+            print("✅ Beanie initialized successfully")
 
     except Exception as e:
         print(f"❌ MongoDB initialization failed: {str(e)}")
         print("⚠️  Events will not be saved. Check your MONGO_URI in .env")
+
+    yield  # l'app gira qui
+
+    # --------- SHUTDOWN ---------
+    print("🔌 Shutting down...")
