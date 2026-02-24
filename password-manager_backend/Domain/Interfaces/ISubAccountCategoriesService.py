@@ -4,9 +4,9 @@ from abc import ABC, abstractmethod
 from Domain.Entities.SubAccountCategories import SubAccountCategories
 
 @abstractmethod
-class ISubAccauntCategoriesService(ABC):
+class ISubAccountCategoriesService(ABC):
     @abstractmethod
-    def CreateSubAccauntCategory(self, subacc_id: str, category_id: str) -> dict:
+    def CreateSubAccountCategory(self, subacc_id: str, category_id: str) -> dict:
         pass
 
     @abstractmethod
@@ -14,9 +14,9 @@ class ISubAccauntCategoriesService(ABC):
         pass
 
     @abstractmethod
-    def UpdateSubAccauntCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID, new_subacc_category: SubAccountCategories) -> dict:
+    def UpdateSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID, new_subacc_category: SubAccountCategories) -> dict:
         pass
 
     @abstractmethod
-    def DeleteSubAccauntCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID) -> dict:
+    def DeleteSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID) -> dict:
         pass

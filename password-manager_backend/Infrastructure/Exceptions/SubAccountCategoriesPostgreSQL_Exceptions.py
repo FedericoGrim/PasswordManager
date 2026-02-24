@@ -1,9 +1,9 @@
-class SubAccauntCategoryAlreadyExistsException(Exception):
-    def __init__(self, message="SubAccauntCategory with the same subaccount and category already exists."):
+class SubAccountCategoryAlreadyExistsException(Exception):
+    def __init__(self, message="SubAccountCategory with the same subaccount and category already exists."):
         self.message = message
         super().__init__(self.message)
 
-class SubAccauntCategoryCreationFailedException(Exception):
+class SubAccountCategoryCreationFailedException(Exception):
     def __init__(self, message="Failed to create subacc category."):
         self.message = message
         super().__init__(self.message)
@@ -13,22 +13,22 @@ class GetAllCategoriesBySubAccountIdNotFoundException(Exception):
         self.message = message
         super().__init__(self.message) 
 
-class SubAccauntCategoryRetrievalException(Exception):
+class SubAccountCategoryRetrievalException(Exception):
     def __init__(self, message="Failed to retrieve subacc categories."):
         self.message = message
         super().__init__(self.message)
 
-class SubAccauntCategoryNotFoundException(Exception):
-    def __init__(self, message="SubAccauntCategory not found."):
+class SubAccountCategoryNotFoundException(Exception):
+    def __init__(self, message="SubAccountCategory not found."):
         self.message = message
         super().__init__(self.message)
 
-class SubAccauntCategoryUpdateFailedException(Exception):
+class SubAccountCategoryUpdateFailedException(Exception):
     def __init__(self, message="Failed to update subacc category."):
         self.message = message
         super().__init__(self.message)
 
-class SubAccauntCategoryDeletionFailedException(Exception):
+class SubAccountCategoryDeletionFailedException(Exception):
     def __init__(self, message="Failed to delete subacc category."):
         self.message = message
         super().__init__(self.message)

@@ -11,7 +11,7 @@ class CreateSubAccountCategoryUseCase:
 
     def execute(self, subacc_id, category_id):
         try:
-            result = self.SubAccountCategoriesRepository.CreateSubAccauntCategory(subacc_id, category_id)
+            result = self.SubAccountCategoriesRepository.CreateSubAccountCategory(subacc_id, category_id)
         
             if self.EventRepository:
                 publisher = EventPublisher(self.EventRepository)
@@ -44,7 +44,7 @@ class UpdateSubAccountCategoryUseCase:
 
     def execute(self, subaccountId: uuid.UUID, categoryId: uuid.UUID, new_subacc_category):
         try:
-            result = self.SubAccountCategoriesRepository.UpdateSubAccauntCategory(subaccountId, categoryId, new_subacc_category.to_entity())
+            result = self.SubAccountCategoriesRepository.UpdateSubAccountCategory(subaccountId, categoryId, new_subacc_category.to_entity())
             return result
         except Exception as e:
             raise SubAccountCategoryUpdateException(str(e)) from e
@@ -55,6 +55,6 @@ class DeleteSubAccountCategoryUseCase:
 
     def execute(self, subaccountId: uuid.UUID, categoryId: uuid.UUID) -> bool:
         try:
-            return self.SubAccountCategoriesRepository.DeleteSubAccauntCategory(subaccountId, categoryId)
+            return self.SubAccountCategoriesRepository.DeleteSubAccountCategory(subaccountId, categoryId)
         except Exception as e:
             raise SubAccountCategoryDeletionException(str(e)) from e

@@ -5,14 +5,14 @@ import logging
 
 from Infrastructure.Exceptions.SubAccountCategoriesPostgreSQL_Exceptions import *
 
-from Domain.Interfaces.ISubAccountCategoriesService import ISubAccauntCategoriesService
+from Domain.Interfaces.ISubAccountCategoriesService import ISubAccountCategoriesService
 from Domain.Entities.SubAccountCategories import SubAccountCategories
 
-class SubAccauntCategoriesService(ISubAccauntCategoriesService):
+class SubAccountCategoriesService(ISubAccountCategoriesService):
     def __init__(self, db: Session):
         self.Db = db
 
-    def CreateSubAccauntCategory(self, subacc_id: str, category_id: str):
+    def CreateSubAccountCategory(self, subacc_id: str, category_id: str):
         try:
             subacc_category_entity = SubAccountCategories(
                 sub_account_id = subacc_id,
@@ -25,11 +25,11 @@ class SubAccauntCategoriesService(ISubAccauntCategoriesService):
             return subacc_category_entity
 
         except IntegrityError:
-            raise SubAccauntCategoryAlreadyExistsException("SubAccauntCategory with the same subaccount and category already exists.")
+            raise SubAccountCategoryAlreadyExistsException("SubAccountCategory with the same subaccount and category already exists.")
 
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise SubAccauntCategoryCreationFailedException("Failed to create subacc category.")
+            raise SubAccountCategoryCreationFailedException("Failed to create subacc category.")
         
     def GetAllCategoriesBySubAccountId(self, subaccountId: uuid.UUID):
         try:
@@ -40,9 +40,9 @@ class SubAccauntCategoriesService(ISubAccauntCategoriesService):
             
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise SubAccauntCategoryRetrievalException("Failed to retrieve subacc categories.")
+            raise SubAccountCategoryRetrievalException("Failed to retrieve subacc categories.")
         
-    def UpdateSubAccauntCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID, new_subacc_category: SubAccountCategories):
+    def UpdateSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID, new_subacc_category: SubAccountCategories):
         try:
             subacc_category = self.Db.query(SubAccountCategories).filter(
                 SubAccountCategories.sub_account_id == subaccountId,
@@ -50,7 +50,7 @@ class SubAccauntCategoriesService(ISubAccauntCategoriesService):
             ).first()
 
             if not subacc_category:
-                raise SubAccauntCategoryNotFoundException("SubAccauntCategory not found.")
+                raise SubAccountCategoryNotFoundException("SubAccountCategory not found.")
 
             subacc_category.category_id = new_subacc_category.category_id
             self.Db.flush()
@@ -59,9 +59,9 @@ class SubAccauntCategoriesService(ISubAccauntCategoriesService):
 
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise SubAccauntCategoryUpdateFailedException("Failed to update subacc category.")
+            raise SubAccountCategoryUpdateFailedException("Failed to update subacc category.")
 
-    def DeleteSubAccauntCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID):
+    def DeleteSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID):
         try:
             subacc_category = self.Db.query(SubAccountCategories).filter(
                 SubAccountCategories.sub_account_id == subaccountId,
@@ -69,7 +69,7 @@ class SubAccauntCategoriesService(ISubAccauntCategoriesService):
             ).first()
 
             if not subacc_category:
-                raise SubAccauntCategoryNotFoundException("SubAccauntCategory not found.")
+                raise SubAccountCategoryNotFoundException("SubAccountCategory not found.")
 
             self.Db.delete(subacc_category)
             self.Db.flush()
@@ -77,4 +77,4 @@ class SubAccauntCategoriesService(ISubAccauntCategoriesService):
 
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise SubAccauntCategoryDeletionFailedException("Failed to delete subacc category.")
+            raise SubAccountCategoryDeletionFailedException("Failed to delete subacc category.")
