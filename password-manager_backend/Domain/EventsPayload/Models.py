@@ -7,8 +7,8 @@ from beanie import Document
 
 class EventPayload(BaseModel):
     user_id: UUID
-    action: str  # es. "UserCreated", "PasswordUpdated", "UserDeleted"
-    changes: Optional[Dict[str, Any]] = None  # es. {"salt": "nuovo_valore"}
+    action: str
+    changes: Optional[Dict[str, Any]] = None
     performed_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
 
