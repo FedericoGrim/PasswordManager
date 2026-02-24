@@ -1,3 +1,9 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from config import SQLContainer, NoSQLContainer
+
 from dependency_injector import containers, providers
 
 from Infrastructure.Databases.SQL.UserPostgreSQL import UserService
@@ -5,11 +11,13 @@ from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
 from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
 from Infrastructure.Databases.SQL.TeamMembersPostgreSQL import TeamMembersService
 from Infrastructure.Databases.SQL.CategoriesPostgreSQL import CategoriesService
-from Infrastructure.Databases.SQL.SubAccauntCategoriesPostgreSQL import SubAccauntCategoriesService
+from Infrastructure.Databases.SQL.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
+
+
 
 from Application.UseCase.UserUseCase import (
     CreateUserUseCase,
-    GetUsersByKeycloakIdUseCase,
+    GetUserByKeycloakIdUseCase,
     UpdateUserByIdUseCase,
     DeleteUserByIdUseCase,
 )
@@ -24,7 +32,6 @@ from Application.UseCase.SubAccountUseCase import (
 from Application.UseCase.TeamUseCase import (
     CreateTeamUseCase,
     GetTeamByIdUseCase,
-    GetTeamsByUserIdUseCase,
     GetTeamsByUserIdUseCase,
     UpdateTeamByIdUseCase,
     DeleteTeamByIdUseCase,
@@ -64,7 +71,7 @@ class UserContainer(containers.DeclarativeContainer):
         UserRepository=UserRepositoryFactory,
     )
     GetUserByKeycloakIdProvider = providers.Factory(
-        GetUsersByKeycloakIdUseCase,
+        GetUserByKeycloakIdUseCase,
         UserRepository=UserRepositoryFactory,
     )
     UpdateUserByIdProvider = providers.Factory(
@@ -167,7 +174,7 @@ class CategoriesContainer(containers.DeclarativeContainer):
     )
 
 class SubAccountCategoriesContainer(containers.DeclarativeContainer):
-    SubAccountCategoriesRepositoryFactory = providers.Factory(SubAccauntCategoriesService, db=providers.Dependency())
+    SubAccountCategoriesRepositoryFactory = providers.Factory(SubAccountCategoriesService, db=providers.Dependency())
 
     CreateSubAccountCategoryProvider = providers.Factory(
         CreateSubAccountCategoryUseCase,
@@ -206,5 +213,6 @@ class NoSQLContainer(containers.DeclarativeContainer):
 
 
 class Container(containers.DeclarativeContainer):
-    SQL = providers.Container(SQLContainer)
-    NoSQL = providers.Container(NoSQLContainer)
+    SQL: SQLContainer = providers.Container(SQLContainer)  # type: ignore[assignment]
+    NoSQL: NoSQLContainer = providers.Container(NoSQLContainer)  # type: ignore[assignment]
+
