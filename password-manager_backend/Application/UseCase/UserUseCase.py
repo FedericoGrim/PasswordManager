@@ -1,12 +1,15 @@
 import uuid
 
-from Application.DTO.UserDTO import CreateUserDTO
+from Application.DTO.UserDTO import CreateUserDTO, UpdateUserDTO
 
 from Application.Exceptions.UserUseCaseExceptions import *
 from Application.UseCase.Publisher import EventPublisher
 
+from Domain.Interfaces.IUserService import IUserService
+from Domain.Interfaces.IEventsMongoDB import IEventsMongoDB
+
 class CreateUserUseCase:
-    def __init__(self, UserRepository, EventRepository=None):
+    def __init__(self, UserRepository: IUserService, EventRepository: IEventsMongoDB):
         self.UserRepository = UserRepository
         self.EventRepository = EventRepository
 
@@ -33,33 +36,33 @@ class CreateUserUseCase:
             raise UserCreationException(str(e)) from e
 
 
-class GetUsersByKeycloakIdUseCase:
-    def __init__(self, UserRepository):
+class GetUserByKeycloakIdUseCase:
+    def __init__(self, UserRepository: IUserService):
         self.UserRepository = UserRepository
 
     def execute(self, mainUserId: uuid.UUID):
         try:
-            return self.UserRepository.GetUserById(mainUserId)
+            return self.UserRepository.GetUserByKeycloakId(mainUserId)
         
         except Exception as e:
             raise UserRetrievalException(str(e)) from e
 
 
 class UpdateUserByIdUseCase:
-    def __init__(self, UserRepository, EventRepository=None):
+    def __init__(self, UserRepository: IUserService, EventRepository: IEventsMongoDB):
         self.UserRepository = UserRepository
         self.EventRepository = EventRepository
 
-    async def execute(self, UserId: uuid.UUID, newSalt: bytes):
+    async def execute(self, UserId: uuid.UUID, new_user: UpdateUserDTO):
         try:
-            updated = self.UserRepository.UpdateUserById(UserId, newSalt)
+            new_user_entity = new_user.to_entity(existing_user=self.UserRepository.GetUserByKeycloakId(UserId))
+            updated = self.UserRepository.UpdateUserById(UserId, new_user_entity)
             if updated and self.EventRepository:
                 publisher = EventPublisher(self.EventRepository)
                 publisher.Publish(
                     EventType="UserUpdated",
                     Payload={
                         "user_id": str(UserId),
-                        "new_salt": newSalt.decode()
                     }
                 )
 
@@ -70,7 +73,7 @@ class UpdateUserByIdUseCase:
 
 
 class DeleteUserByIdUseCase:
-    def __init__(self, UserRepository, EventRepository=None):
+    def __init__(self, UserRepository: IUserService, EventRepository: IEventsMongoDB):
         self.UserRepository = UserRepository
         self.EventRepository = EventRepository
 

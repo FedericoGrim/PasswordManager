@@ -12,7 +12,7 @@ class UserService(IUserService):
     def __init__(self, db: Session):
         self.Db = db
         
-    def CreateUser(self, new_user):
+    def CreateUser(self, new_user: User) -> User:
         try:
             self.Db.add(new_user)
             self.Db.flush()
@@ -29,32 +29,41 @@ class UserService(IUserService):
         
     def GetUserByKeycloakId(self, keycloak_user_id: uuid.UUID):
         try:
-            user = self.Db.query(User).filter(User.id_keycloak == keycloak_user_id).first()
+            user = self.Db.query(User).filter(User.id_keycloak == keycloak_user_id).first()            
             if not user:
-                raise GetAllUserByIdNotFoundException("No User found for the given Keycloak Id.")
-            
+                raise UserNotFoundException(f"User with keycloak_id {keycloak_user_id} not found.")
             return user
+        
+        except UserNotFoundException:
+            raise
         
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise GetAllUserByIdRetrivalException()
+            raise GetUserByIdRetrivalException()
         
-    def UpdateUserById(self, user_id: uuid.UUID, new_user: str):
+    def UpdateUserById(self, user_id: uuid.UUID, new_user: User):
         try:
             user = self.Db.query(User).filter(User.id == user_id).first()
             if not user:
                 raise UserNotFoundException("User not found.")
+            
+            for key, value in new_user.__dict__.items():
+                if not key.startswith("_") and value is not None:
+                    setattr(user, key, value)
             
             self.Db.flush()
             self.Db.refresh(user)
 
             return user
         
+        except UserNotFoundException:
+            raise
+        
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise UserUpdatePasswordException()
+            raise UserUpdateFailedException()
         
-    def DeleteUserById(self, user_id: uuid.UUID):
+    def DeleteUserById(self, user_id: uuid.UUID) -> dict[str, str]:
         try:
             user = self.Db.query(User).filter(User.id == user_id).first()
             if not user:
