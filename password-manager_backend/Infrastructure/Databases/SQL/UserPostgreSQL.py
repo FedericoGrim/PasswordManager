@@ -10,13 +10,13 @@ from Domain.Entities.User import User
 
 class UserService(IUserService):
     def __init__(self, db: Session):
-        self.Db = db
+        self.db = db
         
-    def CreateUser(self, new_user: User) -> User:
+    def create_user(self, new_user: User) -> User:
         try:
-            self.Db.add(new_user)
-            self.Db.flush()
-            self.Db.refresh(new_user)
+            self.db.add(new_user)
+            self.db.flush()
+            self.db.refresh(new_user)
 
             return new_user
         
@@ -27,9 +27,9 @@ class UserService(IUserService):
             logging.error(f"Error: {e}")
             raise UserCreationFailedException()
         
-    def GetUserByKeycloakId(self, keycloak_user_id: uuid.UUID):
+    def get_user_by_keycloak_id(self, keycloak_user_id: uuid.UUID):
         try:
-            user = self.Db.query(User).filter(User.id_keycloak == keycloak_user_id).first()            
+            user = self.db.query(User).filter(User.id_keycloak == keycloak_user_id).first()            
             if not user:
                 raise UserNotFoundException(f"User with keycloak_id {keycloak_user_id} not found.")
             return user
@@ -41,9 +41,9 @@ class UserService(IUserService):
             logging.error(f"Error: {e}")
             raise GetUserByIdRetrivalException()
         
-    def UpdateUserById(self, user_id: uuid.UUID, new_user: User):
+    def update_user_by_id(self, user_id: uuid.UUID, new_user: User):
         try:
-            user = self.Db.query(User).filter(User.id == user_id).first()
+            user = self.db.query(User).filter(User.id == user_id).first()
             if not user:
                 raise UserNotFoundException("User not found.")
             
@@ -51,8 +51,8 @@ class UserService(IUserService):
                 if not key.startswith("_") and value is not None:
                     setattr(user, key, value)
             
-            self.Db.flush()
-            self.Db.refresh(user)
+            self.db.flush()
+            self.db.refresh(user)
 
             return user
         
@@ -63,13 +63,13 @@ class UserService(IUserService):
             logging.error(f"Error: {e}")
             raise UserUpdateFailedException()
         
-    def DeleteUserById(self, user_id: uuid.UUID) -> dict[str, str]:
+    def delete_user_by_id(self, user_id: uuid.UUID) -> dict[str, str]:
         try:
-            user = self.Db.query(User).filter(User.id == user_id).first()
+            user = self.db.query(User).filter(User.id == user_id).first()
             if not user:
                 raise UserNotFoundException("User not found.")
 
-            self.Db.delete(user)
+            self.db.delete(user)
                 
             return {"message": "User deleted successfully."}
         
