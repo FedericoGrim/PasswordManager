@@ -13,13 +13,13 @@ class EventPayload(BaseModel):
 
 
 class UserEvent(Document):
-    EventType: str
-    Payload: EventPayload
-    CreatedAt: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
+    event_type: str
+    payload: EventPayload
+    created_at: datetime = Field(default_factory=lambda: datetime.now(timezone.utc))
 
     class Settings:
         name = "user_events"
         indexes = [
-            "Payload.user_id",
-            "Payload.performed_at",
+            "payload.user_id",
+            "payload.performed_at",
         ]
