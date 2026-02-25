@@ -1,7 +1,7 @@
 from typing import Optional, List, Any
 from uuid import UUID
-from Domain.EventsPayload.Models import UserEvent, EventPayload
-from Domain.Interfaces.IEventsMongoDB import IEventsMongoDB
+from domain.events_payload.models import UserEvent, EventPayload
+from domain.interfaces.events_mongoDB_interface import IEventsMongoDB
 
 
 class EventRepository(IEventsMongoDB):

@@ -6,30 +6,30 @@ if TYPE_CHECKING:
 
 from dependency_injector import containers, providers
 
-from Infrastructure.Databases.SQL.UserPostgreSQL import UserService
-from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
-from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
-from Infrastructure.Databases.SQL.TeamMembersPostgreSQL import TeamMembersService
-from Infrastructure.Databases.SQL.CategoriesPostgreSQL import CategoriesService
-from Infrastructure.Databases.SQL.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
+from infrastructure.databases.SQL.user_postgreSQL import UserService
+from infrastructure.databases.SQL.SubAccountPostgreSQL import SubAccountService
+from infrastructure.databases.SQL.TeamPostgreSQL import TeamService
+from infrastructure.databases.SQL.team_members_postgreSQL import TeamMembersService
+from infrastructure.databases.SQL.CategoriesPostgreSQL import CategoriesService
+from infrastructure.databases.SQL.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
 
 
 
-from Application.UseCase.UserUseCase import (
+from application.use_case.user_use_case import (
     CreateUserUseCase,
     GetUserByKeycloakIdUseCase,
     UpdateUserByIdUseCase,
     DeleteUserByIdUseCase,
 )
 
-from Application.UseCase.SubAccountUseCase import (
+from application.use_case.SubAccountUseCase import (
     CreateSubAccountUseCase,
     GetAllSubAccountsByTeamIdUseCase,
     UpdateSubAccountByIdUseCase,
     DeleteSubAccountByIdUseCase,
 )
 
-from Application.UseCase.TeamUseCase import (
+from application.use_case.TeamUseCase import (
     CreateTeamUseCase,
     GetTeamByIdUseCase,
     GetTeamsByUserIdUseCase,
@@ -37,29 +37,28 @@ from Application.UseCase.TeamUseCase import (
     DeleteTeamByIdUseCase,
 )
 
-from Application.UseCase.TeamMembersUseCase import (
+from application.use_case.team_members_use_case import (
     AddMemberToTeamUseCase,
     GetTeamMembersByTeamIdUseCase,
-    GetTeamsByMemberIdUseCase,
     UpdateTeamMemberRoleUseCase,
     RemoveMemberFromTeamUseCase
 )
 
-from Application.UseCase.CategoriesUseCase import (
+from application.use_case.CategoriesUseCase import (
     CreateCategoriesUseCase,
     GetAllCategoriesByTeamIdUseCase,
     UpdateCategoryByIdUseCase,
     DeleteCategoryByIdUseCase,
 )
 
-from Application.UseCase.SubAccountCategoriesUseCase import (
+from application.use_case.SubAccountCategoriesUseCase import (
     CreateSubAccountCategoryUseCase,
     GetAllCategoriesBySubAccountIdUseCase,
     UpdateSubAccountCategoryUseCase,
     DeleteSubAccountCategoryUseCase,
 )
 
-from Infrastructure.Databases.NoSQL.EventsMongoDB import EventRepository
+from infrastructure.databases.NoSQL.events_mongoDB import EventRepository
 
 
 # ------------------- SQL Containers -------------------
@@ -140,10 +139,7 @@ class TeamMembersContainer(containers.DeclarativeContainer):
         GetTeamMembersByTeamIdUseCase,
         TeamMembersRepository=TeamMembersRepositoryFactory,
     )
-    GetTeamsByMemberIdProvider = providers.Factory(
-        GetTeamsByMemberIdUseCase,
-        TeamMembersRepository=TeamMembersRepositoryFactory,
-    )
+
     UpdateTeamMemberRoleProvider = providers.Factory(
         UpdateTeamMemberRoleUseCase,
         TeamMembersRepository=TeamMembersRepositoryFactory,

@@ -7,15 +7,15 @@ from beanie import init_beanie # type: ignore[misc]
 from starlette.middleware.base import RequestResponseEndpoint
 
 from config import Container
-from Presentation.Controllers.UserController import router as user_router
-from Presentation.Controllers.SubAccountController import router as subaccount_router
-from Presentation.Controllers.TeamController import router as team_router
-from Presentation.Controllers.TeamMembersController import router as team_members_router
-from Presentation.Controllers.CategoriesController import router as categories_router
-from Presentation.Controllers.SubAccountCategoriesController import router as subacc_categories_router
+from presentation.controllers.user_controller import router as user_router
+from presentation.controllers.SubAccountController import router as subaccount_router
+from presentation.controllers.TeamController import router as team_router
+from presentation.controllers.team_members_controller import router as team_members_router
+from presentation.controllers.CategoriesController import router as categories_router
+from presentation.controllers.SubAccountCategoriesController import router as subacc_categories_router
 
-from Infrastructure.Databases.SQL.Database import SessionLocal
-from Domain.EventsPayload.Models import UserEvent
+from infrastructure.databases.SQL.database import SessionLocal
+from domain.events_payload.models import UserEvent
 
 from dotenv import load_dotenv
 import os

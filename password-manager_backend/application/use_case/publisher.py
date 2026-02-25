@@ -2,7 +2,7 @@ import asyncio
 from typing import Any
 import uuid
 
-from Domain.Interfaces.IEventsMongoDB import IEventsMongoDB
+from domain.interfaces.events_mongoDB_interface import IEventsMongoDB
 
 class EventPublisher:
     def __init__(self, EventRepository: IEventsMongoDB):

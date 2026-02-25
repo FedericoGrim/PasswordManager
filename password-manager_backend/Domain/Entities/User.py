@@ -1,6 +1,6 @@
 from sqlalchemy import Column, UUID
 import uuid
-from Domain.Entities.Base import Base
+from domain.entities.base import Base
 
 class User(Base):
     __tablename__ = 'users'

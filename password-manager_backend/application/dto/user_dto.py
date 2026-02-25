@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 
-from Domain.Entities.User import User
+from domain.entities.user import User
 
 class UserDTO(BaseModel):
     id: UUID

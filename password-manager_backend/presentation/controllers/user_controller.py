@@ -5,8 +5,8 @@ from dependency_injector.wiring import inject
 
 
 from config import Container
-from Application.DTO.UserDTO import CreateUserDTO, UpdateUserDTO, UserDTO
-from Infrastructure.Databases.SQL.Database import get_db
+from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO
+from infrastructure.databases.SQL.database import get_db
 
 router = APIRouter()
 

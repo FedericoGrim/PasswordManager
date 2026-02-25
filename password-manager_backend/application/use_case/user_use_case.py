@@ -1,10 +1,10 @@
 import uuid
 
-from Application.DTO.UserDTO import CreateUserDTO, UpdateUserDTO, UserDTO
-from Application.Exceptions.UserUseCaseExceptions import *
-from Application.UseCase.Publisher import EventPublisher
-from Domain.Interfaces.IUserService import IUserService
-from Domain.Interfaces.IEventsMongoDB import IEventsMongoDB
+from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO
+from application.exceptions.user_use_Case_exceptions import *
+from application.use_case.publisher import EventPublisher
+from domain.interfaces.user_service_interface import IUserService
+from domain.interfaces.events_mongoDB_interface import IEventsMongoDB
 
 
 class CreateUserUseCase:

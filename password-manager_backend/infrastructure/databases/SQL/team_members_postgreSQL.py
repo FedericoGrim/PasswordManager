@@ -3,16 +3,16 @@ from sqlalchemy.exc import IntegrityError
 import uuid
 import logging
 
-#from Infrastructure.Exceptions.UserPostgreSQL_Exceptions import *
+from infrastructure.exceptions.team_members_postgreSQL_exceptions import *
 
-from Domain.Interfaces.ITeamMembers import ITeamMembersService
-from Domain.Entities.TeamMembers import TeamMembers
+from domain.interfaces.team_members_interface import ITeamMembersService
+from domain.entities.team_members import TeamMembers
 
 class TeamMembersService(ITeamMembersService):
     def __init__(self, db: Session):
         self.Db = db
 
-    def AddMemberToTeam(self, member_id: uuid.UUID, team_id: uuid.UUID, role: str) -> dict:
+    def add_member_to_team(self, member_id: uuid.UUID, team_id: uuid.UUID, role: str) -> TeamMembers:
         try:
             new_member = TeamMembers(team_id=team_id, user_id=member_id, role=role)
             self.Db.add(new_member)
@@ -28,29 +28,20 @@ class TeamMembersService(ITeamMembersService):
             logging.error(f"Error: {e}")
             raise Exception("Failed to add member to team.")
         
-    def GetTeamsByMemberId(self, member_id: uuid.UUID) -> list:
+    def get_teams_by_member_id(self, member_id: uuid.UUID) -> list[TeamMembers]:
         try:
-            members = self.Db.query(TeamMembers).filter(TeamMembers.user_id == member_id).all()
+            members = self.Db.query(TeamMembers).filter_by(user_id=member_id).all()
             return members
 
         except Exception as e:
             logging.error(f"Error: {e}")
             raise Exception("Failed to retrieve teams for the member.")
         
-    def GetMembersByTeamId(self, team_id: uuid.UUID) -> list:
+    def update_member_role(self, member_id: uuid.UUID, team_id: uuid.UUID, new_role: str) -> TeamMembers:
         try:
-            members = self.Db.query(TeamMembers).filter(TeamMembers.team_id == team_id).all()
-            return members
-
-        except Exception as e:
-            logging.error(f"Error: {e}")
-            raise Exception("Failed to retrieve members for the team.")
-        
-    def UpdateMemberRole(self, member_id, team_id, new_role):
-        try:
-            member = self.Db.query(TeamMembers).filter(
-                TeamMembers.user_id == member_id,
-                TeamMembers.team_id == team_id
+            member = self.Db.query(TeamMembers).filter_by(
+                user_id=member_id,
+                team_id=team_id
             ).first()
             
             if not member:
@@ -66,11 +57,11 @@ class TeamMembersService(ITeamMembersService):
             logging.error(f"Error: {e}")
             raise Exception("Failed to update member role.")
         
-    def RemoveMemberFromTeam(self, member_id, team_id):
+    def remove_member_from_team(self, member_id: uuid.UUID, team_id: uuid.UUID) -> dict[str, str]:
         try:
-            member = self.Db.query(TeamMembers).filter(
-                TeamMembers.user_id == member_id,
-                TeamMembers.team_id == team_id
+            member = self.Db.query(TeamMembers).filter_by(
+                user_id=member_id,
+                team_id=team_id
             ).first()
             
             if not member:

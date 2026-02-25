@@ -3,10 +3,10 @@ from sqlalchemy.exc import IntegrityError
 import uuid
 import logging
 
-from Infrastructure.Exceptions.UserPostgreSQL_Exceptions import *
+from infrastructure.exceptions.user_postrgreSQL_exceptions import *
 
-from Domain.Interfaces.IUserService import IUserService
-from Domain.Entities.User import User
+from domain.interfaces.user_service_interface import IUserService
+from domain.entities.user import User
 
 class UserService(IUserService):
     def __init__(self, db: Session):
