@@ -2,7 +2,7 @@ from uuid import UUID
 from pydantic import BaseModel
 from typing import Optional
 
-from Domain.Entities.Team import Team
+from domain.entities.team import Team
 
 class TeamDTO(BaseModel):
     id: UUID
@@ -26,6 +26,7 @@ class CreateTeamDTO(BaseModel):
         )
 
 class UpdateTeamDTO(BaseModel):
+    id: UUID
     name: Optional[str]
     salt_argon: Optional[str]
 
@@ -35,3 +36,6 @@ class UpdateTeamDTO(BaseModel):
             name=self.name if self.name is not None else existing_team.name,
             salt_argon=self.salt_argon if self.salt_argon is not None else existing_team.salt_argon
         )
+        
+class DeleteTeamDTO(BaseModel):
+    id: UUID

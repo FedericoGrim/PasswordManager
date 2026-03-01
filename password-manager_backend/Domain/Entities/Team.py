@@ -1,7 +1,7 @@
 from sqlalchemy import Column, String, UUID
 import uuid
 
-from Domain.Entities.Base import Base
+from domain.entities.base import Base
 
 class Team(Base):
     __tablename__ = 'teams'
