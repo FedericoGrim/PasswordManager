@@ -6,12 +6,12 @@ if TYPE_CHECKING:
 
 from dependency_injector import containers, providers
 
-from infrastructure.databases.SQL.user_postgreSQL import UserService
-from infrastructure.databases.SQL.SubAccountPostgreSQL import SubAccountService
-from infrastructure.databases.SQL.TeamPostgreSQL import TeamService
-from infrastructure.databases.SQL.team_members_postgreSQL import TeamMembersService
-from infrastructure.databases.SQL.CategoriesPostgreSQL import CategoriesService
-from infrastructure.databases.SQL.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
+from infrastructure.databases.sql.user_postgreSQL import UserService
+from infrastructure.databases.sql.SubAccountPostgreSQL import SubAccountService
+from infrastructure.databases.sql.TeamPostgreSQL import TeamService
+from infrastructure.databases.sql.team_members_postgreSQL import TeamMembersService
+from infrastructure.databases.sql.CategoriesPostgreSQL import CategoriesService
+from infrastructure.databases.sql.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
 
 
 
@@ -39,6 +39,7 @@ from application.use_case.TeamUseCase import (
 
 from application.use_case.team_members_use_case import (
     AddMemberToTeamUseCase,
+    GetTeamMemberByIdUseCase,
     GetTeamMembersByTeamIdUseCase,
     UpdateTeamMemberRoleUseCase,
     RemoveMemberFromTeamUseCase
@@ -58,10 +59,10 @@ from application.use_case.SubAccountCategoriesUseCase import (
     DeleteSubAccountCategoryUseCase,
 )
 
-from infrastructure.databases.NoSQL.events_mongoDB import EventRepository
+from infrastructure.databases.nosql.events_mongoDB import EventRepository
 
 
-# ------------------- SQL Containers -------------------
+# ------------------- sql Containers -------------------
 class UserContainer(containers.DeclarativeContainer):
     UserRepositoryFactory = providers.Factory(UserService, db=providers.Dependency())
 
@@ -135,6 +136,12 @@ class TeamMembersContainer(containers.DeclarativeContainer):
         AddMemberToTeamUseCase,
         TeamMembersRepository=TeamMembersRepositoryFactory,
     )
+    
+    GetTeamMemberByIdProvider = providers.Factory(
+        GetTeamMemberByIdUseCase,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
+    )
+    
     GetTeamMembersByTeamIdProvider = providers.Factory(
         GetTeamMembersByTeamIdUseCase,
         TeamMembersRepository=TeamMembersRepositoryFactory,
@@ -209,6 +216,6 @@ class NoSQLContainer(containers.DeclarativeContainer):
 
 
 class Container(containers.DeclarativeContainer):
-    SQL: SQLContainer = providers.Container(SQLContainer)  # type: ignore[assignment]
+    sql: SQLContainer = providers.Container(SQLContainer)  # type: ignore[assignment]
     NoSQL: NoSQLContainer = providers.Container(NoSQLContainer)  # type: ignore[assignment]
 
