@@ -2,7 +2,7 @@ from pydantic import BaseModel
 from typing import Optional
 from uuid import UUID
 
-from domain.entities.team_members import TeamMembers
+from domain.entities.team_members import TeamMember
         
 class TeamMembersDTO(BaseModel):
     id: UUID
@@ -11,7 +11,7 @@ class TeamMembersDTO(BaseModel):
     role: str
 
     def to_entity(self):
-        return TeamMembers(
+        return TeamMember(
             user_id=self.user_id,
             team_id=self.team_id,
             role=self.role
@@ -23,19 +23,24 @@ class CreateTeamMembersDTO(BaseModel):
     role: str
 
     def to_entity(self):
-        return TeamMembers(
+        return TeamMember(
             user_id=self.user_id,
             team_id=self.team_id,
             role=self.role
         )
 
 class UpdateTeamMembersDTO(BaseModel):
+    user_id: UUID
+    team_id: UUID
     role: Optional[str]
 
-    def to_entity(self, existing_member: TeamMembers):
-        return TeamMembers(
+    def to_entity(self, existing_member: TeamMember):
+        return TeamMember(
             user_id=UUID(str(existing_member.user_id)),
             team_id=UUID(str(existing_member.team_id)),
             role=str(self.role)
         )
         
+class RemoveTeamMembersDTO(BaseModel):
+    member_id: UUID
+    team_id: UUID

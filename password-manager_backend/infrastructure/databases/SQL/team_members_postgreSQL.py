@@ -6,15 +6,14 @@ import logging
 from infrastructure.exceptions.team_members_postgreSQL_exceptions import *
 
 from domain.interfaces.team_members_interface import ITeamMembersService
-from domain.entities.team_members import TeamMembers
+from domain.entities.team_members import TeamMember
 
 class TeamMembersService(ITeamMembersService):
     def __init__(self, db: Session):
         self.Db = db
 
-    def add_member_to_team(self, member_id: uuid.UUID, team_id: uuid.UUID, role: str) -> TeamMembers:
+    def add_member_to_team(self, new_member: TeamMember) -> TeamMember:
         try:
-            new_member = TeamMembers(team_id=team_id, user_id=member_id, role=role)
             self.Db.add(new_member)
             self.Db.flush()
             self.Db.refresh(new_member)
@@ -28,26 +27,37 @@ class TeamMembersService(ITeamMembersService):
             logging.error(f"Error: {e}")
             raise Exception("Failed to add member to team.")
         
-    def get_teams_by_member_id(self, member_id: uuid.UUID) -> list[TeamMembers]:
+    def get_team_member_by_id(self, member_id: uuid.UUID) -> TeamMember:
         try:
-            members = self.Db.query(TeamMembers).filter_by(user_id=member_id).all()
+            member = self.Db.query(TeamMember).filter_by(id=member_id).first()
+            if not member:
+                raise Exception("Member not found.")
+            return member
+
+        except Exception as e:
+            logging.error(f"Error: {e}")
+            raise Exception("Failed to retrieve team member by ID.")
+        
+    def get_teams_by_member_id(self, member_id: uuid.UUID) -> list[TeamMember]:
+        try:
+            members = self.Db.query(TeamMember).filter_by(user_id=member_id).all()
             return members
 
         except Exception as e:
             logging.error(f"Error: {e}")
             raise Exception("Failed to retrieve teams for the member.")
         
-    def update_member_role(self, member_id: uuid.UUID, team_id: uuid.UUID, new_role: str) -> TeamMembers:
+    def update_member_role(self, new_user_data: TeamMember) -> TeamMember:
         try:
-            member = self.Db.query(TeamMembers).filter_by(
-                user_id=member_id,
-                team_id=team_id
+            member = self.Db.query(TeamMember).filter_by(
+                user_id=new_user_data.user_id,
+                team_id=new_user_data.team_id
             ).first()
             
             if not member:
                 raise Exception("Member not found in the team.")
             
-            member.role = new_role
+            member.role = new_user_data.role
             self.Db.flush()
             self.Db.refresh(member)
 
@@ -59,7 +69,7 @@ class TeamMembersService(ITeamMembersService):
         
     def remove_member_from_team(self, member_id: uuid.UUID, team_id: uuid.UUID) -> dict[str, str]:
         try:
-            member = self.Db.query(TeamMembers).filter_by(
+            member = self.Db.query(TeamMember).filter_by(
                 user_id=member_id,
                 team_id=team_id
             ).first()

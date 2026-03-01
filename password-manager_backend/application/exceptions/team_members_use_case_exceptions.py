@@ -8,6 +8,11 @@ class TeamMembersRetrievalByTeamIdException(Exception):
         self.message = message
         super().__init__(self.message)
 
+class TeamMemberRetrievalByIdException(Exception):
+    def __init__(self, message: str="Error retrieving team member by ID"):
+        self.message = message
+        super().__init__(self.message)
+
 class TeamsRetrievalByMemberIdException(Exception):
     def __init__(self, message: str="Error retrieving teams by Member ID"):
         self.message = message
