@@ -3,10 +3,10 @@ from sqlalchemy.exc import IntegrityError
 import uuid
 import logging
 
-from infrastructure.exceptions.team_members_postgreSQL_exceptions import *
+from infrastructure.exceptions.team_member_postgreSQL_exceptions import *
 
-from domain.interfaces.team_members_interface import ITeamMembersService
-from domain.entities.team_members import TeamMember
+from domain.interfaces.team_member_service_interface import ITeamMembersService
+from domain.entities.team_member import TeamMember
 
 class TeamMembersService(ITeamMembersService):
     def __init__(self, db: Session):

@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from domain.entities.team_members import TeamMember
+from domain.entities.team_member import TeamMember
 
 @abstractmethod
 class ITeamMembersService(ABC):

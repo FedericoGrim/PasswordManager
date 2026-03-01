@@ -5,7 +5,7 @@ from dependency_injector.wiring import inject
 
 from config import Container
 from infrastructure.databases.sql.database import get_db
-from application.dto.team_members_dto import TeamMembersDTO, CreateTeamMembersDTO, UpdateTeamMembersDTO, RemoveTeamMembersDTO
+from application.dto.team_member_dto import TeamMemberDTO, CreateTeamMemberDTO, UpdateTeamMemberDTO, RemoveTeamMemberDTO
 
 router = APIRouter()
 
@@ -13,10 +13,10 @@ router = APIRouter()
 @inject
 async def api_add_member_to_team(
     interactor_id: uuid.UUID,
-    CreateTeamMembersDTO: CreateTeamMembersDTO,
+    CreateTeamMemberDTO: CreateTeamMemberDTO,
     request: Request,
     db: Session = Depends(get_db),
-) -> dict[str, str | TeamMembersDTO]:
+) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
     add_member_use_case = container.sql.team_members().AddMemberToTeamProvider(
@@ -25,7 +25,7 @@ async def api_add_member_to_team(
     )
 
     try:
-        team_member = add_member_use_case.execute(interactor_id, CreateTeamMembersDTO)
+        team_member = add_member_use_case.execute(interactor_id, CreateTeamMemberDTO)
         return {"message": "Member added to team successfully", "team_member": team_member}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -36,7 +36,7 @@ async def api_get_team_member_by_id(
     member_id: uuid.UUID,
     request: Request,
     db: Session = Depends(get_db),
-) -> dict[str, str | TeamMembersDTO]:
+) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
     get_member_use_case = container.sql.team_members().GetTeamMemberByIdProvider(
         TeamMembersRepository__db=db
@@ -54,7 +54,7 @@ async def api_get_team_members_by_team_id(
     team_id: uuid.UUID,
     request: Request,
     db: Session = Depends(get_db),
-) -> dict[str, str | list[TeamMembersDTO]]:
+) -> dict[str, str | list[TeamMemberDTO]]:
     container: Container = request.app.state.container
     get_members_use_case = container.sql.team_members().GetTeamMembersByTeamIdProvider(
         TeamMembersRepository__db=db
@@ -70,10 +70,10 @@ async def api_get_team_members_by_team_id(
 @inject
 async def api_update_team_member_role(
     interactor_id: uuid.UUID,
-    new_user_data: UpdateTeamMembersDTO,
+    new_user_data: UpdateTeamMemberDTO,
     request: Request,
     db: Session = Depends(get_db),
-) -> dict[str, str | TeamMembersDTO]:
+) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
     update_role_use_case = container.sql.team_members().UpdateTeamMemberRoleProvider(
@@ -91,7 +91,7 @@ async def api_update_team_member_role(
 @inject
 async def api_remove_member_from_team(
     interactor_id: uuid.UUID,
-    team_member_to_delete: RemoveTeamMembersDTO,
+    team_member_to_delete: RemoveTeamMemberDTO,
     request: Request,
     db: Session = Depends(get_db),
 ):
