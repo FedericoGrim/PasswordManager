@@ -14,7 +14,7 @@ from presentation.controllers.team_members_controller import router as team_memb
 from presentation.controllers.CategoriesController import router as categories_router
 from presentation.controllers.SubAccountCategoriesController import router as subacc_categories_router
 
-from infrastructure.databases.SQL.database import SessionLocal
+from infrastructure.databases.sql.database import SessionLocal
 from domain.events_payload.models import UserEvent
 
 from dotenv import load_dotenv
