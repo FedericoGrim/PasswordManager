@@ -4,40 +4,58 @@ import uuid
 from dependency_injector.wiring import inject
 from config import Container
 
-from Infrastructure.Databases.SQL.Database import get_db
-from Application.DTO.SubAccountDTO import CreateSubAccountDTO, UpdateSubAccountDTO
+from infrastructure.databases.sql.database import get_db
+from application.dto.sub_account_dto import CreateSubAccountDTO, UpdateSubAccountDTO, SubAccountDTO, DeleteSubAccountDTO
 
 router = APIRouter()
 
 @router.post("/{team_id}")
 async def CreateSubAccount(
+    interactor_id: uuid.UUID,
     subaccountObj: CreateSubAccountDTO,
+    request: Request,
     db: Session = Depends(get_db),
-    request: Request = None,
 ):
     container: Container = request.app.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    create_subaccount_use_case = container.SQL.subaccount().CreateSubAccountProvider(
+    create_subaccount_use_case = container.sql.subaccount().CreateSubAccountProvider(
         SubAccountRepository__db=db,
         EventRepository=event_repo
     )
 
     try:
-        if create_subaccount_use_case.execute(subaccountObj):
+        if create_subaccount_use_case.execute(interactor_id, subaccountObj):
             return {"message": "SubAccount created successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
 
+@router.get("/{subaccount_id}")
+async def GetSubAccountById(
+    subaccount_id: uuid.UUID, 
+    request: Request,
+    db: Session = Depends(get_db), 
+) -> dict[str, str | SubAccountDTO]:
+    container: Container = request.app.container
+    get_subaccount_use_case = container.sql.subaccount().GetSubAccountByIdProvider(
+        SubAccountRepository__db=db,
+    )
+
+    try:
+        subaccount = get_subaccount_use_case.execute(subaccount_id)
+        return {"message": "SubAccount retrieved successfully", "subaccount": subaccount}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e) + "\n SubAccount not found")
+
 @router.get("/{team_id}")
 @inject
 async def GetAllSubAccountsByTeamId(
     team_id: uuid.UUID, 
+    request: Request,
     db: Session = Depends(get_db), 
-    request: Request = None
-):
+) -> dict[str, str | list[SubAccountDTO]]:
     container: Container = request.app.container
-    get_subaccounts_use_case = container.SQL.subaccount().GetAllSubAccountsByTeamIdProvider(
+    get_subaccounts_use_case = container.sql.subaccount().GetAllSubAccountsByTeamIdProvider(
         SubAccountRepository__db=db,
     )
 
@@ -45,19 +63,19 @@ async def GetAllSubAccountsByTeamId(
         subaccounts = get_subaccounts_use_case.execute(team_id)
         return {"message": "SubAccounts retrieved successfully", "subaccounts": subaccounts}
     except Exception as e:
-        raise HTTPException(status_code=404, detail="SubAccounts not found")
+        raise HTTPException(status_code=404, detail= str(e) + "\n SubAccounts not found")
 
 @router.put("/{subaccount_id}")
 @inject
 async def UpdateSubAccountById(
     subaccount_id: uuid.UUID, 
     updated_data: UpdateSubAccountDTO, 
+    request: Request,
     db: Session = Depends(get_db), 
-    request: Request = None
 ):
     container: Container = request.app.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    update_subaccount_use_case = container.SQL.subaccount().UpdateSubAccountByIdProvider(
+    update_subaccount_use_case = container.sql.subaccount().UpdateSubAccountByIdProvider(
         SubAccountRepository__db=db,
         EventRepository=event_repo
     )
@@ -71,19 +89,20 @@ async def UpdateSubAccountById(
 @router.delete("/{subaccount_id}")
 @inject
 async def DeleteSubAccount(
-    subaccount_id: uuid.UUID, 
+    interactor_id: uuid.UUID,
+    subaccount_id: DeleteSubAccountDTO, 
+    request: Request,
     db: Session = Depends(get_db), 
-    request: Request = None
 ):
     container: Container = request.app.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    delete_subaccount_use_case = container.SQL.subaccount().DeleteSubAccountByIdProvider(
+    delete_subaccount_use_case = container.sql.subaccount().DeleteSubAccountByIdProvider(
         SubAccountRepository__db=db,
         EventRepository=event_repo
     )
 
     try:
-        if delete_subaccount_use_case.execute(subaccount_id):
+        if delete_subaccount_use_case.execute(interactor_id, subaccount_id):
             return {"message": "SubAccount deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

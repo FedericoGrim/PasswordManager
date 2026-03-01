@@ -2,8 +2,7 @@ from sqlalchemy import Column, String, UUID, ForeignKey
 from sqlalchemy.orm import relationship
 import uuid
 
-from Domain.Entities.Base import Base
-from Domain.Entities.Team import Team
+from domain.entities.base import Base
 
 class SubAccount(Base):
     __tablename__ = "sub_accounts"

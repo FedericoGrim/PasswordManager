@@ -1,7 +1,7 @@
 from pydantic import BaseModel, UUID4, StringConstraints
 from typing import Optional, Annotated
 
-from Domain.Entities.SubAccount import SubAccount
+from domain.entities.sub_account import SubAccount
 
 class SubAccountDTO(BaseModel):
     id: UUID4
@@ -25,7 +25,6 @@ class SubAccountDTO(BaseModel):
         )
 
 class CreateSubAccountDTO(BaseModel):
-    
     team_id: UUID4
     title: Annotated[str, StringConstraints(min_length=1)]
     username: str
@@ -46,6 +45,7 @@ class CreateSubAccountDTO(BaseModel):
         )
 
 class UpdateSubAccountDTO(BaseModel):
+    id: UUID4
     title: Optional[Annotated[str, StringConstraints(min_length=1)]]
     username: Optional[str]
     email: Optional[str]
@@ -63,3 +63,6 @@ class UpdateSubAccountDTO(BaseModel):
             link=self.link if self.link is not None else existing_sub_account.link,
             necessary_role=self.necessary_role if self.necessary_role is not None else existing_sub_account.necessary_role
         )
+        
+class DeleteSubAccountDTO(BaseModel):
+    id: UUID4

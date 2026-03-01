@@ -7,9 +7,9 @@ if TYPE_CHECKING:
 from dependency_injector import containers, providers
 
 from infrastructure.databases.sql.user_postgreSQL import UserService
-from infrastructure.databases.sql.SubAccountPostgreSQL import SubAccountService
+from infrastructure.databases.sql.suc_account_postgreSQL import SubAccountService
 from infrastructure.databases.sql.team_postgreSQL import TeamService
-from infrastructure.databases.sql.team_members_postgreSQL import TeamMembersService
+from infrastructure.databases.sql.team_member_postgreSQL import TeamMembersService
 from infrastructure.databases.sql.CategoriesPostgreSQL import CategoriesService
 from infrastructure.databases.sql.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
 
@@ -22,8 +22,9 @@ from application.use_case.user_use_case import (
     DeleteUserByIdUseCase,
 )
 
-from application.use_case.SubAccountUseCase import (
+from application.use_case.sub_account_use_case import (
     CreateSubAccountUseCase,
+    GetSubAccountByIdUseCase,
     GetAllSubAccountsByTeamIdUseCase,
     UpdateSubAccountByIdUseCase,
     DeleteSubAccountByIdUseCase,
@@ -37,7 +38,7 @@ from application.use_case.team_use_case import (
     DeleteTeamByIdUseCase,
 )
 
-from application.use_case.team_members_use_case import (
+from application.use_case.team_member_use_case import (
     AddMemberToTeamUseCase,
     GetTeamMemberByIdUseCase,
     GetTeamMembersByTeamIdUseCase,
@@ -89,6 +90,10 @@ class SubAccountContainer(containers.DeclarativeContainer):
 
     CreateSubAccountProvider = providers.Factory(
         CreateSubAccountUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    GetSubAccountByIdProvider = providers.Factory(
+        GetSubAccountByIdUseCase,
         SubAccountRepository=SubAccountRepositoryFactory,
     )
     GetAllSubAccountsByTeamIdProvider = providers.Factory(
