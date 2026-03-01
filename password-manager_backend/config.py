@@ -8,7 +8,7 @@ from dependency_injector import containers, providers
 
 from infrastructure.databases.sql.user_postgreSQL import UserService
 from infrastructure.databases.sql.SubAccountPostgreSQL import SubAccountService
-from infrastructure.databases.sql.TeamPostgreSQL import TeamService
+from infrastructure.databases.sql.team_postgreSQL import TeamService
 from infrastructure.databases.sql.team_members_postgreSQL import TeamMembersService
 from infrastructure.databases.sql.CategoriesPostgreSQL import CategoriesService
 from infrastructure.databases.sql.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
@@ -29,7 +29,7 @@ from application.use_case.SubAccountUseCase import (
     DeleteSubAccountByIdUseCase,
 )
 
-from application.use_case.TeamUseCase import (
+from application.use_case.team_use_case import (
     CreateTeamUseCase,
     GetTeamByIdUseCase,
     GetTeamsByUserIdUseCase,
