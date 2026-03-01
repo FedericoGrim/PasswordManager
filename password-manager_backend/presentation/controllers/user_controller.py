@@ -6,7 +6,7 @@ from dependency_injector.wiring import inject
 
 from config import Container
 from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO
-from infrastructure.databases.SQL.database import get_db
+from infrastructure.databases.sql.database import get_db
 
 router = APIRouter()
 
@@ -21,7 +21,7 @@ async def create_user(
 ) -> dict[str, str | UserDTO]:
     container: Container = request.app.state.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    create_user_use_case = container.SQL.user().CreateUserProvider(
+    create_user_use_case = container.sql.user().CreateUserProvider(
         UserRepository__db=db,
         event_repository=event_repo,
     )
@@ -41,7 +41,7 @@ async def get_user_by_keycloak_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str| UserDTO]:
     container: Container = request.app.state.container
-    get_user_use_case = container.SQL.user().GetUserByKeycloakIdProvider(
+    get_user_use_case = container.sql.user().GetUserByKeycloakIdProvider(
         UserRepository__db=db
     )
     try:
@@ -62,7 +62,7 @@ async def update_user_by_id(
 ) -> dict[str, str]:
     container: Container = request.app.state.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    update_user_use_case = container.SQL.user().UpdateUserByIdProvider(
+    update_user_use_case = container.sql.user().UpdateUserByIdProvider(
         UserRepository__db=db,
         event_repository=event_repo,
     )
@@ -85,7 +85,7 @@ async def delete_user_by_id(
 ) -> dict[str, str]:
     container: Container = request.app.state.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    delete_user_use_case = container.SQL.user().DeleteUserByIdProvider(
+    delete_user_use_case = container.sql.user().DeleteUserByIdProvider(
         UserRepository__db=db,
         event_repository=event_repo,
     )
