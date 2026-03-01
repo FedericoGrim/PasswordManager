@@ -2,7 +2,7 @@ import uuid
 
 from application.use_case.publisher import EventPublisher
 from application.exceptions.team_member_use_case_exceptions import *
-from domain.interfaces.team_member__service_interface import ITeamMembersService
+from domain.interfaces.team_member_service_interface import ITeamMembersService
 from domain.interfaces.events_mongoDB_interface import IEventsMongoDB
 
 from application.dto.team_member_dto import TeamMemberDTO, CreateTeamMemberDTO, UpdateTeamMemberDTO, RemoveTeamMemberDTO
