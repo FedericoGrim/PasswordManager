@@ -2,7 +2,7 @@ from sqlalchemy import Column, String, ForeignKey, UUID
 from sqlalchemy.orm import relationship
 import uuid
 
-from Domain.Entities.Base import Base
+from domain.entities.base import Base
 
 class Categories(Base):
     __tablename__ = "categories"

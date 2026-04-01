@@ -8,11 +8,11 @@ from starlette.middleware.base import RequestResponseEndpoint
 
 from config import Container
 from presentation.controllers.user_controller import router as user_router
-from presentation.controllers.SubAccountController import router as subaccount_router
-from presentation.controllers.TeamController import router as team_router
+from presentation.controllers.sub_account_controller import router as subaccount_router
+from presentation.controllers.team_controller import router as team_router
 from presentation.controllers.team_members_controller import router as team_members_router
-from presentation.controllers.CategoriesController import router as categories_router
-from presentation.controllers.SubAccountCategoriesController import router as subacc_categories_router
+from presentation.controllers.categories_controller import router as categories_router
+from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
 
 from infrastructure.databases.sql.database import SessionLocal
 from domain.events_payload.models import UserEvent
@@ -32,12 +32,12 @@ DB_NAME = os.getenv("DB_NAME")
 # FastAPI App
 # ------------------------------
 container = Container()
-container.wire(modules=["Presentation.Controllers.UserController", 
-                        "Presentation.Controllers.SubAccountController", 
-                        "Presentation.Controllers.TeamController",
-                        "Presentation.Controllers.TeamMembersController",
-                        "Presentation.Controllers.CategoriesController",
-                        "Presentation.Controllers.SubAccountCategoriesController"
+container.wire(modules=["presentation.controllers.user_controller", 
+                        "presentation.controllers.sub_account_controller", 
+                        "presentation.controllers.team_controller",
+                        "presentation.controllers.team_members_controller",
+                        "presentation.controllers.categories_controller",
+                        "presentation.controllers.sub_account_categories_controller"
                         ])
 
 app = FastAPI()

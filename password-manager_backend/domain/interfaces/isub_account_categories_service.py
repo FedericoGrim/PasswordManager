@@ -1,7 +1,7 @@
 import uuid
 from abc import ABC, abstractmethod
 
-from Domain.Entities.SubAccountCategories import SubAccountCategories
+from domain.entities.sub_account_categories import SubAccountCategories
 
 @abstractmethod
 class ISubAccountCategoriesService(ABC):

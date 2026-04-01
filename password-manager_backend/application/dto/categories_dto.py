@@ -1,7 +1,7 @@
 from pydantic import BaseModel, UUID4, StringConstraints
 from typing import Optional, Annotated
 
-from Domain.Entities.Categories import Categories
+from domain.entities.categories import Categories
 
 class CategoriesDTO(BaseModel):
     id: UUID4

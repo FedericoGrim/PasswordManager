@@ -3,10 +3,10 @@ from sqlalchemy.exc import IntegrityError
 import uuid
 import logging
 
-from Infrastructure.Exceptions.SubAccountCategoriesPostgreSQL_Exceptions import *
+from infrastructure.exceptions.sub_account_categories_postgresql_exceptions import *
 
-from Domain.Interfaces.ISubAccountCategoriesService import ISubAccountCategoriesService
-from Domain.Entities.SubAccountCategories import SubAccountCategories
+from domain.interfaces.isub_account_categories_service import ISubAccountCategoriesService
+from domain.entities.sub_account_categories import SubAccountCategories
 
 class SubAccountCategoriesService(ISubAccountCategoriesService):
     def __init__(self, db: Session):

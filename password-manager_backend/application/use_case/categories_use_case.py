@@ -1,7 +1,7 @@
-from Application.DTO.CategoriesDTO import CategoriesDTO
-from Application.UseCase.Publisher import EventPublisher
+from application.dto.categories_dto import CategoriesDTO
+from application.use_case.publisher import EventPublisher
 
-from Application.Exceptions.CategoriesUseCase_Exception import *
+from application.exceptions.categories_use_case_exceptions import *
 
 import uuid
 

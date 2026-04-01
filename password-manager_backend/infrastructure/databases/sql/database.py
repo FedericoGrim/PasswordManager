@@ -4,7 +4,7 @@ import os
 import logging
 from dotenv import load_dotenv
 
-from Infrastructure.Exceptions.DatabaseException import PostgreSqlConnectionException
+from infrastructure.exceptions.database_exception import PostgreSqlConnectionException
 
 load_dotenv()
 

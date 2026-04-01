@@ -3,10 +3,10 @@ from sqlalchemy.exc import IntegrityError
 import uuid
 import logging
 
-from Infrastructure.Exceptions.CategoriesPostgreSQL_Exceptions import *
+from infrastructure.exceptions.categories_postgresql_exceptions import *
 
-from Domain.Interfaces.ICategories import ICategoriesService
-from Domain.Entities.Categories import Categories
+from domain.interfaces.icategories import ICategoriesService
+from domain.entities.categories import Categories
 
 class CategoriesService(ICategoriesService):
     def __init__(self, db: Session):

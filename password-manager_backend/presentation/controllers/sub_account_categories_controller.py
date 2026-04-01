@@ -4,7 +4,7 @@ import uuid
 from dependency_injector.wiring import inject
 from config import Container
 
-from Infrastructure.Databases.SQL.Database import get_db
+from infrastructure.databases.sql.database import get_db
 
 router = APIRouter()
 

@@ -2,9 +2,9 @@ from sqlalchemy import Column, String, ForeignKey, UUID
 from sqlalchemy.orm import relationship
 import uuid
 
-from Domain.Entities.Base import Base
-from Domain.Entities.SubAccount import SubAccount
-from Domain.Entities.Categories import Categories
+from domain.entities.base import Base
+from domain.entities.sub_account import SubAccount
+from domain.entities.categories import Categories
 
 class SubAccountCategories(Base):
     __tablename__ = "sub_account_categories"
