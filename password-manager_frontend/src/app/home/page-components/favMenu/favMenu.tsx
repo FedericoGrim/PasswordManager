@@ -17,7 +17,6 @@ const favItems: FavItem[] = Array.from({ length: 20 }, (_, i) => ({
 
 export default function FavMenu() {
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedItem, setSelectedItem] = useState<FavItem | null>(null);
 
   const totalPages = Math.ceil(favItems.length / ITEMS_PER_PAGE);
 
@@ -50,7 +49,7 @@ export default function FavMenu() {
           <button
             key={item.id}
             className="fav-card"
-            onClick={() => setSelectedItem(item)}
+            onClick={() => console.log(item)}
           >
             {item.title}
           </button>
@@ -77,17 +76,6 @@ export default function FavMenu() {
           ›
         </button>
       </div>
-
-      {/* Popup */}
-      {selectedItem && (
-        <div className="popup-overlay" onClick={() => setSelectedItem(null)}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <h2>{selectedItem.title}</h2>
-            <p>Dettagli della card...</p>
-            <button onClick={() => setSelectedItem(null)}>Close</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }

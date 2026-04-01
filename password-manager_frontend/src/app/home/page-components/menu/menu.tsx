@@ -18,7 +18,6 @@ const items: GridItem[] = Array.from({ length: 40 }, (_, i) => ({
 export default function Menu() {
   const [searchText, setSearchText] = useState("");
   const [currentPage, setCurrentPage] = useState(1);
-  const [selectedItem, setSelectedItem] = useState<GridItem | null>(null);
 
   // 🔹 filtro dati
   const filteredItems = useMemo(() => {
@@ -67,7 +66,7 @@ export default function Menu() {
           <button
             key={item.id}
             className="grid-card"
-            onClick={() => setSelectedItem(item)}
+            onClick={() => console.log(item)}
           >
             {item.title}
           </button>
@@ -102,17 +101,6 @@ export default function Menu() {
           ›
         </button>
       </div>
-
-      {/* POPUP */}
-      {selectedItem && (
-        <div className="popup-overlay" onClick={() => setSelectedItem(null)}>
-          <div className="popup-content" onClick={(e) => e.stopPropagation()}>
-            <h2>{selectedItem.title}</h2>
-            <p>Dettagli della card...</p>
-            <button onClick={() => setSelectedItem(null)}>Close</button>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
