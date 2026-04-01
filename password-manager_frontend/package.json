@@ -16,6 +16,7 @@
     "axios": "^1.11.0",
     "crypto-browserify": "^3.3.0",
     "keycloak-js": "^26.2.0",
+    "lucide-react": "^1.7.0",
     "next": "^15.5.2",
     "next-runtime-env": "^2.0.1",
     "react": "^19.0.0",
