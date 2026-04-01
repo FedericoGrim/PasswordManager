@@ -12,11 +12,11 @@ class SubAccountCategoriesService(ISubAccountCategoriesService):
     def __init__(self, db: Session):
         self.Db = db
 
-    def CreateSubAccountCategory(self, subacc_id: str, category_id: str):
+    def CreateSubAccountCategory(self, new_subacc_category: SubAccountCategories) -> SubAccountCategories:
         try:
             subacc_category_entity = SubAccountCategories(
-                sub_account_id = subacc_id,
-                category_id = category_id
+                sub_account_id = new_subacc_category.sub_account_id,
+                category_id = new_subacc_category.category_id
             )
 
             self.Db.add(subacc_category_entity)
@@ -31,7 +31,7 @@ class SubAccountCategoriesService(ISubAccountCategoriesService):
             logging.error(f"Error: {e}")
             raise SubAccountCategoryCreationFailedException("Failed to create subacc category.")
         
-    def GetAllCategoriesBySubAccountId(self, subaccountId: uuid.UUID):
+    def GetAllCategoriesBySubAccountId(self, subaccountId: uuid.UUID) -> list[SubAccountCategories]:
         try:
             subacc_categories: list[SubAccountCategories] = self.Db.query(SubAccountCategories).filter(SubAccountCategories.sub_account_id == subaccountId).all()
             if not subacc_categories:
@@ -41,31 +41,12 @@ class SubAccountCategoriesService(ISubAccountCategoriesService):
         except Exception as e:
             logging.error(f"Error: {e}")
             raise SubAccountCategoryRetrievalException("Failed to retrieve subacc categories.")
-        
-    def UpdateSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID, new_subacc_category: SubAccountCategories):
+
+    def DeleteSubAccountCategory(self, subacc_category: SubAccountCategories) -> bool:
         try:
             subacc_category = self.Db.query(SubAccountCategories).filter(
-                SubAccountCategories.sub_account_id == subaccountId,
-                SubAccountCategories.category_id == categoryId
-            ).first()
-
-            if not subacc_category:
-                raise SubAccountCategoryNotFoundException("SubAccountCategory not found.")
-
-            subacc_category.category_id = new_subacc_category.category_id
-            self.Db.flush()
-            self.Db.refresh(subacc_category)
-            return subacc_category
-
-        except Exception as e:
-            logging.error(f"Error: {e}")
-            raise SubAccountCategoryUpdateFailedException("Failed to update subacc category.")
-
-    def DeleteSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID):
-        try:
-            subacc_category = self.Db.query(SubAccountCategories).filter(
-                SubAccountCategories.sub_account_id == subaccountId,
-                SubAccountCategories.category_id == categoryId
+                SubAccountCategories.sub_account_id == subacc_category.sub_account_id,
+                SubAccountCategories.category_id == subacc_category.category_id
             ).first()
 
             if not subacc_category:

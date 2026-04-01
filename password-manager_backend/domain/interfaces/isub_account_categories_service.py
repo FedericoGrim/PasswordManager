@@ -6,17 +6,13 @@ from domain.entities.sub_account_categories import SubAccountCategories
 @abstractmethod
 class ISubAccountCategoriesService(ABC):
     @abstractmethod
-    def CreateSubAccountCategory(self, subacc_id: str, category_id: str) -> dict:
+    def CreateSubAccountCategory(self, new_subacc_category: SubAccountCategories) -> SubAccountCategories:
         pass
 
     @abstractmethod
-    def GetAllCategoriesBySubAccountId(self, subaccountId: uuid.UUID)  -> dict:
+    def GetAllCategoriesBySubAccountId(self, subaccountId: uuid.UUID) -> list[SubAccountCategories]:
         pass
-
+    
     @abstractmethod
-    def UpdateSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID, new_subacc_category: SubAccountCategories) -> dict:
-        pass
-
-    @abstractmethod
-    def DeleteSubAccountCategory(self, subaccountId: uuid.UUID, categoryId: uuid.UUID) -> dict:
+    def DeleteSubAccountCategory(self, subacc_category: SubAccountCategories) -> bool:
         pass
