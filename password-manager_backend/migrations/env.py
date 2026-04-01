@@ -4,7 +4,7 @@ from sqlalchemy import pool
 from alembic import context
 from dotenv import load_dotenv
 import os
-from Domain.Entities.Base import Base
+from domain.entities.base import Base
 
 config = context.config
 if config.config_file_name is not None:

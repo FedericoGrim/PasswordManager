@@ -27,9 +27,8 @@ pytest-asyncio
 #Migration SQL
 alembic
 
-#Migration NoSQL
-pyMongoDB
-
 #Docs
 sphinx
 sphinx-autobuild
+
+motor

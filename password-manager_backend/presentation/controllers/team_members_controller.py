@@ -1,7 +1,6 @@
 import uuid
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
-from dependency_injector.wiring import inject
 
 from config import Container
 from infrastructure.databases.sql.database import get_db
@@ -10,7 +9,7 @@ from application.dto.team_member_dto import TeamMemberDTO, CreateTeamMemberDTO, 
 router = APIRouter()
 
 @router.post("/{team_id}/members")
-@inject
+
 async def api_add_member_to_team(
     interactor_id: uuid.UUID,
     CreateTeamMemberDTO: CreateTeamMemberDTO,
@@ -31,7 +30,7 @@ async def api_add_member_to_team(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/members/{member_id}")
-@inject
+
 async def api_get_team_member_by_id(
     member_id: uuid.UUID,
     request: Request,
@@ -49,7 +48,7 @@ async def api_get_team_member_by_id(
         raise HTTPException(status_code=404, detail=str(e))
     
 @router.get("/{team_id}/members")
-@inject
+
 async def api_get_team_members_by_team_id(
     team_id: uuid.UUID,
     request: Request,
@@ -67,7 +66,7 @@ async def api_get_team_members_by_team_id(
         raise HTTPException(status_code=404, detail=str(e))
     
 @router.put("/{team_id}/members/{member_id}/role")
-@inject
+
 async def api_update_team_member_role(
     interactor_id: uuid.UUID,
     new_user_data: UpdateTeamMemberDTO,
@@ -88,7 +87,7 @@ async def api_update_team_member_role(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.delete("/{team_id}/members/{member_id}")
-@inject
+
 async def api_remove_member_from_team(
     interactor_id: uuid.UUID,
     team_member_to_delete: RemoveTeamMemberDTO,

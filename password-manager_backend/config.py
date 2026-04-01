@@ -10,8 +10,8 @@ from infrastructure.databases.sql.user_postgreSQL import UserService
 from infrastructure.databases.sql.suc_account_postgreSQL import SubAccountService
 from infrastructure.databases.sql.team_postgreSQL import TeamService
 from infrastructure.databases.sql.team_member_postgreSQL import TeamMembersService
-from infrastructure.databases.sql.CategoriesPostgreSQL import CategoriesService
-from infrastructure.databases.sql.SubAccountCategoriesPostgreSQL import SubAccountCategoriesService
+from infrastructure.databases.sql.categories_postgresql import CategoriesService
+from infrastructure.databases.sql.sub_account_categories_postgresql import SubAccountCategoriesService
 
 
 
@@ -46,14 +46,14 @@ from application.use_case.team_member_use_case import (
     RemoveMemberFromTeamUseCase
 )
 
-from application.use_case.CategoriesUseCase import (
+from application.use_case.categories_use_case import (
     CreateCategoriesUseCase,
     GetAllCategoriesByTeamIdUseCase,
     UpdateCategoryByIdUseCase,
     DeleteCategoryByIdUseCase,
 )
 
-from application.use_case.SubAccountCategoriesUseCase import (
+from application.use_case.sub_account_categories_use_case import (
     CreateSubAccountCategoryUseCase,
     GetAllCategoriesBySubAccountIdUseCase,
     UpdateSubAccountCategoryUseCase,
