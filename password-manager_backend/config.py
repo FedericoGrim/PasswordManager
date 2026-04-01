@@ -1,61 +1,68 @@
+from __future__ import annotations
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    from config import SQLContainer, NoSQLContainer
+
 from dependency_injector import containers, providers
 
-from Infrastructure.Databases.SQL.UserPostgreSQL import UserService
-from Infrastructure.Databases.SQL.SubAccountPostgreSQL import SubAccountService
-from Infrastructure.Databases.SQL.TeamPostgreSQL import TeamService
-from Infrastructure.Databases.SQL.TeamMembersPostgreSQL import TeamMembersService
-from Infrastructure.Databases.SQL.CategoriesPostgreSQL import CategoriesService
-from Infrastructure.Databases.SQL.SubAccauntCategoriesPostgreSQL import SubAccauntCategoriesService
+from infrastructure.databases.sql.user_postgreSQL import UserService
+from infrastructure.databases.sql.suc_account_postgreSQL import SubAccountService
+from infrastructure.databases.sql.team_postgreSQL import TeamService
+from infrastructure.databases.sql.team_member_postgreSQL import TeamMembersService
+from infrastructure.databases.sql.categories_postgresql import CategoriesService
+from infrastructure.databases.sql.sub_account_categories_postgresql import SubAccountCategoriesService
 
-from Application.UseCase.UserUseCase import (
+
+
+from application.use_case.user_use_case import (
     CreateUserUseCase,
-    GetUsersByKeycloakIdUseCase,
+    GetUserByKeycloakIdUseCase,
     UpdateUserByIdUseCase,
     DeleteUserByIdUseCase,
 )
 
-from Application.UseCase.SubAccountUseCase import (
+from application.use_case.sub_account_use_case import (
     CreateSubAccountUseCase,
+    GetSubAccountByIdUseCase,
     GetAllSubAccountsByTeamIdUseCase,
     UpdateSubAccountByIdUseCase,
     DeleteSubAccountByIdUseCase,
 )
 
-from Application.UseCase.TeamUseCase import (
+from application.use_case.team_use_case import (
     CreateTeamUseCase,
     GetTeamByIdUseCase,
-    GetTeamsByUserIdUseCase,
     GetTeamsByUserIdUseCase,
     UpdateTeamByIdUseCase,
     DeleteTeamByIdUseCase,
 )
 
-from Application.UseCase.TeamMembersUseCase import (
+from application.use_case.team_member_use_case import (
     AddMemberToTeamUseCase,
+    GetTeamMemberByIdUseCase,
     GetTeamMembersByTeamIdUseCase,
-    GetTeamsByMemberIdUseCase,
     UpdateTeamMemberRoleUseCase,
     RemoveMemberFromTeamUseCase
 )
 
-from Application.UseCase.CategoriesUseCase import (
+from application.use_case.categories_use_case import (
     CreateCategoriesUseCase,
     GetAllCategoriesByTeamIdUseCase,
     UpdateCategoryByIdUseCase,
     DeleteCategoryByIdUseCase,
 )
 
-from Application.UseCase.SubAccountCategoriesUseCase import (
+from application.use_case.sub_account_categories_use_case import (
     CreateSubAccountCategoryUseCase,
     GetAllCategoriesBySubAccountIdUseCase,
-    UpdateSubAccountCategoryUseCase,
     DeleteSubAccountCategoryUseCase,
 )
 
-from Infrastructure.Databases.NoSQL.EventsMongoDB import EventRepository
+from infrastructure.databases.nosql.events_mongoDB import EventRepository
 
 
-# ------------------- SQL Containers -------------------
+# ------------------- sql Containers -------------------
 class UserContainer(containers.DeclarativeContainer):
     UserRepositoryFactory = providers.Factory(UserService, db=providers.Dependency())
 
@@ -64,7 +71,7 @@ class UserContainer(containers.DeclarativeContainer):
         UserRepository=UserRepositoryFactory,
     )
     GetUserByKeycloakIdProvider = providers.Factory(
-        GetUsersByKeycloakIdUseCase,
+        GetUserByKeycloakIdUseCase,
         UserRepository=UserRepositoryFactory,
     )
     UpdateUserByIdProvider = providers.Factory(
@@ -82,6 +89,10 @@ class SubAccountContainer(containers.DeclarativeContainer):
 
     CreateSubAccountProvider = providers.Factory(
         CreateSubAccountUseCase,
+        SubAccountRepository=SubAccountRepositoryFactory,
+    )
+    GetSubAccountByIdProvider = providers.Factory(
+        GetSubAccountByIdUseCase,
         SubAccountRepository=SubAccountRepositoryFactory,
     )
     GetAllSubAccountsByTeamIdProvider = providers.Factory(
@@ -129,14 +140,17 @@ class TeamMembersContainer(containers.DeclarativeContainer):
         AddMemberToTeamUseCase,
         TeamMembersRepository=TeamMembersRepositoryFactory,
     )
+    
+    GetTeamMemberByIdProvider = providers.Factory(
+        GetTeamMemberByIdUseCase,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
+    )
+    
     GetTeamMembersByTeamIdProvider = providers.Factory(
         GetTeamMembersByTeamIdUseCase,
         TeamMembersRepository=TeamMembersRepositoryFactory,
     )
-    GetTeamsByMemberIdProvider = providers.Factory(
-        GetTeamsByMemberIdUseCase,
-        TeamMembersRepository=TeamMembersRepositoryFactory,
-    )
+
     UpdateTeamMemberRoleProvider = providers.Factory(
         UpdateTeamMemberRoleUseCase,
         TeamMembersRepository=TeamMembersRepositoryFactory,
@@ -167,7 +181,7 @@ class CategoriesContainer(containers.DeclarativeContainer):
     )
 
 class SubAccountCategoriesContainer(containers.DeclarativeContainer):
-    SubAccountCategoriesRepositoryFactory = providers.Factory(SubAccauntCategoriesService, db=providers.Dependency())
+    SubAccountCategoriesRepositoryFactory = providers.Factory(SubAccountCategoriesService, db=providers.Dependency())
 
     CreateSubAccountCategoryProvider = providers.Factory(
         CreateSubAccountCategoryUseCase,
@@ -177,10 +191,7 @@ class SubAccountCategoriesContainer(containers.DeclarativeContainer):
         GetAllCategoriesBySubAccountIdUseCase,
         SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
     )
-    UpdateSubAccountCategoryProvider = providers.Factory(
-        UpdateSubAccountCategoryUseCase,
-        SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
-    )
+
     DeleteSubAccountCategoryProvider = providers.Factory(
         DeleteSubAccountCategoryUseCase,
         SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
@@ -206,5 +217,6 @@ class NoSQLContainer(containers.DeclarativeContainer):
 
 
 class Container(containers.DeclarativeContainer):
-    SQL = providers.Container(SQLContainer)
-    NoSQL = providers.Container(NoSQLContainer)
+    sql: SQLContainer = providers.Container(SQLContainer)  # type: ignore[assignment]
+    NoSQL: NoSQLContainer = providers.Container(NoSQLContainer)  # type: ignore[assignment]
+
