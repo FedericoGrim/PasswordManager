@@ -11,62 +11,68 @@ router = APIRouter()
 @router.post("/{team_id}")
 
 async def CreateCategory(
-    categoryObj: CreateCategoryDTO,
+    new_category: CreateCategoryDTO,
+    user_interactor_id: uuid.UUID,
+    request: Request,
     db: Session = Depends(get_db),
-    request: Request = None,
 ):
-    container: Container = request.app.container
+    container: Container = request.app.state.container
     event_repo = container.NoSQL.events().EventRepositoryProvider()
-    create_category_use_case = container.SQL.categories().CreateCategoriesProvider(
+    create_category_use_case = container.sql.categories().CreateCategoriesProvider(
         CategoriesRepository__db=db,
         EventRepository=event_repo
     )
 
     try:
         result = create_category_use_case.execute(
-            categoryObj
+            category=new_category,
+            user_interactor_id=user_interactor_id
         )
-        return {"message": "Category created successfully", "category": result}
+        return "Category created successfully", result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/{team_id}")
 
 async def GetAllCategoriesByTeamId(
-    team_id: uuid.UUID, 
+    team_id: uuid.UUID,
+    request: Request, 
     db: Session = Depends(get_db), 
-    request: Request = None
 ):
-    container: Container = request.app.container
-    get_categories_use_case = container.SQL.categories().GetAllCategoriesByTeamIdProvider(
+    container: Container = request.app.state.container
+    get_categories_use_case = container.sql.categories().GetAllCategoriesByTeamIdProvider(
         CategoriesRepository__db=db,
     )
 
     try:
         categories = get_categories_use_case.execute(team_id)
-        return {"message": "Categories retrieved successfully", "categories": categories}
+        return "Categories retrieved successfully", categories
     except Exception as e:
-        raise HTTPException(status_code=404, detail="Categories not found")
+        raise HTTPException(status_code=404, detail=str(e))
     
 @router.put("/{category_id}")
 
 async def UpdateCategoryById(
     category_id: uuid.UUID, 
-    updated_data: UpdateCategoryDTO, 
-    db: Session = Depends(get_db), 
-    request: Request = None
+    updated_data: UpdateCategoryDTO,
+    interactor_id: uuid.UUID, 
+    request: Request,
+    db: Session = Depends(get_db)
 ):
-    container: Container = request.app.container
-    update_category_use_case = container.SQL.categories().UpdateCategoryByIdProvider(
+    container: Container = request.app.state.container
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
+    update_category_use_case = container.sql.categories().UpdateCategoryByIdProvider(
         CategoriesRepository__db=db,
+        EventRepository=event_repo
     )
 
     try:
         result = update_category_use_case.execute(
             categoryId=category_id,
-            new_category=updated_data
+            new_category=updated_data,
+            user_interactor_id=interactor_id
         )
-        return {"message": "Category updated successfully", "category": result}
+        return "Category updated successfully", result
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
     
@@ -74,16 +80,19 @@ async def UpdateCategoryById(
 
 async def DeleteCategory(
     category_id: uuid.UUID,
-    db: Session = Depends(get_db),
-    request: Request = None,
+    user_interactor_id: uuid.UUID,
+    request: Request,
+    db: Session = Depends(get_db)
 ):
-    container: Container = request.app.container
-    delete_category_use_case = container.SQL.categories().DeleteCategoryByIdProvider(
+    container: Container = request.app.state.container
+    event_repo = container.NoSQL.events().EventRepositoryProvider()
+    delete_category_use_case = container.sql.categories().DeleteCategoryByIdProvider(
         CategoriesRepository__db=db,
+        EventRepository=event_repo
     )
 
     try:
-        if delete_category_use_case.execute(category_id):
+        if delete_category_use_case.execute(category_id, user_interactor_id):
             return {"message": "Category deleted successfully"}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))

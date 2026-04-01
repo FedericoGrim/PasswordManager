@@ -1,5 +1,5 @@
-from pydantic import BaseModel, UUID4, StringConstraints
-from typing import Optional, Annotated
+from pydantic import BaseModel, UUID4
+from typing import Optional
 
 from domain.entities.categories import Categories
 

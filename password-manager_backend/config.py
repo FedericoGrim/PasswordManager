@@ -56,7 +56,6 @@ from application.use_case.categories_use_case import (
 from application.use_case.sub_account_categories_use_case import (
     CreateSubAccountCategoryUseCase,
     GetAllCategoriesBySubAccountIdUseCase,
-    UpdateSubAccountCategoryUseCase,
     DeleteSubAccountCategoryUseCase,
 )
 
@@ -192,10 +191,7 @@ class SubAccountCategoriesContainer(containers.DeclarativeContainer):
         GetAllCategoriesBySubAccountIdUseCase,
         SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
     )
-    UpdateSubAccountCategoryProvider = providers.Factory(
-        UpdateSubAccountCategoryUseCase,
-        SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
-    )
+
     DeleteSubAccountCategoryProvider = providers.Factory(
         DeleteSubAccountCategoryUseCase,
         SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,

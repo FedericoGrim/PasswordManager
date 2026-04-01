@@ -12,7 +12,7 @@ class CategoriesService(ICategoriesService):
     def __init__(self, db: Session):
         self.Db = db
 
-    def CreateCategory(self, category):
+    def CreateCategory(self, category: Categories) -> Categories:
         try:
             category_entity = Categories(
                 team_id = category.team_id,
@@ -31,7 +31,7 @@ class CategoriesService(ICategoriesService):
             logging.error(f"Error: {e}")
             raise CategoryCreationFailedException("Failed to create category.")
         
-    def GetAllCategoriesByTeamId(self, teamId: uuid.UUID):
+    def GetAllCategoriesByTeamId(self, teamId: uuid.UUID) -> list[Categories]:
         try:
             categories: list[Categories] = self.Db.query(Categories).filter(Categories.team_id == teamId).all()
             if not categories:
@@ -42,7 +42,7 @@ class CategoriesService(ICategoriesService):
             logging.error(f"Error: {e}")
             raise CategoryRetrievalException("Failed to retrieve categories.")
         
-    def UpdateCategoryById(self, categoryId: uuid.UUID, new_category: Categories):
+    def UpdateCategoryById(self, categoryId: uuid.UUID, new_category: Categories) -> Categories:
         try:
             category = self.Db.query(Categories).filter(Categories.id == categoryId).first()
             if not category:
@@ -58,7 +58,7 @@ class CategoriesService(ICategoriesService):
             logging.error(f"Error: {e}")
             raise CategoryUpdateException("Failed to update category.")
 
-    def DeleteCategoryById(self, categoryId: uuid.UUID):
+    def DeleteCategoryById(self, categoryId: uuid.UUID) -> bool:
         try:
             category = self.Db.query(Categories).filter(Categories.id == categoryId).first()
             if not category:
