@@ -1,7 +1,6 @@
 import uuid
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
-from dependency_injector.wiring import inject
 
 from config import Container
 from application.dto.team_dto import TeamDTO, CreateTeamDTO, UpdateTeamDTO, DeleteTeamDTO
@@ -11,7 +10,7 @@ router = APIRouter()
 
 # -------------------- CREATE --------------------
 @router.post("/")
-@inject
+
 async def ApiCreateTeam(
     user_interactor_id: uuid.UUID,
     team: CreateTeamDTO,
@@ -33,7 +32,7 @@ async def ApiCreateTeam(
     
 # -------------------- GET --------------------
 @router.get("/{team_id}")
-@inject
+
 async def ApiGetTeamById(
     team_id: uuid.UUID,
     request: Request,
@@ -51,7 +50,7 @@ async def ApiGetTeamById(
         raise HTTPException(status_code=404, detail=str(e))
     
 @router.get("/{user_id}")
-@inject
+
 async def ApiGetTeamsByUserId(
     user_id: uuid.UUID,
     request: Request,
@@ -70,7 +69,7 @@ async def ApiGetTeamsByUserId(
     
 # -------------------- UPDATE --------------------
 @router.put("/{team_id}")
-@inject
+
 async def ApiUpdateTeam(
     user_interactor_id: uuid.UUID,
     new_team_data: UpdateTeamDTO,
@@ -92,7 +91,7 @@ async def ApiUpdateTeam(
     
 # -------------------- DELETE --------------------
 @router.delete("/{team_id}")
-@inject
+
 async def ApiDeleteTeam(
     interactor_id: uuid.UUID,
     team_to_delete: DeleteTeamDTO,

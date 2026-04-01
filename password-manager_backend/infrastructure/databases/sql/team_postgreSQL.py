@@ -7,7 +7,7 @@ from infrastructure.exceptions.team_postgreSQL_exceptions import *
 
 from domain.interfaces.team_service_interface import ITeamService
 from domain.entities.team import Team
-from domain.entities.team_members import TeamMember
+from domain.entities.team_member import TeamMember
 
 class TeamService(ITeamService):
     def __init__(self, db: Session):

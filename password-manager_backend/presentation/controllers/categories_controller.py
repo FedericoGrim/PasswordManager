@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 import uuid
-from dependency_injector.wiring import inject
 from config import Container
 
 from infrastructure.databases.sql.database import get_db
@@ -10,7 +9,7 @@ from application.dto.categories_dto import CreateCategoryDTO, UpdateCategoryDTO
 router = APIRouter()
 
 @router.post("/{team_id}")
-@inject
+
 async def CreateCategory(
     categoryObj: CreateCategoryDTO,
     db: Session = Depends(get_db),
@@ -32,7 +31,7 @@ async def CreateCategory(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/{team_id}")
-@inject
+
 async def GetAllCategoriesByTeamId(
     team_id: uuid.UUID, 
     db: Session = Depends(get_db), 
@@ -50,7 +49,7 @@ async def GetAllCategoriesByTeamId(
         raise HTTPException(status_code=404, detail="Categories not found")
     
 @router.put("/{category_id}")
-@inject
+
 async def UpdateCategoryById(
     category_id: uuid.UUID, 
     updated_data: UpdateCategoryDTO, 
@@ -72,7 +71,7 @@ async def UpdateCategoryById(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.delete("/{category_id}")
-@inject
+
 async def DeleteCategory(
     category_id: uuid.UUID,
     db: Session = Depends(get_db),

@@ -1,7 +1,6 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 import uuid
-from dependency_injector.wiring import inject
 from config import Container
 
 from infrastructure.databases.sql.database import get_db
@@ -9,7 +8,7 @@ from infrastructure.databases.sql.database import get_db
 router = APIRouter()
 
 @router.post("/")
-@inject
+
 async def CreateSubAccauntCategory(
     subacc_id: str,
     category_id: str,
@@ -33,7 +32,7 @@ async def CreateSubAccauntCategory(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.get("/{subaccount_id}")
-@inject
+
 async def GetAllCategoriesBySubAccountId(
     subaccount_id: uuid.UUID, 
     db: Session = Depends(get_db), 
@@ -51,7 +50,7 @@ async def GetAllCategoriesBySubAccountId(
         raise HTTPException(status_code=404, detail="SubAccountCategories not found")
     
 @router.put("/{subaccount_id}/{category_id}")
-@inject
+
 async def UpdateSubAccauntCategory(
     subaccount_id: uuid.UUID, 
     category_id: uuid.UUID,
@@ -75,7 +74,7 @@ async def UpdateSubAccauntCategory(
         raise HTTPException(status_code=400, detail=str(e))
     
 @router.delete("/{subaccount_id}/{category_id}")
-@inject
+
 async def DeleteSubAccauntCategory(
     subaccount_id: uuid.UUID, 
     category_id: uuid.UUID,

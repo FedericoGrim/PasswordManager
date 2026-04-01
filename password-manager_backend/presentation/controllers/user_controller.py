@@ -1,7 +1,6 @@
 import uuid
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
-from dependency_injector.wiring import inject
 
 
 from config import Container
@@ -13,7 +12,6 @@ router = APIRouter()
 
 # -------------------- CREATE --------------------
 @router.post("/")
-@inject
 async def create_user(
     user: CreateUserDTO,
     request: Request,
@@ -34,7 +32,6 @@ async def create_user(
 
 # -------------------- GET --------------------
 @router.get("/{keycloak_user_id}")
-@inject
 async def get_user_by_keycloak_id(
     keycloak_user_id: uuid.UUID,
     request: Request,
@@ -53,7 +50,6 @@ async def get_user_by_keycloak_id(
 
 # -------------------- UPDATE --------------------
 @router.put("/{user_id}")
-@inject
 async def update_user_by_id(
     user_id: uuid.UUID,
     new_user: UpdateUserDTO,
@@ -77,7 +73,6 @@ async def update_user_by_id(
 
 # -------------------- DELETE --------------------
 @router.delete("/{user_id}")
-@inject
 async def delete_user_by_id(
     user_id: uuid.UUID,
     request: Request,
