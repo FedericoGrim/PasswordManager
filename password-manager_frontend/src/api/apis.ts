@@ -1,16 +1,14 @@
 import axiosClient from './axiosClient';
-import { keycloakFactory } from './keycloakClient';
 import { mainUser } from './entities/mainUser';
 import { subAccount } from './entities/subAccount';
 import { UUID } from 'crypto';
 
 axiosClient.defaults.headers.common['Content-Type'] = 'application/json';
 
-const createMainUser = async (KeycloakId: UUID, SaltArgon: string): Promise<void> => {
+const createMainUser = async (KeycloakId: string): Promise<void> => {
     try {
-        await axiosClient.post('/api/localuser/', {
-            IdKeycloak: KeycloakId,
-            Salt: SaltArgon
+        await axiosClient.post('/api/user/', {
+            id_keycloak: KeycloakId
         });
     } catch (error) {
         console.error('Error creating main user:', error);
@@ -18,9 +16,9 @@ const createMainUser = async (KeycloakId: UUID, SaltArgon: string): Promise<void
     }
 }
 
-const getMainUserByKeycloakId = async (keycloak_user_id: UUID): Promise<mainUser | null> => {
+const getMainUserByKeycloakId = async (keycloak_user_id: string): Promise<mainUser | null> => {
     try {
-        const response = await axiosClient.get(`/api/localuser/${keycloak_user_id}`);
+        const response = await axiosClient.get(`/api/user/${keycloak_user_id}`);
         return response.data.user as mainUser;
     } catch (error) {
         console.error('Error fetching main user:', error);

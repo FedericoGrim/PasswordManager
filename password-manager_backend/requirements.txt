@@ -10,6 +10,7 @@ cryptography
 #Apis
 FastAPI
 uvicorn
+httpx
 
 #SQL DB
 SQLAlchemy

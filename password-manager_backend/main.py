@@ -13,6 +13,7 @@ from presentation.controllers.team_controller import router as team_router
 from presentation.controllers.team_members_controller import router as team_members_router
 from presentation.controllers.categories_controller import router as categories_router
 from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
+from presentation.controllers.auth_controller import router as auth_router
 
 from infrastructure.databases.sql.database import SessionLocal
 from domain.events_payload.models import UserEvent
@@ -88,6 +89,11 @@ app.include_router(
     subacc_categories_router,
     prefix="/api/subaccount-categories",
     tags=["SubAccountCategories"],
+)
+
+app.include_router(
+    auth_router,
+    tags=["Auth"],
 )
 
 # ------------------------------
