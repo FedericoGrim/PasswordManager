@@ -1,0 +1,58 @@
+/* Reset generale */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  overflow: hidden;
+  background-color: #e0f0ff;
+  font-family: sans-serif;
+}
+
+.main-layout {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+}
+
+/* Rimosso sidebar, resta solo l'area contenuti */
+.content-area {
+  flex: 1;
+  display: flex;
+  padding: 40px;
+  gap: 0;
+}
+
+.column-fav, .column-menu {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  /* Importante per centrare le griglie orizzontalmente */
+  align-items: center; 
+}
+
+/* IL TUO STILE KEYDEN ORIGINALE */
+.fav-title {
+  font-size: 7rem;
+  font-weight: 900;
+  line-height: 0.95;
+  color: #271d66;
+  text-shadow:
+    1px 0 #271d66, -1px 0 #271d66,
+    0 1px #271d66, 0 -1px #271d66,
+    1px 1px #271d66, -1px -1px #271d66;
+  margin-bottom: 20px;
+  text-align: center;
+}
+
+.divider {
+  width: 10px;
+  height: 85vh;
+  background-color: #4465ad;
+  border-radius: 999px;
+  margin: auto 30px;
+  flex-shrink: 0;
+}

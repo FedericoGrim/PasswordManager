@@ -1,0 +1,72 @@
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+/* BARRA RICERCA: Posizionata in alto */
+.grid-search {
+  color: #271d66;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  width: 100%;
+  padding-left: 10%; /* Allinea l'inizio della barra verso sinistra */
+  margin-bottom: 20px;
+  height: 80px; /* Pareggia visivamente l'altezza del titolo Keyden */
+}
+
+.grid-search input {
+  width: 250px;
+  height: 45px;
+  padding: 0 15px;
+  border-radius: 25px;
+  border: 4px solid #4f6fbf;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.filter-btn, .add-btn {
+  height: 45px;
+  background-color: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 150px);
+  gap: 25px;
+  justify-content: center;
+  margin: auto 0; /* Centra i cubi verticalmente */
+}
+
+.grid-card {
+  background-color: #4f6fbf;
+  color: white;
+  height: 150px;
+  width: 150px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.grid-pagination {
+  margin-top: auto; /* Allineato perfettamente con fav-pagination */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+}

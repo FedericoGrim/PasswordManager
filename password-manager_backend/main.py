@@ -1,10 +1,12 @@
 # main.py
-from fastapi import FastAPI, Response, Request
+from fastapi import Depends, FastAPI, Response, Request, HTTPException
 from fastapi.concurrency import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie # type: ignore[misc]
 from starlette.middleware.base import RequestResponseEndpoint
+from pydantic import BaseModel
+import requests
 
 from config import Container
 from presentation.controllers.user_controller import router as user_router
@@ -15,6 +17,8 @@ from presentation.controllers.categories_controller import router as categories_
 from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
 
 from infrastructure.databases.sql.database import SessionLocal
+from infrastructure.keycloak.jwt_token_autentication import jwt_authentication
+
 from domain.events_payload.models import UserEvent
 
 from dotenv import load_dotenv
@@ -28,6 +32,7 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 DB_NAME = os.getenv("DB_NAME")
 
+
 # ------------------------------
 # FastAPI App
 # ------------------------------
@@ -40,59 +45,72 @@ container.wire(modules=["presentation.controllers.user_controller",
                         "presentation.controllers.sub_account_categories_controller"
                         ])
 
-app = FastAPI()
+app = FastAPI(
+    swagger_ui_init_oauth={
+        "clientId": os.getenv("KEYCLOAK_CLIENT_ID"),
+        "appName": "Keyden Swagger UI",
+        "usePkceWithAuthorizationCodeGrant": True,
+        "scopes": "openid profile email"
+    }
+)
 
+
+class TokenExchangeRequest(BaseModel):
+    code: str
+
+
+@app.post("/auth/token")
+async def exchange_code_for_token(payload: TokenExchangeRequest):
+    keycloak_base = f"http://{os.getenv('KEYCLOAK_HOST')}:{os.getenv('KEYCLOAK_PORT')}/realms/{os.getenv('KEYCLOAK_REALM')}"
+    token_url = f"{keycloak_base}/protocol/openid-connect/token"
+
+    client_id = os.getenv("KEYCLOAK_CLIENT_ID") or ""
+    token_data: dict[str, str] = {
+        "grant_type": "authorization_code",
+        "code": payload.code,
+        "client_id": client_id,
+        "redirect_uri": "http://localhost:3000/auth/callback",
+    }
+
+    # Include secret only when configured as confidential client.
+    client_secret = os.getenv("KEYCLOAK_SECRET")
+    if client_secret:
+        token_data["client_secret"] = client_secret
+
+    try:
+        response = requests.post(token_url, data=token_data, timeout=10)
+        if not response.ok:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"Token exchange failed: {response.text}",
+            )
+
+        token_payload = response.json()
+        return {
+            "token": token_payload.get("id_token") or token_payload.get("access_token"),
+            "access_token": token_payload.get("access_token"),
+            "id_token": token_payload.get("id_token"),
+            "refresh_token": token_payload.get("refresh_token"),
+            "token_type": token_payload.get("token_type"),
+            "expires_in": token_payload.get("expires_in"),
+        }
+    except requests.RequestException as exc:
+        raise HTTPException(status_code=502, detail=f"Keycloak unreachable: {exc}")
+
+# ------------------------------
+# Middlewares DB + Log
+# ------------------------------
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://localhost:3000"], 
+    allow_origins=[
+        "http://localhost:3000", # Frontend React/Vue
+        "http://localhost:8000", # Swagger UI stesso
+    ], 
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
 
-client = AsyncIOMotorClient(os.getenv("MONGO_URI")) # type: ignore[misc]
-container.NoSQL.events().mongo_client.override(client)  # type: ignore[misc]
-app.state.container = container
-
-app.include_router(
-    user_router,
-    prefix="/api/user",
-    tags=["User"],
-)
-
-app.include_router(
-    subaccount_router,
-    prefix="/api/subaccount",
-    tags=["SubAccount"],
-)
-
-app.include_router(
-    team_router,
-    prefix="/api/team",
-    tags=["Team"],
-)
-
-app.include_router(
-    team_members_router,
-    prefix="/api/team-members",
-    tags=["TeamMembers"],
-)
-
-app.include_router(
-    categories_router,
-    prefix="/api/categories",
-    tags=["Categories"],
-)
-
-app.include_router(
-    subacc_categories_router,
-    prefix="/api/subaccount-categories",
-    tags=["SubAccountCategories"],
-)
-
-# ------------------------------
-# Middlewares DB + Log
-# ------------------------------
 @app.middleware("http")
 async def DbSessionMiddleware(request: Request, call_next: RequestResponseEndpoint):
     response = Response("Internal server error", status_code=500)
@@ -111,7 +129,6 @@ async def DbSessionMiddleware(request: Request, call_next: RequestResponseEndpoi
 
     return response
 
-
 @app.middleware("http")
 async def LogExceptionsMiddleware(request: Request, call_next: RequestResponseEndpoint):
     try:
@@ -123,9 +140,62 @@ async def LogExceptionsMiddleware(request: Request, call_next: RequestResponseEn
         traceback.print_exc()
         raise e
 
+# ------------------------------
+# Routers
+# ------------------------------
+
+client = AsyncIOMotorClient(os.getenv("MONGO_URI")) # type: ignore[misc]
+container.NoSQL.events().mongo_client.override(client)  # type: ignore[misc]
+app.state.container = container
+
+app.include_router(
+    user_router,
+    prefix="/api/user",
+    tags=["User"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    subaccount_router,
+    prefix="/api/subaccount",
+    tags=["SubAccount"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    team_router,
+    prefix="/api/team",
+    tags=["Team"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    team_members_router,
+    prefix="/api/team-members",
+    tags=["TeamMembers"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    categories_router,
+    prefix="/api/categories",
+    tags=["Categories"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    subacc_categories_router,
+    prefix="/api/subaccount-categories",
+    tags=["SubAccountCategories"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+# ------------------------------
+# Startup/Shutdown messages
+# ------------------------------
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # --------- STARTUP ---------
     try:
         mongo_uri = os.getenv("MONGO_URI")
         if not mongo_uri:

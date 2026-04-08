@@ -12,10 +12,14 @@ export default function LoginPage() {
       return;
     }
 
+    const keycloakUrl = process.env.NEXT_PUBLIC_KEYCLOAK_URL;
+    const realm = process.env.NEXT_PUBLIC_KEYCLOAK_REALM;
+    const clientId = process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID;
+
     const KeycloakUrl = new URL(
-      "http://localhost:8080/realms/PasswordManager/protocol/openid-connect/auth"
+      `${keycloakUrl}/realms/${realm}/protocol/openid-connect/auth`
     );
-    KeycloakUrl.searchParams.append("client_id", "PasswordManager-frontend");
+    KeycloakUrl.searchParams.append("client_id", clientId || "");
     KeycloakUrl.searchParams.append(
       "redirect_uri",
       "http://localhost:3000/auth/callback"

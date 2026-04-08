@@ -6,6 +6,7 @@ from sqlalchemy.orm import Session
 from config import Container
 from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO
 from infrastructure.databases.sql.database import get_db
+from infrastructure.keycloak.jwt_token_autentication import jwt_authentication
 
 router = APIRouter()
 
@@ -13,24 +14,55 @@ router = APIRouter()
 # -------------------- CREATE --------------------
 @router.post("/")
 async def create_user(
-    user: CreateUserDTO,
     request: Request,
     db: Session = Depends(get_db),
-) -> dict[str, str | UserDTO]:
+    current_user_payload: dict[str, str] = Depends(jwt_authentication) 
+) -> dict[str, str| UserDTO]:
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
+    
+    # Estraiamo il keycloak_id (sub) dal payload del token
+    keycloak_id = current_user_payload.get("sub")
+    
+    # Creiamo il DTO internamente con i dati certi del token
+    try:
+        if not keycloak_id:
+            raise ValueError("keycloak_id not found in token")
+        user_dto = CreateUserDTO(id_keycloak=uuid.UUID(keycloak_id))
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"Invalid user data: {str(e)}")
+    
     create_user_use_case = container.sql.user().CreateUserProvider(
         UserRepository__db=db,
-        event_repository=event_repo,
+        event_repository=container.NoSQL.events().EventRepositoryProvider(),
     )
+    
     try:
-        user = await create_user_use_case.execute(user)
+        user = await create_user_use_case.execute(user_dto)
         return {"message": "User created successfully", "user": user}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
-
 # -------------------- GET --------------------
+@router.get("/me")
+async def get_my_user_data(
+    request: Request,
+    db: Session = Depends(get_db),
+    current_user_payload: dict[str, str] = Depends(jwt_authentication) 
+) -> dict[str, str| UserDTO]:
+    keycloak_id = current_user_payload.get("sub")
+    if not keycloak_id:
+        raise HTTPException(status_code=400, detail="keycloak_id not found in token")
+
+    container: Container = request.app.state.container
+    get_user_use_case = container.sql.user().GetUserByKeycloakIdProvider(
+        UserRepository__db=db
+    )
+
+    try:
+        user = get_user_use_case.execute(uuid.UUID(keycloak_id))
+        return {"message": "User retrieved successfully", "user": user}
+    except Exception as e:
+        raise HTTPException(status_code=404, detail=str(e))
+
 @router.get("/{keycloak_user_id}")
 async def get_user_by_keycloak_id(
     keycloak_user_id: uuid.UUID,

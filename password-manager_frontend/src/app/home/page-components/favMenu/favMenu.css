@@ -1,0 +1,69 @@
+.fav-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+}
+
+.fav-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 150px);
+  gap: 25px;
+  justify-content: center;
+  margin: auto 0; /* Centra i cubi nello spazio tra titolo e paginazione */
+}
+
+.fav-card {
+  background-color: #4f6fbf;
+  color: white;
+  height: 150px;
+  width: 150px;
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1.1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+}
+
+.fav-pagination {
+  margin-top: auto; /* Allineamento al fondo */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 10px;
+}
+
+/* Stili comuni bottoni paginazione */
+.pagination-arrow, .pagination-page {
+  background-color: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: bold;
+}
+
+.pagination-arrow { width: 32px; height: 32px; font-size: 18px; }
+.pagination-page { width: 44px; height: 44px; font-size: 18px; }
+
+.pagination-page.active {
+  background-color: white;
+  color: #2d267a;
+  /* Outline di 3px dello stesso colore dei bottoni non attivi */
+  outline: 3px solid #2d267a;
+  /* Opzionale: crea un piccolo spazio tra il bottone e il contorno */
+  outline-offset: -3px; 
+}
+
+button:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
