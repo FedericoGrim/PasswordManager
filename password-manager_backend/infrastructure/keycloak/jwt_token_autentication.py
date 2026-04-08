@@ -1,12 +1,9 @@
 import os
+from typing import Any
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2AuthorizationCodeBearer
 from jose import jwt, JWTError
 import requests
-from sqlalchemy.orm import Session
-# Importa i tuoi modelli e la logica DB
-from infrastructure.databases.sql.database import get_db 
-from domain.entities.user import User # Il tuo modello SQLAlchemy
 
 # Configurazione (meglio se letta da .env via config.py)
 KEYCLOAK_HOST = os.getenv("KEYCLOAK_HOST") # es. https://auth.tuodominio.it
@@ -33,11 +30,10 @@ def get_keycloak_public_keys():
     return response.json()
 
 async def jwt_authentication(
-    token: str = Depends(oauth2_scheme), 
-    db: Session = Depends(get_db)
-) -> User:
+    token: str = Depends(oauth2_scheme)
+) -> dict[str, Any]:
     """
-    Verifica il token e restituisce l'utente dal database locale.
+    Verifica il token e restituisce il payload JWT.
     """
     credentials_exception = HTTPException(
         status_code=status.HTTP_401_UNAUTHORIZED,
@@ -71,14 +67,4 @@ async def jwt_authentication(
         print(f"JWT Error: {str(e)}")
         raise credentials_exception
 
-    # 4. Cerca l'utente nel tuo Database locale
-    # Assumiamo che nel tuo modello User ci sia un campo 'keycloak_id'
-    user = db.query(User).filter(User.keycloak_id == keycloak_id).first()
-    
-    if user is None:
-        raise HTTPException(
-            status_code=status.HTTP_404_NOT_FOUND,
-            detail="Utente autenticato ma non presente nel database locale"
-        )
-
-    return user
+    return payload

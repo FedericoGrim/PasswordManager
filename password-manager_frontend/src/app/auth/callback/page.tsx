@@ -1,18 +1,23 @@
 "use client";
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { extractSubFromToken } from "@/utils/jwtUtils";
-import { createMainUser, getMainUserByKeycloakId } from "@/api/apis";
+import { createMainUser, getMainUserMe } from "@/api/apis";
 
 export default function CallbackPage() {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const hasRunRef = useRef(false);
 
   useEffect(() => {
+    if (hasRunRef.current) {
+      return;
+    }
+    hasRunRef.current = true;
+
     const exchangeCodeForToken = async () => {
       try {
         const code = searchParams.get("code");
-        const state = searchParams.get("state");
 
         if (!code) {
           console.error("Nessun codice ricevuto da Keycloak");
@@ -51,12 +56,18 @@ export default function CallbackPage() {
             sessionStorage.setItem("keycloakId", sub);
 
             try {
-              const existingUser = await getMainUserByKeycloakId(sub);
+              const existingUser = await getMainUserMe();
+
               if (existingUser) {
-                console.log("Utente già presente nel backend", existingUser);
+                console.log("Utente già esistente, recuperato con successo dopo il login");
               } else {
-                await createMainUser(sub);
-                console.log("Utente creato con successo nel backend");
+                await createMainUser();
+                console.log("Utente creato con successo dopo il login");
+
+                const createdUser = await getMainUserMe();
+                if (!createdUser) {
+                  throw new Error("Utente non trovato anche dopo la creazione");
+                }
               }
             } catch (error) {
               console.error("Errore durante il controllo / creazione dell'utente:", error);

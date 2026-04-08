@@ -1,10 +1,12 @@
 # main.py
-from fastapi import Depends, FastAPI, Response, Request
+from fastapi import Depends, FastAPI, Response, Request, HTTPException
 from fastapi.concurrency import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
 from beanie import init_beanie # type: ignore[misc]
 from starlette.middleware.base import RequestResponseEndpoint
+from pydantic import BaseModel
+import requests
 
 from config import Container
 from presentation.controllers.user_controller import router as user_router
@@ -51,6 +53,49 @@ app = FastAPI(
         "scopes": "openid profile email"
     }
 )
+
+
+class TokenExchangeRequest(BaseModel):
+    code: str
+
+
+@app.post("/auth/token")
+async def exchange_code_for_token(payload: TokenExchangeRequest):
+    keycloak_base = f"http://{os.getenv('KEYCLOAK_HOST')}:{os.getenv('KEYCLOAK_PORT')}/realms/{os.getenv('KEYCLOAK_REALM')}"
+    token_url = f"{keycloak_base}/protocol/openid-connect/token"
+
+    client_id = os.getenv("KEYCLOAK_CLIENT_ID") or ""
+    token_data: dict[str, str] = {
+        "grant_type": "authorization_code",
+        "code": payload.code,
+        "client_id": client_id,
+        "redirect_uri": "http://localhost:3000/auth/callback",
+    }
+
+    # Include secret only when configured as confidential client.
+    client_secret = os.getenv("KEYCLOAK_SECRET")
+    if client_secret:
+        token_data["client_secret"] = client_secret
+
+    try:
+        response = requests.post(token_url, data=token_data, timeout=10)
+        if not response.ok:
+            raise HTTPException(
+                status_code=response.status_code,
+                detail=f"Token exchange failed: {response.text}",
+            )
+
+        token_payload = response.json()
+        return {
+            "token": token_payload.get("id_token") or token_payload.get("access_token"),
+            "access_token": token_payload.get("access_token"),
+            "id_token": token_payload.get("id_token"),
+            "refresh_token": token_payload.get("refresh_token"),
+            "token_type": token_payload.get("token_type"),
+            "expires_in": token_payload.get("expires_in"),
+        }
+    except requests.RequestException as exc:
+        raise HTTPException(status_code=502, detail=f"Keycloak unreachable: {exc}")
 
 # ------------------------------
 # Middlewares DB + Log

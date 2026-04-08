@@ -1,28 +1,30 @@
 import axiosClient from './axiosClient';
+import axios from 'axios';
 import { mainUser } from './entities/mainUser';
 import { subAccount } from './entities/subAccount';
 import { UUID } from 'crypto';
 
 axiosClient.defaults.headers.common['Content-Type'] = 'application/json';
 
-const createMainUser = async (KeycloakId: string): Promise<void> => {
+const createMainUser = async (): Promise<void> => {
     try {
-        await axiosClient.post('/api/user/', {
-            id_keycloak: KeycloakId
-        });
+        await axiosClient.post('/api/user/'); 
     } catch (error) {
         console.error('Error creating main user:', error);
         throw error;
     }
 }
 
-const getMainUserByKeycloakId = async (keycloak_user_id: string): Promise<mainUser | null> => {
+const getMainUserMe = async (): Promise<mainUser | null> => {
     try {
-        const response = await axiosClient.get(`/api/user/${keycloak_user_id}`);
+        const response = await axiosClient.get('/api/user/me');
         return response.data.user as mainUser;
     } catch (error) {
-        console.error('Error fetching main user:', error);
-        return null;
+        if (axios.isAxiosError(error) && error.response?.status === 404) {
+            return null;
+        }
+        console.error('Error fetching user data:', error);
+        throw error;
     }
 };
 
@@ -62,13 +64,9 @@ const createSubAccount = async (UserId: string, SubAccount: subAccount): Promise
     }
 }
 
-
-const getSubAccountsByUserId = async (userId: UUID): Promise<subAccount[]> => {
+const getMySubAccounts = async (): Promise<subAccount[]> => {
   try {
-    const response = await axiosClient.get(`/api/subaccount/${userId}`, {
-      params: { userId }
-    });
-    console.log(response.data);
+    const response = await axiosClient.get('/api/subaccount/');
     return response.data.subaccounts as subAccount[];
   } catch (error) {
     console.error("Error fetching sub accounts:", error);
@@ -106,11 +104,11 @@ const deleteSubAccount = async (subaccount_id: UUID): Promise<void> => {
 
 export {
     createMainUser,
-    getMainUserByKeycloakId,
+    getMainUserMe,
     updateMainUser,
     deleteMainUser,
     createSubAccount,
-    getSubAccountsByUserId,
+    getMySubAccounts,
     updateSubAccount,
     deleteSubAccount
 };
