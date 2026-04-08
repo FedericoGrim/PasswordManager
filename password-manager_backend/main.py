@@ -1,5 +1,5 @@
 # main.py
-from fastapi import FastAPI, Response, Request
+from fastapi import Depends, FastAPI, Response, Request
 from fastapi.concurrency import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -13,9 +13,10 @@ from presentation.controllers.team_controller import router as team_router
 from presentation.controllers.team_members_controller import router as team_members_router
 from presentation.controllers.categories_controller import router as categories_router
 from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
-from presentation.controllers.auth_controller import router as auth_router
 
 from infrastructure.databases.sql.database import SessionLocal
+from infrastructure.keycloak.jwt_token_autentication import jwt_authentication
+
 from domain.events_payload.models import UserEvent
 
 from dotenv import load_dotenv
@@ -29,6 +30,7 @@ DB_HOST = os.getenv("DB_HOST")
 DB_PORT = os.getenv("DB_PORT")
 DB_NAME = os.getenv("DB_NAME")
 
+
 # ------------------------------
 # FastAPI App
 # ------------------------------
@@ -41,64 +43,29 @@ container.wire(modules=["presentation.controllers.user_controller",
                         "presentation.controllers.sub_account_categories_controller"
                         ])
 
-app = FastAPI()
-
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["http://localhost:3000"], 
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
-
-client = AsyncIOMotorClient(os.getenv("MONGO_URI")) # type: ignore[misc]
-container.NoSQL.events().mongo_client.override(client)  # type: ignore[misc]
-app.state.container = container
-
-app.include_router(
-    user_router,
-    prefix="/api/user",
-    tags=["User"],
-)
-
-app.include_router(
-    subaccount_router,
-    prefix="/api/subaccount",
-    tags=["SubAccount"],
-)
-
-app.include_router(
-    team_router,
-    prefix="/api/team",
-    tags=["Team"],
-)
-
-app.include_router(
-    team_members_router,
-    prefix="/api/team-members",
-    tags=["TeamMembers"],
-)
-
-app.include_router(
-    categories_router,
-    prefix="/api/categories",
-    tags=["Categories"],
-)
-
-app.include_router(
-    subacc_categories_router,
-    prefix="/api/subaccount-categories",
-    tags=["SubAccountCategories"],
-)
-
-app.include_router(
-    auth_router,
-    tags=["Auth"],
+app = FastAPI(
+    swagger_ui_init_oauth={
+        "clientId": os.getenv("KEYCLOAK_CLIENT_ID"),
+        "appName": "Keyden Swagger UI",
+        "usePkceWithAuthorizationCodeGrant": True,
+        "scopes": "openid profile email"
+    }
 )
 
 # ------------------------------
 # Middlewares DB + Log
 # ------------------------------
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:3000", # Frontend React/Vue
+        "http://localhost:8000", # Swagger UI stesso
+    ], 
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 @app.middleware("http")
 async def DbSessionMiddleware(request: Request, call_next: RequestResponseEndpoint):
     response = Response("Internal server error", status_code=500)
@@ -117,7 +84,6 @@ async def DbSessionMiddleware(request: Request, call_next: RequestResponseEndpoi
 
     return response
 
-
 @app.middleware("http")
 async def LogExceptionsMiddleware(request: Request, call_next: RequestResponseEndpoint):
     try:
@@ -129,9 +95,62 @@ async def LogExceptionsMiddleware(request: Request, call_next: RequestResponseEn
         traceback.print_exc()
         raise e
 
+# ------------------------------
+# Routers
+# ------------------------------
+
+client = AsyncIOMotorClient(os.getenv("MONGO_URI")) # type: ignore[misc]
+container.NoSQL.events().mongo_client.override(client)  # type: ignore[misc]
+app.state.container = container
+
+app.include_router(
+    user_router,
+    prefix="/api/user",
+    tags=["User"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    subaccount_router,
+    prefix="/api/subaccount",
+    tags=["SubAccount"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    team_router,
+    prefix="/api/team",
+    tags=["Team"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    team_members_router,
+    prefix="/api/team-members",
+    tags=["TeamMembers"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    categories_router,
+    prefix="/api/categories",
+    tags=["Categories"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+app.include_router(
+    subacc_categories_router,
+    prefix="/api/subaccount-categories",
+    tags=["SubAccountCategories"],
+    dependencies=[Depends(jwt_authentication)]
+)
+
+# ------------------------------
+# Startup/Shutdown messages
+# ------------------------------
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    # --------- STARTUP ---------
     try:
         mongo_uri = os.getenv("MONGO_URI")
         if not mongo_uri:
