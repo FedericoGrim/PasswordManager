@@ -1,149 +1,180 @@
-/* --- SIDEBAR GENERALE --- */
+@import url("./../../app/globals.css");
+
+/* ==========================================================================
+   1. CONTENITORE PRINCIPALE (SIDEBAR)
+   ========================================================================== */
 .sidebar {
+  /* Layout */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  flex-shrink: 0;
+
+  /* Posizionamento e Dimensioni */
   height: 90vh;
-  width: 8rem;
-  background-color: #4465ad;
-  border-radius: 2.5rem;
+  width: 13.5vh;
+  margin: auto 0 auto 4vh; /* Top, Right, Bottom, Left */
+  padding: 4vh 0;
+
+  /* Estetica */
+  background-color: var(--medium-blue);
+  border-radius: 4.5vh;
+}
+
+/* Sottogruppi interni per gestire la distribuzione delle icone */
+.sidebar-top-group,
+.sidebar-bottom-group {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2.5rem 0;
-  gap: 2.25rem;
-  margin-left: 2.5rem;
-  margin-top: auto;
-  margin-bottom: auto;
-  flex-shrink: 0;
+  width: 100%;
 }
 
-/* --- LOGO --- */
+.sidebar-top-group {
+  gap: 4vh;
+}
+
+/* ==========================================================================
+   2. ELEMENTI DELLA LOGO
+   ========================================================================== */
 .logo-container {
-  width: 6rem;
-  height: 9rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 1.5rem;
+
+  width: 12vh;
+  height: 16vh;
+
+  border-radius: 45vh;
   transition: all 0.3s ease;
 }
 
 .logo-container:hover {
-  background-color: #4e6cac;
-  /* Unifichiamo anche il logo con lo stesso stile di contorno */
+  background-color: var(--medium-blue);
   filter: 
-    drop-shadow(4px 0 0 #271d66) 
-    drop-shadow(-4px 0 0 #271d66) 
-    drop-shadow(0 4px 0 #271d66) 
-    drop-shadow(0 -4px 0 #271d66);
+    drop-shadow(4px 0 0 var(--darkest-blue)) 
+    drop-shadow(-4px 0 0 var(--darkest-blue)) 
+    drop-shadow(0 4px 0 var(--darkest-blue)) 
+    drop-shadow(0 -4px 0 var(--darkest-blue));
 }
 
-/* --- ICONE (Base per tutti i bottoni) --- */
-.icon, .arrow-icon {
-  width: 2.5rem;
-  height: 2.5rem;
-  color: #271d66;
+/* ==========================================================================
+   3. BOTTONI E ICONE (BASE)
+   ========================================================================== */
+.icon-button, 
+.menu-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 10vh;
+  height: 10vh;
+  border: none;
+  border-radius: 999px;
+
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-/* --- STILE UNIFICATO PER TUTTI I BOTTONI (Semplici e con Freccia) --- */
+.icon, 
+.arrow-icon {
+  width: 5vh;
+  height: 5vh;
+  color: var(--darkest-blue);
+}
 
-/* Applichiamo il filtro al container per i tasti con freccia 
-   e direttamente al bottone per quelli semplici */
+/* ==========================================================================
+   4. MENU A TENDINA E FRECCE (LOGICA COMPLESSA)
+   ========================================================================== */
+
+/* Contenitore per allineare bottone + freccia laterale */
+.menu-button-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  
+  width: 10vh;
+  height: 10vh;
+  transition: all 0.3s ease;
+}
+
+/* La freccia bianca che spunta di lato */
+.menu-arrow {
+  position: absolute;
+  z-index: 1;
+  top: 50%;
+  right: -4vh;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  width: 6vh;
+  height: 5vh;
+  border-radius: 1rem;
+  background-color: white;
+  
+  transition: all 0.3s ease;
+}
+
+/* Il menu a comparsa vero e proprio */
+.dropdown-menu {
+  position: absolute;
+  z-index: 100;
+  top: 50%;
+  left: 12vh;
+  transform: translateY(-50%);
+
+  min-width: 13.5rem;
+  padding: 1.25rem;
+
+  background-color: white;
+  border: 6px solid #4465ad;
+  border-radius: 1.25rem;
+  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
+}
+
+.dropdown-link {
+  display: block;
+  margin-bottom: 1rem;
+  padding: 1rem;
+
+  background-color: #4465ad;
+  color: white;
+  text-decoration: none;
+  border-radius: 1rem;
+  
+  transition: background-color 0.2s;
+}
+
+.dropdown-link:last-child { 
+  margin-bottom: 0; 
+}
+
+/* ==========================================================================
+   5. STATI HOVER (RAGGRUPPATI PER FUNZIONE)
+   ========================================================================== */
+
+/* Effetto ombra (Glow/Border simulato) */
 .icon-button:hover,
 .menu-button-container:hover {
   filter: 
-    drop-shadow(4px 0 0 #271d66) 
-    drop-shadow(-4px 0 0 #271d66) 
-    drop-shadow(0 4px 0 #271d66) 
-    drop-shadow(0 -4px 0 #271d66);
+    drop-shadow(4px 0 0 var(--darkest-blue)) 
+    drop-shadow(-4px 0 0 var(--darkest-blue)) 
+    drop-shadow(0 4px 0 var(--darkest-blue)) 
+    drop-shadow(0 -4px 0 var(--darkest-blue));
 }
 
-/* Cambio colore sfondo all'hover per tutti */
+/* Cambio colore sfondo al passaggio del mouse */
 .icon-button:hover,
 .menu-button-container:hover .menu-button,
 .menu-button-container:hover .menu-arrow {
   background-color: #e7e7e7;
 }
 
-/* --- PULSANTI ICONA SEMPLICI --- */
-.icon-button {
-  width: 5.5rem;
-  height: 5.5rem;
-  background-color: white;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  border: none;
-}
-
-/* --- PULSANTI CON FRECCETTA --- */
-.menu-button-container {
-  position: relative;
-  width: 5.5rem;
-  height: 5.5rem;
-  display: flex;
-  align-items: center;
-  transition: all 0.3s ease;
-}
-
-.menu-button {
-  width: 100%;
-  height: 100%;
-  background-color: white;
-  border-radius: 9999px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  z-index: 2;
-}
-
-.menu-arrow {
-  position: absolute;
-  top: 50%;
-  right: -2.4rem;
-  transform: translateY(-50%);
-  width: 3.75rem;
-  height: 3rem;
-  background-color: white;
-  border-radius: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.3s ease;
-  z-index: 1;
-}
-
-/* --- DROPDOWN --- */
-.dropdown-menu {
-  position: absolute;
-  top: 50%;
-  left: 9.5rem; /* Aumentato leggermente per non toccare il drop-shadow */
-  transform: translateY(-50%);
-  border-radius: 1.25rem;
-  box-shadow: 0 8px 16px rgba(0,0,0,0.25);
-  padding: 1.25rem;
-  min-width: 13.5rem;
-  background-color: white;
-  border: 6px solid #4465ad;
-  z-index: 100;
-}
-
-.dropdown-link {
-  display: block;
-  background-color: #4465ad;
-  color: white;
-  border-radius: 1rem;
-  padding: 1rem;
-  text-decoration: none;
-  margin-bottom: 1rem;
-  transition: background-color 0.2s;
-}
-
 .dropdown-link:hover {
-  background-color: #271d66;
+  background-color: var(--darkest-blue);
 }
-
-.dropdown-link:last-child { margin-bottom: 0; }

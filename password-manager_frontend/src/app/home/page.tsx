@@ -18,7 +18,7 @@ export default function Home() {
       <section className="content-area">
         {/* 2. COLONNA SINISTRA: Titolo + Preferiti */}
         <div className="column-fav">
-          <h1 className={`fav-title ${poppins.className}`}>KEYDEN</h1>
+          <h1 className={`title ${poppins.className}`}>KEYDEN</h1>
           <FavMenu />
         </div>
 

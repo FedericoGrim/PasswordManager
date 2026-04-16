@@ -1,43 +1,56 @@
 .fav-container {
+  background-color: red;
   display: flex;
   flex-direction: column;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
+  padding: 20px; /* Spazio interno per non far toccare i bordi ai box */
 }
 
 .fav-grid {
   display: grid;
-  grid-template-columns: repeat(2, 150px);
-  gap: 25px;
-  justify-content: center;
-  margin: auto 0; /* Centra i cubi nello spazio tra titolo e paginazione */
+  /* repeat(2, 1fr) divide lo spazio disponibile in 2 colonne uguali */
+  grid-template-columns: repeat(2, 1fr); 
+  gap: 3vh; /* Gap basato sull'altezza della viewport per scalare col browser */
+  width: 100%;
+  max-width: 500px; /* Opzionale: evita che i box diventino giganti su schermi enormi */
+  margin: auto; /* Centra la griglia verticalmente e orizzontalmente */
 }
 
 .fav-card {
   background-color: #4f6fbf;
   color: white;
-  height: 150px;
-  width: 150px;
+  
+  /* Rimuoviamo width e height fisse in px */
+  width: 15vh; 
+  aspect-ratio: 1 / 1; /* Forza il box a rimanere un quadrato perfetto */
+  
   border-radius: 15px;
   border: none;
   cursor: pointer;
   font-weight: 900;
-  font-size: 1.1rem;
+  
+  /* Font size fluido basato sulla larghezza del contenitore o della viewport */
+  font-size: clamp(0.8rem, 2vh, 1.2rem); 
+  
   display: flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
+  padding: 10px;
+  text-align: center;
 }
 
 .fav-pagination {
-  margin-top: auto; /* Allineamento al fondo */
+  margin-top: auto; 
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
-  padding-bottom: 10px;
+  padding-bottom: 20px;
+  flex-shrink: 0; /* Impedisce alla paginazione di schiacciarsi */
 }
-
 /* Stili comuni bottoni paginazione */
 .pagination-arrow, .pagination-page {
   background-color: #2d267a;
