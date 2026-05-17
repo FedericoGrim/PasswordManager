@@ -3,18 +3,19 @@
   flex-direction: column;
   height: 100%;
   width: 100%;
+  box-sizing: border-box;
+  /* Se vuoi uno sfondo esterno diverso dal bianco del box, impostalo qui */
 }
 
-/* BARRA RICERCA: Posizionata in alto */
+/* BARRA RICERCA: Rimane in alto */
 .grid-search {
   color: #271d66;
   display: flex;
   gap: 15px;
   align-items: center;
   width: 100%;
-  padding-left: 10%; /* Allinea l'inizio della barra verso sinistra */
-  margin-bottom: 20px;
-  height: 80px; /* Pareggia visivamente l'altezza del titolo Keyden */
+  padding: 20px 0 20px 10%; 
+  box-sizing: border-box;
 }
 
 .grid-search input {
@@ -38,35 +39,83 @@
   cursor: pointer;
 }
 
+/* BOX BIANCO CENTRALE: Contiene la griglia */
 .grid {
   display: grid;
-  grid-template-columns: repeat(4, 150px);
-  gap: 25px;
-  justify-content: center;
-  margin: auto 0; /* Centra i cubi verticalmente */
+  /* Definisce 2 colonne uguali */
+  grid-template-columns: repeat(2, 1fr); 
+  
+  /* Aumentiamo il gap per dare respiro alle card più grandi */
+  gap: 30px;
+
+  background-color: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  margin: auto; 
+  
+  /* Raddoppiamo la larghezza massima per ospitare card più grandi */
+  width: 76%;
+  max-height: 66%;
+  box-sizing: border-box;
 }
 
+/* CARD: Fluide e proporzionali */
 .grid-card {
   background-color: #4f6fbf;
   color: white;
-  height: 150px;
-  width: 150px;
+  width: 100%;
+  
+  /* Se vuoi che siano rettangolari e non quadrati giganti: */
+  aspect-ratio: 2 / 1; 
+  
   border-radius: 15px;
   border: none;
   cursor: pointer;
+  
+  /* Aumentiamo il font per proporzione */
+  font-size: 1.4rem; 
   font-weight: 900;
-  font-size: 1rem;
+  
   display: flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s ease;
 }
 
+.grid-card:hover {
+  transform: scale(1.03);
+}
+
+/* PAGINAZIONE: In fondo */
 .grid-pagination {
-  margin-top: auto; /* Allineato perfettamente con fav-pagination */
+  margin-top: auto; 
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
-  padding-bottom: 10px;
+  padding: 20px 0;
+}
+
+/* Stili comuni per i bottoni paginazione (coerenti con il precedente) */
+.pagination-arrow, .pagination-page {
+  background-color: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pagination-page.active {
+  background-color: white;
+  color: #2d267a;
+  outline: 3px solid #2d267a;
+  outline-offset: -3px; 
 }

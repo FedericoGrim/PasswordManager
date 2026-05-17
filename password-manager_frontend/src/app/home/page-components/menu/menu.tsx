@@ -3,7 +3,7 @@
 import { useMemo, useState } from "react";
 import "./menu.css";
 
-const ITEMS_PER_PAGE = 12;
+const ITEMS_PER_PAGE = 6;
 
 type GridItem = {
   id: number;

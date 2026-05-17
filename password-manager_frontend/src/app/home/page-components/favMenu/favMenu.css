@@ -1,82 +1,88 @@
 .fav-container {
-  background-color: red;
   display: flex;
   flex-direction: column;
-  height: 100%;
+  height: 100vh; /* O 100% a seconda del genitore */
   width: 100%;
   box-sizing: border-box;
-  padding: 20px; /* Spazio interno per non far toccare i bordi ai box */
+  padding: 20px;
 }
 
 .fav-grid {
+  /* Layout a 2 colonne */
   display: grid;
-  /* repeat(2, 1fr) divide lo spazio disponibile in 2 colonne uguali */
-  grid-template-columns: repeat(2, 1fr); 
-  gap: 3vh; /* Gap basato sull'altezza della viewport per scalare col browser */
-  width: 100%;
-  max-width: 500px; /* Opzionale: evita che i box diventino giganti su schermi enormi */
-  margin: auto; /* Centra la griglia verticalmente e orizzontalmente */
+  grid-template-columns: repeat(1, 1fr); 
+  gap: 20px;
+
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  margin: auto; 
+  width: fit-content; 
+  /* Aumentiamo il max-width per non tagliare le card su schermi piccoli */
+  max-width: 95%; 
 }
 
 .fav-card {
   background-color: #4f6fbf;
   color: white;
   
-  /* Rimuoviamo width e height fisse in px */
-  width: 15vh; 
-  aspect-ratio: 1 / 1; /* Forza il box a rimanere un quadrato perfetto */
+  /* ALTEZZA INVARIATA: 16.25vh */
+  /* LARGHEZZA RADDOPPIATA: 32.5vh */
+  width: 32.5vh;  
+  height: 16.25vh;
   
-  border-radius: 15px;
+  /* Rimosso aspect-ratio perché non è più un quadrato */
+  
+  border-radius: 12px;
   border: none;
   cursor: pointer;
   font-weight: 900;
-  
-  /* Font size fluido basato sulla larghezza del contenitore o della viewport */
-  font-size: clamp(0.8rem, 2vh, 1.2rem); 
+  font-size: 1rem; /* Leggermente aumentato per le nuove dimensioni */
   
   display: flex;
   align-items: center;
   justify-content: center;
   text-transform: uppercase;
-  padding: 10px;
+  padding: 15px;
   text-align: center;
+  transition: all 0.2s ease;
+}
+
+.fav-card:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
 }
 
 .fav-pagination {
-  margin-top: auto; 
+  margin-top: 20px; /* Spazio tra il box bianco e la paginazione */
   display: flex;
   justify-content: center;
   align-items: center;
   gap: 12px;
   padding-bottom: 20px;
-  flex-shrink: 0; /* Impedisce alla paginazione di schiacciarsi */
 }
-/* Stili comuni bottoni paginazione */
+
+/* --- Paginazione (come prima) --- */
 .pagination-arrow, .pagination-page {
   background-color: #2d267a;
   color: white;
   border: none;
   border-radius: 8px;
+  width: 36px;
+  height: 36px;
   cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   font-weight: bold;
 }
-
-.pagination-arrow { width: 32px; height: 32px; font-size: 18px; }
-.pagination-page { width: 44px; height: 44px; font-size: 18px; }
 
 .pagination-page.active {
   background-color: white;
   color: #2d267a;
-  /* Outline di 3px dello stesso colore dei bottoni non attivi */
   outline: 3px solid #2d267a;
-  /* Opzionale: crea un piccolo spazio tra il bottone e il contorno */
   outline-offset: -3px; 
 }
 
 button:disabled {
-  opacity: 0.4;
-  cursor: not-allowed;
+  opacity: 0.3;
 }

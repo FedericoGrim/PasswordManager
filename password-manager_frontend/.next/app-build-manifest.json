@@ -1,14 +1,29 @@
 {
   "pages": {
-    "/home/page": [
+    "/_not-found/page": [
       "static/chunks/[root-of-the-server]__40fbfa5c._.css",
-      "static/chunks/a7338_9bad9b26._.js",
+      "static/chunks/a7338_d0054e83._.js",
       "static/chunks/password-manager_frontend_src_Components_Sidebar_Sidebar_tsx_e56265a1._.js",
       "static/chunks/password-manager_frontend_src_app_layout_tsx_d821c5b9._.js",
-      "static/chunks/a7338_next_dist_client_components_builtin_global-error_c801f4f7.js",
+      "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_ad539236._.js",
+      "static/chunks/a7338_next_dist_compiled_react-dom_dcdf2a51._.js",
+      "static/chunks/a7338_next_dist_compiled_next-devtools_index_e264c59a.js",
+      "static/chunks/a7338_next_dist_compiled_68b847e6._.js",
+      "static/chunks/a7338_next_dist_client_4c2762bd._.js",
+      "static/chunks/a7338_next_dist_47fb2792._.js",
+      "static/chunks/a7338_@swc_helpers_cjs_ce0d3899._.js",
+      "static/chunks/password-manager_frontend_a0ff3932._.js",
+      "static/chunks/turbopack-password-manager_frontend_96dde969._.js"
+    ],
+    "/home/page": [
+      "static/chunks/[root-of-the-server]__40fbfa5c._.css",
+      "static/chunks/a7338_d0054e83._.js",
+      "static/chunks/password-manager_frontend_src_Components_Sidebar_Sidebar_tsx_e56265a1._.js",
+      "static/chunks/password-manager_frontend_src_app_layout_tsx_d821c5b9._.js",
+      "static/chunks/a7338_next_dist_client_components_builtin_global-error_108f9a87.js",
       "static/chunks/[root-of-the-server]__1687fdd9._.css",
       "static/chunks/[root-of-the-server]__b60a0c8f._.js",
-      "static/chunks/password-manager_frontend_src_app_home_page_tsx_c801f4f7._.js",
+      "static/chunks/password-manager_frontend_src_app_home_page_tsx_108f9a87._.js",
       "static/chunks/[turbopack]_browser_dev_hmr-client_hmr-client_ts_ad539236._.js",
       "static/chunks/a7338_next_dist_compiled_react-dom_dcdf2a51._.js",
       "static/chunks/a7338_next_dist_compiled_next-devtools_index_e264c59a.js",

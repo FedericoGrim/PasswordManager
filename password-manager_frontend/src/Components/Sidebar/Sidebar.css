@@ -43,20 +43,11 @@
   align-items: center;
   justify-content: center;
 
-  width: 12vh;
+  width: 10vh;
   height: 16vh;
 
   border-radius: 45vh;
   transition: all 0.3s ease;
-}
-
-.logo-container:hover {
-  background-color: var(--medium-blue);
-  filter: 
-    drop-shadow(4px 0 0 var(--darkest-blue)) 
-    drop-shadow(-4px 0 0 var(--darkest-blue)) 
-    drop-shadow(0 4px 0 var(--darkest-blue)) 
-    drop-shadow(0 -4px 0 var(--darkest-blue));
 }
 
 /* ==========================================================================
