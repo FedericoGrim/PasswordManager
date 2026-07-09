@@ -17,10 +17,8 @@ async def CreateCategory(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     create_category_use_case = container.sql.categories().CreateCategoriesProvider(
         CategoriesRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:
@@ -60,10 +58,8 @@ async def UpdateCategoryById(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     update_category_use_case = container.sql.categories().UpdateCategoryByIdProvider(
         CategoriesRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:
@@ -85,10 +81,8 @@ async def DeleteCategory(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     delete_category_use_case = container.sql.categories().DeleteCategoryByIdProvider(
         CategoriesRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:

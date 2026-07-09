@@ -18,10 +18,8 @@ async def ApiCreateTeam(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     create_team_use_case = container.sql.team().CreateTeamProvider(
         TeamRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:
@@ -77,10 +75,8 @@ async def ApiUpdateTeam(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamDTO]:
     container: Container = request.app.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     update_team_use_case = container.sql.team().UpdateTeamByIdProvider(
         TeamRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:
@@ -99,10 +95,8 @@ async def ApiDeleteTeam(
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
     container: Container = request.app.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     delete_team_use_case = container.sql.team().DeleteTeamByIdProvider(
         TeamRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:

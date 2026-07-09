@@ -18,5 +18,17 @@ docs/**/_build/
 docs/**/.doctrees/
 docs/**/.sphinx/
 
+# --- Testing / linting ---
+.pytest_cache/
+.coverage
+htmlcov/
+.mypy_cache/
+.ruff_cache/
+
+# --- Packaging ---
+*.egg-info/
+build/
+dist/
+
 # --- Logs ---
 *.log

@@ -17,10 +17,8 @@ async def api_add_member_to_team(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     add_member_use_case = container.sql.team_members().AddMemberToTeamProvider(
         TeamMembersRepository__db=db,
-        event_repository=event_repo
     )
 
     try:
@@ -74,10 +72,8 @@ async def api_update_team_member_role(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     update_role_use_case = container.sql.team_members().UpdateTeamMemberRoleProvider(
         TeamMembersRepository__db=db,
-        event_repository=event_repo
     )
 
     try:
@@ -95,10 +91,8 @@ async def api_remove_member_from_team(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     remove_member_use_case = container.sql.team_members().RemoveMemberFromTeamProvider(
         TeamMembersRepository__db=db,
-        event_repository=event_repo
     )
 
     try:

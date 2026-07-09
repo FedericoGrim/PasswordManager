@@ -2,7 +2,7 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from config import SQLContainer, NoSQLContainer
+    from config import SQLContainer
 
 from dependency_injector import containers, providers
 
@@ -58,8 +58,6 @@ from application.use_case.sub_account_categories_use_case import (
     GetAllCategoriesBySubAccountIdUseCase,
     DeleteSubAccountCategoryUseCase,
 )
-
-from infrastructure.databases.nosql.events_mongoDB import EventRepository
 
 
 # ------------------- sql Containers -------------------
@@ -196,11 +194,6 @@ class SubAccountCategoriesContainer(containers.DeclarativeContainer):
         DeleteSubAccountCategoryUseCase,
         SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
     )
-# ------------------- NoSQL Container -------------------
-class EventsContainer(containers.DeclarativeContainer):
-    mongo_client = providers.Dependency()
-    EventRepositoryProvider = providers.Factory(EventRepository, mongo_client=mongo_client)
-
 
 # ------------------- Aggregated Containers -------------------
 class SQLContainer(containers.DeclarativeContainer):
@@ -212,11 +205,6 @@ class SQLContainer(containers.DeclarativeContainer):
     sub_account_categories = providers.Container(SubAccountCategoriesContainer)
 
 
-class NoSQLContainer(containers.DeclarativeContainer):
-    events = providers.Container(EventsContainer)
-
-
 class Container(containers.DeclarativeContainer):
     sql: SQLContainer = providers.Container(SQLContainer)  # type: ignore[assignment]
-    NoSQL: NoSQLContainer = providers.Container(NoSQLContainer)  # type: ignore[assignment]
 

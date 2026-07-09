@@ -15,10 +15,8 @@ async def CreateSubAccauntCategory(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     create_subacc_category_use_case = container.sql.sub_account_categories().CreateSubAccountCategoryProvider(
         SubAccountCategoriesRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:

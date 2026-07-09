@@ -1,9 +1,6 @@
 # main.py
 from fastapi import FastAPI, Response, Request
-from fastapi.concurrency import asynccontextmanager
 from fastapi.middleware.cors import CORSMiddleware
-from motor.motor_asyncio import AsyncIOMotorClient
-from beanie import init_beanie # type: ignore[misc]
 from starlette.middleware.base import RequestResponseEndpoint
 
 from config import Container
@@ -15,7 +12,6 @@ from presentation.controllers.categories_controller import router as categories_
 from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
 
 from infrastructure.databases.sql.database import SessionLocal
-from domain.events_payload.models import UserEvent
 
 from dotenv import load_dotenv
 import os
@@ -50,8 +46,6 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-client = AsyncIOMotorClient(os.getenv("MONGO_URI")) # type: ignore[misc]
-container.NoSQL.events().mongo_client.override(client)  # type: ignore[misc]
 app.state.container = container
 
 app.include_router(
@@ -122,30 +116,3 @@ async def LogExceptionsMiddleware(request: Request, call_next: RequestResponseEn
         import traceback
         traceback.print_exc()
         raise e
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    # --------- STARTUP ---------
-    try:
-        mongo_uri = os.getenv("MONGO_URI")
-        if not mongo_uri:
-            print("⚠️  MONGO_URI not set in .env")
-        else:
-            print(f"🔌 Connecting to MongoDB at {mongo_uri}...")
-            client = AsyncIOMotorClient(mongo_uri, serverSelectionTimeoutMS=5000)  # type: ignore[misc]
-            db = client.get_database(os.getenv("MONGO_DB_NAME"))  # type: ignore[misc]
-            
-            await db.command("ping")
-            print("✅ MongoDB connected successfully")
-            
-            await init_beanie(database=db, document_models=[UserEvent])  # type: ignore[misc]
-            print("✅ Beanie initialized successfully")
-
-    except Exception as e:
-        print(f"❌ MongoDB initialization failed: {str(e)}")
-        print("⚠️  Events will not be saved. Check your MONGO_URI in .env")
-
-    yield  # l'app gira qui
-
-    # --------- SHUTDOWN ---------
-    print("🔌 Shutting down...")

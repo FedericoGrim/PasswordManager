@@ -18,10 +18,8 @@ async def create_user(
     db: Session = Depends(get_db),
 ) -> dict[str, str | UserDTO]:
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     create_user_use_case = container.sql.user().CreateUserProvider(
         UserRepository__db=db,
-        event_repository=event_repo,
     )
     try:
         user = await create_user_use_case.execute(user)
@@ -57,10 +55,8 @@ async def update_user_by_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     update_user_use_case = container.sql.user().UpdateUserByIdProvider(
         UserRepository__db=db,
-        event_repository=event_repo,
     )
     try:
         updated = await update_user_use_case.execute(user_id, new_user)
@@ -79,10 +75,8 @@ async def delete_user_by_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     delete_user_use_case = container.sql.user().DeleteUserByIdProvider(
         UserRepository__db=db,
-        event_repository=event_repo,
     )
     try:
         deleted = await delete_user_use_case.execute(user_id)

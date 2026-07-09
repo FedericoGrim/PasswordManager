@@ -17,10 +17,8 @@ async def CreateSubAccount(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     create_subaccount_use_case = container.sql.subaccount().CreateSubAccountProvider(
         SubAccountRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:
@@ -72,10 +70,8 @@ async def UpdateSubAccountById(
     db: Session = Depends(get_db), 
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     update_subaccount_use_case = container.sql.subaccount().UpdateSubAccountByIdProvider(
         SubAccountRepository__db=db,
-        EventRepository=event_repo
     )
 
     try:
@@ -92,10 +88,8 @@ async def DeleteSubAccount(
     db: Session = Depends(get_db), 
 ):
     container: Container = request.app.state.container
-    event_repo = container.NoSQL.events().EventRepositoryProvider()
     delete_subaccount_use_case = container.sql.subaccount().DeleteSubAccountByIdProvider(
         SubAccountRepository__db=db,
-        EventRepository=event_repo
     )
 
     delete_dto = DeleteSubAccountDTO(id=subaccount_id)

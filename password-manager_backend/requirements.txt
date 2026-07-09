@@ -14,9 +14,6 @@ uvicorn
 #SQL DB
 SQLAlchemy
 
-#NoSQL DB
-beanie
-
 #Injection
 dependency_injector
 
@@ -30,5 +27,3 @@ alembic
 #Docs
 sphinx
 sphinx-autobuild
-
-motor

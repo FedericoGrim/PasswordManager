@@ -1,33 +1,18 @@
 import uuid
 
-from application.use_case.publisher import EventPublisher
 from application.exceptions.team_member_use_case_exceptions import *
 from domain.interfaces.team_member_service_interface import ITeamMembersService
-from domain.interfaces.events_mongoDB_interface import IEventsMongoDB
 
 from application.dto.team_member_dto import TeamMemberDTO, CreateTeamMemberDTO, UpdateTeamMemberDTO, RemoveTeamMemberDTO
 
 class AddMemberToTeamUseCase:
-    def __init__(self, TeamMembersRepository: ITeamMembersService, event_repository: IEventsMongoDB):
+    def __init__(self, TeamMembersRepository: ITeamMembersService):
         self.team_members_repository = TeamMembersRepository
-        self.event_repository = event_repository
 
     def execute(self, interactor_id: uuid.UUID, new_member: CreateTeamMemberDTO) -> TeamMemberDTO:
         try:
             team_member = self.team_members_repository.add_member_to_team(new_member.to_entity())
 
-            if self.event_repository:
-                publisher = EventPublisher(self.event_repository)
-                publisher.publish(
-                    event_type="TeamMemberAdded",
-                    payload={
-                        "member_id": str(team_member.member_id),
-                        "team_id": str(team_member.team_id),
-                        "role": team_member.role
-                    },
-                    user_id=interactor_id
-                )
-            
             return TeamMemberDTO(
                 id=uuid.UUID(str(team_member.id)),
                 user_id=uuid.UUID(str(team_member.user_id)),
@@ -73,26 +58,13 @@ class GetTeamMembersByTeamIdUseCase:
             raise TeamMembersRetrievalByTeamIdException(str(e)) from e
 
 class UpdateTeamMemberRoleUseCase:
-    def __init__(self, TeamMembersRepository: ITeamMembersService, event_repository: IEventsMongoDB):
+    def __init__(self, TeamMembersRepository: ITeamMembersService):
         self.team_members_repository = TeamMembersRepository
-        self.event_repository = event_repository
 
     def execute(self, interactor_id: uuid.UUID, new_user_data: UpdateTeamMemberDTO) -> TeamMemberDTO:
         try:
             updated_member = self.team_members_repository.update_member_role(new_user_data.to_entity(self.team_members_repository.get_team_member_by_id(new_user_data.user_id)))
 
-            if self.event_repository:
-                publisher = EventPublisher(self.event_repository)
-                publisher.publish(
-                    event_type="TeamMemberRoleUpdated",
-                    payload={
-                        "member_id": str(updated_member.id),
-                        "team_id": str(updated_member.team_id),
-                        "new_role": new_user_data.role
-                    },
-                    user_id=interactor_id
-                )
-            
             return TeamMemberDTO(
                 id=uuid.UUID(str(updated_member.id)),
                 user_id=uuid.UUID(str(updated_member.user_id)),
@@ -104,9 +76,8 @@ class UpdateTeamMemberRoleUseCase:
             raise TeamMemberRoleUpdateException(str(e)) from e
         
 class RemoveMemberFromTeamUseCase:
-    def __init__(self, TeamMembersRepository: ITeamMembersService, event_repository: IEventsMongoDB):
+    def __init__(self, TeamMembersRepository: ITeamMembersService):
         self.team_members_repository = TeamMembersRepository
-        self.event_repository = event_repository
 
     def execute(self, user_interactor: uuid.UUID, user_to_delete: RemoveTeamMemberDTO) -> dict[str, str]:
         try:
@@ -115,17 +86,6 @@ class RemoveMemberFromTeamUseCase:
                 team_id=user_to_delete.team_id
             )
 
-            if self.event_repository:
-                publisher = EventPublisher(self.event_repository)
-                publisher.publish(
-                    event_type="TeamMemberRemoved",
-                    payload={
-                        "member_id": str(user_to_delete.member_id),
-                        "team_id": str(user_to_delete.team_id)
-                    },
-                    user_id=user_interactor
-                )
-            
             return removal_result
         
         except Exception as e:
