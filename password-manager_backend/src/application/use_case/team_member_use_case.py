@@ -1,9 +1,9 @@
 import uuid
 
 from application.exceptions.team_member_use_case_exceptions import *
-from domain.interfaces.team_member_service_interface import ITeamMembersService
-
 from application.dto.team_member_dto import TeamMemberDTO, CreateTeamMemberDTO, UpdateTeamMemberDTO, RemoveTeamMemberDTO
+
+from domain.interfaces.team_member_service_interface import ITeamMembersService
 
 class AddMemberToTeamUseCase:
     def __init__(self, TeamMembersRepository: ITeamMembersService):

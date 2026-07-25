@@ -4,7 +4,9 @@ from sqlalchemy.orm import Session
 
 
 from config import Container
+
 from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO
+
 from infrastructure.databases.database import get_db
 
 router = APIRouter()
@@ -27,7 +29,6 @@ async def create_user(
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
-
 # -------------------- GET --------------------
 @router.get("/{keycloak_user_id}")
 async def get_user_by_keycloak_id(
@@ -44,7 +45,6 @@ async def get_user_by_keycloak_id(
         return {"message": "User retrieved successfully", "user": user}
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
-
 
 # -------------------- UPDATE --------------------
 @router.put("/{user_id}")
@@ -65,7 +65,6 @@ async def update_user_by_id(
         raise HTTPException(status_code=400, detail="User update failed")
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
-
 
 # -------------------- DELETE --------------------
 @router.delete("/{user_id}")

@@ -4,6 +4,10 @@ from sqlalchemy import pool
 from alembic import context
 from dotenv import load_dotenv
 import os
+import sys
+
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
+
 from domain.entities.base import Base
 
 config = context.config

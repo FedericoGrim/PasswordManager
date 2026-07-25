@@ -7,6 +7,7 @@ from presentation.controllers.user_controller import router as user_router
 from presentation.controllers.sub_account_controller import router as subaccount_router
 from presentation.controllers.team_controller import router as team_router
 from presentation.controllers.team_members_controller import router as team_members_router
+from presentation.controllers.user_teams_keys_controller import router as user_teams_keys_router
 from presentation.controllers.categories_controller import router as categories_router
 from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
 
@@ -31,6 +32,7 @@ container.wire(modules=["presentation.controllers.user_controller",
                         "presentation.controllers.sub_account_controller", 
                         "presentation.controllers.team_controller",
                         "presentation.controllers.team_members_controller",
+                        "presentation.controllers.user_teams_keys_controller",
                         "presentation.controllers.categories_controller",
                         "presentation.controllers.sub_account_categories_controller"
                         ])
@@ -69,6 +71,12 @@ app.include_router(
     team_members_router,
     prefix="/api/team-members",
     tags=["TeamMembers"],
+)
+
+app.include_router(
+    user_teams_keys_router,
+    prefix="/api/user-teams-keys",
+    tags=["UserTeamsKeys"],
 )
 
 app.include_router(

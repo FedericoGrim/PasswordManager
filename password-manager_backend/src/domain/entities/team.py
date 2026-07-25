@@ -1,11 +1,13 @@
-from sqlalchemy import Column, String, UUID
 import uuid
+
+from sqlalchemy import String, UUID
+from sqlalchemy.orm import Mapped, mapped_column
 
 from domain.entities.base import Base
 
 class Team(Base):
     __tablename__ = 'teams'
 
-    id = Column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    name = Column(String, unique=True, nullable=False)
-    salt_argon = Column(String, nullable=False)
+    id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
+    name: Mapped[str] = mapped_column(String, unique=True, nullable=False)
+    salt_argon: Mapped[str] = mapped_column(String, nullable=False)

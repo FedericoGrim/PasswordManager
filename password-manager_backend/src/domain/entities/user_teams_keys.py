@@ -4,13 +4,16 @@ from sqlalchemy import String, ForeignKey, UUID
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from domain.entities.base import Base
+from domain.entities.user import User
 from domain.entities.team import Team
 
-class Categories(Base):
-    __tablename__ = "categories"
+class UserTeamsKeys(Base):
+    __tablename__ = "user_teams_keys"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
+    user_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("users.id", ondelete="CASCADE"), nullable=False)
     team_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("teams.id", ondelete="CASCADE"), nullable=False)
-    name: Mapped[str] = mapped_column(String(100), nullable=False)
+    key: Mapped[str] = mapped_column(String, nullable=False)
 
-    Team: Mapped[Team] = relationship("Team", backref="categories")
+    User: Mapped[User] = relationship("User", backref="user_teams_keys")
+    Team: Mapped[Team] = relationship("Team", backref="user_teams_keys")

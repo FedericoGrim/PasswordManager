@@ -6,23 +6,24 @@ if TYPE_CHECKING:
 
 from dependency_injector import containers, providers
 
-from src.infrastructure.databases.user_postgreSQL import UserService
-from src.infrastructure.databases.suc_account_postgreSQL import SubAccountService
-from src.infrastructure.databases.team_postgreSQL import TeamService
-from src.infrastructure.databases.team_member_postgreSQL import TeamMembersService
-from src.infrastructure.databases.categories_postgresql import CategoriesService
-from src.infrastructure.databases.sub_account_categories_postgresql import SubAccountCategoriesService
+from infrastructure.databases.user_postgreSQL import UserService
+from infrastructure.databases.suc_account_postgreSQL import SubAccountService
+from infrastructure.databases.team_postgreSQL import TeamService
+from infrastructure.databases.team_member_postgreSQL import TeamMembersService
+from infrastructure.databases.user_teams_keys_postgreSQL import UserTeamsKeysService
+from infrastructure.databases.categories_postgresql import CategoriesService
+from infrastructure.databases.sub_account_categories_postgresql import SubAccountCategoriesService
 
 
 
-from src.application.use_case.user_use_case import (
+from application.use_case.user_use_case import (
     CreateUserUseCase,
     GetUserByKeycloakIdUseCase,
     UpdateUserByIdUseCase,
     DeleteUserByIdUseCase,
 )
 
-from src.application.use_case.sub_account_use_case import (
+from application.use_case.sub_account_use_case import (
     CreateSubAccountUseCase,
     GetSubAccountByIdUseCase,
     GetAllSubAccountsByTeamIdUseCase,
@@ -30,7 +31,7 @@ from src.application.use_case.sub_account_use_case import (
     DeleteSubAccountByIdUseCase,
 )
 
-from src.application.use_case.team_use_case import (
+from application.use_case.team_use_case import (
     CreateTeamUseCase,
     GetTeamByIdUseCase,
     GetTeamsByUserIdUseCase,
@@ -38,7 +39,7 @@ from src.application.use_case.team_use_case import (
     DeleteTeamByIdUseCase,
 )
 
-from src.application.use_case.team_member_use_case import (
+from application.use_case.team_member_use_case import (
     AddMemberToTeamUseCase,
     GetTeamMemberByIdUseCase,
     GetTeamMembersByTeamIdUseCase,
@@ -46,14 +47,23 @@ from src.application.use_case.team_member_use_case import (
     RemoveMemberFromTeamUseCase
 )
 
-from src.application.use_case.categories_use_case import (
+from application.use_case.user_teams_keys_use_case import (
+    AddUserTeamsKeyUseCase,
+    GetUserTeamsKeyByIdUseCase,
+    GetUserTeamsKeysByTeamIdUseCase,
+    GetUserTeamsKeysByUserIdUseCase,
+    UpdateUserTeamsKeyUseCase,
+    RemoveUserTeamsKeyUseCase
+)
+
+from application.use_case.categories_use_case import (
     CreateCategoriesUseCase,
     GetAllCategoriesByTeamIdUseCase,
     UpdateCategoryByIdUseCase,
     DeleteCategoryByIdUseCase,
 )
 
-from src.application.use_case.sub_account_categories_use_case import (
+from application.use_case.sub_account_categories_use_case import (
     CreateSubAccountCategoryUseCase,
     GetAllCategoriesBySubAccountIdUseCase,
     DeleteSubAccountCategoryUseCase,
@@ -158,6 +168,38 @@ class TeamMembersContainer(containers.DeclarativeContainer):
         TeamMembersRepository=TeamMembersRepositoryFactory,
     )
 
+class UserTeamsKeysContainer(containers.DeclarativeContainer):
+    UserTeamsKeysRepositoryFactory = providers.Factory(UserTeamsKeysService, db=providers.Dependency())
+
+    AddUserTeamsKeyProvider = providers.Factory(
+        AddUserTeamsKeyUseCase,
+        UserTeamsKeysRepository=UserTeamsKeysRepositoryFactory,
+    )
+
+    GetUserTeamsKeyByIdProvider = providers.Factory(
+        GetUserTeamsKeyByIdUseCase,
+        UserTeamsKeysRepository=UserTeamsKeysRepositoryFactory,
+    )
+
+    GetUserTeamsKeysByTeamIdProvider = providers.Factory(
+        GetUserTeamsKeysByTeamIdUseCase,
+        UserTeamsKeysRepository=UserTeamsKeysRepositoryFactory,
+    )
+
+    GetUserTeamsKeysByUserIdProvider = providers.Factory(
+        GetUserTeamsKeysByUserIdUseCase,
+        UserTeamsKeysRepository=UserTeamsKeysRepositoryFactory,
+    )
+
+    UpdateUserTeamsKeyProvider = providers.Factory(
+        UpdateUserTeamsKeyUseCase,
+        UserTeamsKeysRepository=UserTeamsKeysRepositoryFactory,
+    )
+    RemoveUserTeamsKeyProvider = providers.Factory(
+        RemoveUserTeamsKeyUseCase,
+        UserTeamsKeysRepository=UserTeamsKeysRepositoryFactory,
+    )
+
 class CategoriesContainer(containers.DeclarativeContainer):
     CategoriesRepositoryFactory = providers.Factory(CategoriesService, db=providers.Dependency())
 
@@ -201,6 +243,7 @@ class SQLContainer(containers.DeclarativeContainer):
     subaccount = providers.Container(SubAccountContainer)
     team = providers.Container(TeamContainer)
     team_members = providers.Container(TeamMembersContainer)
+    user_teams_keys = providers.Container(UserTeamsKeysContainer)
     categories = providers.Container(CategoriesContainer)
     sub_account_categories = providers.Container(SubAccountCategoriesContainer)
 

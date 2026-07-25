@@ -1,5 +1,4 @@
 from application.dto.categories_dto import *
-
 from application.exceptions.categories_use_case_exceptions import *
 
 from domain.interfaces.icategories import ICategoriesService

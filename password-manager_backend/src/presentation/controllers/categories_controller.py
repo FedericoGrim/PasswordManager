@@ -1,9 +1,11 @@
 from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 import uuid
+
 from config import Container
 
 from infrastructure.databases.database import get_db
+
 from application.dto.categories_dto import CreateCategoryDTO, UpdateCategoryDTO
 
 router = APIRouter()

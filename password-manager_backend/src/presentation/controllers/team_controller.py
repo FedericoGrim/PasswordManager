@@ -3,7 +3,9 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 
 from config import Container
+
 from application.dto.team_dto import TeamDTO, CreateTeamDTO, UpdateTeamDTO, DeleteTeamDTO
+
 from infrastructure.databases.database import get_db
 
 router = APIRouter()
