@@ -4,7 +4,7 @@ from sqlalchemy.orm import Session
 
 from config import Container
 from application.dto.team_dto import TeamDTO, CreateTeamDTO, UpdateTeamDTO, DeleteTeamDTO
-from infrastructure.databases.sql.database import get_db
+from infrastructure.databases.database import get_db
 
 router = APIRouter()
 
@@ -18,7 +18,7 @@ async def ApiCreateTeam(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.container
-    create_team_use_case = container.sql.team().CreateTeamProvider(
+    create_team_use_case = container.team().CreateTeamProvider(
         TeamRepository__db=db,
     )
 
@@ -37,7 +37,7 @@ async def ApiGetTeamById(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamDTO]:
     container: Container = request.app.container
-    get_team_use_case = container.sql.team().GetTeamByIdProvider(
+    get_team_use_case = container.team().GetTeamByIdProvider(
         TeamRepository__db=db
     )
 
@@ -55,7 +55,7 @@ async def ApiGetTeamsByUserId(
     db: Session = Depends(get_db),
 ) -> dict[str, str | list[TeamDTO]]:
     container: Container = request.app.container
-    get_teams_use_case = container.sql.team().GetTeamsByUserIdProvider(
+    get_teams_use_case = container.team().GetTeamsByUserIdProvider(
         TeamRepository__db=db
     )
 
@@ -75,7 +75,7 @@ async def ApiUpdateTeam(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamDTO]:
     container: Container = request.app.container
-    update_team_use_case = container.sql.team().UpdateTeamByIdProvider(
+    update_team_use_case = container.team().UpdateTeamByIdProvider(
         TeamRepository__db=db,
     )
 
@@ -95,7 +95,7 @@ async def ApiDeleteTeam(
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
     container: Container = request.app.container
-    delete_team_use_case = container.sql.team().DeleteTeamByIdProvider(
+    delete_team_use_case = container.team().DeleteTeamByIdProvider(
         TeamRepository__db=db,
     )
 

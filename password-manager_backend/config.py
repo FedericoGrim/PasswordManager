@@ -6,23 +6,23 @@ if TYPE_CHECKING:
 
 from dependency_injector import containers, providers
 
-from infrastructure.databases.sql.user_postgreSQL import UserService
-from infrastructure.databases.sql.suc_account_postgreSQL import SubAccountService
-from infrastructure.databases.sql.team_postgreSQL import TeamService
-from infrastructure.databases.sql.team_member_postgreSQL import TeamMembersService
-from infrastructure.databases.sql.categories_postgresql import CategoriesService
-from infrastructure.databases.sql.sub_account_categories_postgresql import SubAccountCategoriesService
+from src.infrastructure.databases.user_postgreSQL import UserService
+from src.infrastructure.databases.suc_account_postgreSQL import SubAccountService
+from src.infrastructure.databases.team_postgreSQL import TeamService
+from src.infrastructure.databases.team_member_postgreSQL import TeamMembersService
+from src.infrastructure.databases.categories_postgresql import CategoriesService
+from src.infrastructure.databases.sub_account_categories_postgresql import SubAccountCategoriesService
 
 
 
-from application.use_case.user_use_case import (
+from src.application.use_case.user_use_case import (
     CreateUserUseCase,
     GetUserByKeycloakIdUseCase,
     UpdateUserByIdUseCase,
     DeleteUserByIdUseCase,
 )
 
-from application.use_case.sub_account_use_case import (
+from src.application.use_case.sub_account_use_case import (
     CreateSubAccountUseCase,
     GetSubAccountByIdUseCase,
     GetAllSubAccountsByTeamIdUseCase,
@@ -30,7 +30,7 @@ from application.use_case.sub_account_use_case import (
     DeleteSubAccountByIdUseCase,
 )
 
-from application.use_case.team_use_case import (
+from src.application.use_case.team_use_case import (
     CreateTeamUseCase,
     GetTeamByIdUseCase,
     GetTeamsByUserIdUseCase,
@@ -38,7 +38,7 @@ from application.use_case.team_use_case import (
     DeleteTeamByIdUseCase,
 )
 
-from application.use_case.team_member_use_case import (
+from src.application.use_case.team_member_use_case import (
     AddMemberToTeamUseCase,
     GetTeamMemberByIdUseCase,
     GetTeamMembersByTeamIdUseCase,
@@ -46,14 +46,14 @@ from application.use_case.team_member_use_case import (
     RemoveMemberFromTeamUseCase
 )
 
-from application.use_case.categories_use_case import (
+from src.application.use_case.categories_use_case import (
     CreateCategoriesUseCase,
     GetAllCategoriesByTeamIdUseCase,
     UpdateCategoryByIdUseCase,
     DeleteCategoryByIdUseCase,
 )
 
-from application.use_case.sub_account_categories_use_case import (
+from src.application.use_case.sub_account_categories_use_case import (
     CreateSubAccountCategoryUseCase,
     GetAllCategoriesBySubAccountIdUseCase,
     DeleteSubAccountCategoryUseCase,

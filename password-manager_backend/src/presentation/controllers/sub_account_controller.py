@@ -4,7 +4,7 @@ import uuid
 from pydantic import UUID4
 from config import Container
 
-from infrastructure.databases.sql.database import get_db
+from infrastructure.databases.database import get_db
 from application.dto.sub_account_dto import CreateSubAccountDTO, UpdateSubAccountDTO, SubAccountDTO, DeleteSubAccountDTO
 
 router = APIRouter()
@@ -17,7 +17,7 @@ async def CreateSubAccount(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.state.container
-    create_subaccount_use_case = container.sql.subaccount().CreateSubAccountProvider(
+    create_subaccount_use_case = container.subaccount().CreateSubAccountProvider(
         SubAccountRepository__db=db,
     )
 
@@ -35,7 +35,7 @@ async def GetSubAccountById(
     db: Session = Depends(get_db), 
 ) -> dict[str, str | SubAccountDTO]:
     container: Container = request.app.state.container
-    get_subaccount_use_case = container.sql.subaccount().GetSubAccountByIdProvider(
+    get_subaccount_use_case = container.subaccount().GetSubAccountByIdProvider(
         SubAccountRepository__db=db,
     )
 
@@ -52,7 +52,7 @@ async def GetAllSubAccountsByTeamId(
     db: Session = Depends(get_db), 
 ) -> dict[str, str | list[SubAccountDTO]]:
     container: Container = request.app.state.container
-    get_subaccounts_use_case = container.sql.subaccount().GetAllSubAccountsByTeamIdProvider(
+    get_subaccounts_use_case = container.subaccount().GetAllSubAccountsByTeamIdProvider(
         SubAccountRepository__db=db,
     )
 
@@ -70,7 +70,7 @@ async def UpdateSubAccountById(
     db: Session = Depends(get_db), 
 ):
     container: Container = request.app.state.container
-    update_subaccount_use_case = container.sql.subaccount().UpdateSubAccountByIdProvider(
+    update_subaccount_use_case = container.subaccount().UpdateSubAccountByIdProvider(
         SubAccountRepository__db=db,
     )
 
@@ -88,7 +88,7 @@ async def DeleteSubAccount(
     db: Session = Depends(get_db), 
 ):
     container: Container = request.app.state.container
-    delete_subaccount_use_case = container.sql.subaccount().DeleteSubAccountByIdProvider(
+    delete_subaccount_use_case = container.subaccount().DeleteSubAccountByIdProvider(
         SubAccountRepository__db=db,
     )
 

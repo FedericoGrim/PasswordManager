@@ -1,4 +1,3 @@
-# main.py
 from fastapi import FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import RequestResponseEndpoint
@@ -11,7 +10,7 @@ from presentation.controllers.team_members_controller import router as team_memb
 from presentation.controllers.categories_controller import router as categories_router
 from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
 
-from infrastructure.databases.sql.database import SessionLocal
+from infrastructure.databases.database import SessionLocal
 
 from dotenv import load_dotenv
 import os

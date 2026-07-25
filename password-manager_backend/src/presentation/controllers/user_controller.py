@@ -5,7 +5,7 @@ from sqlalchemy.orm import Session
 
 from config import Container
 from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO
-from infrastructure.databases.sql.database import get_db
+from infrastructure.databases.database import get_db
 
 router = APIRouter()
 
@@ -13,17 +13,17 @@ router = APIRouter()
 # -------------------- CREATE --------------------
 @router.post("/")
 async def create_user(
-    user: CreateUserDTO,
+    user_data: CreateUserDTO,
     request: Request,
     db: Session = Depends(get_db),
 ) -> dict[str, str | UserDTO]:
     container: Container = request.app.state.container
-    create_user_use_case = container.sql.user().CreateUserProvider(
+    create_user_use_case = container.user().CreateUserProvider(
         UserRepository__db=db,
     )
     try:
-        user = await create_user_use_case.execute(user)
-        return {"message": "User created successfully", "user": user}
+        created_user: UserDTO = await create_user_use_case.execute(user_data)
+        return {"message": "User created successfully", "user": created_user}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -36,7 +36,7 @@ async def get_user_by_keycloak_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str| UserDTO]:
     container: Container = request.app.state.container
-    get_user_use_case = container.sql.user().GetUserByKeycloakIdProvider(
+    get_user_use_case = container.user().GetUserByKeycloakIdProvider(
         UserRepository__db=db
     )
     try:
@@ -55,7 +55,7 @@ async def update_user_by_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
     container: Container = request.app.state.container
-    update_user_use_case = container.sql.user().UpdateUserByIdProvider(
+    update_user_use_case = container.user().UpdateUserByIdProvider(
         UserRepository__db=db,
     )
     try:
@@ -75,7 +75,7 @@ async def delete_user_by_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
     container: Container = request.app.state.container
-    delete_user_use_case = container.sql.user().DeleteUserByIdProvider(
+    delete_user_use_case = container.user().DeleteUserByIdProvider(
         UserRepository__db=db,
     )
     try:

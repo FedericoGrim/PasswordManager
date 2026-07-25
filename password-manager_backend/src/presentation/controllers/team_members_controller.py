@@ -3,7 +3,7 @@ from fastapi import APIRouter, HTTPException, Depends, Request
 from sqlalchemy.orm import Session
 
 from config import Container
-from infrastructure.databases.sql.database import get_db
+from infrastructure.databases.database import get_db
 from application.dto.team_member_dto import TeamMemberDTO, CreateTeamMemberDTO, UpdateTeamMemberDTO, RemoveTeamMemberDTO
 
 router = APIRouter()
@@ -17,7 +17,7 @@ async def api_add_member_to_team(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
-    add_member_use_case = container.sql.team_members().AddMemberToTeamProvider(
+    add_member_use_case = container.team_members().AddMemberToTeamProvider(
         TeamMembersRepository__db=db,
     )
 
@@ -35,7 +35,7 @@ async def api_get_team_member_by_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
-    get_member_use_case = container.sql.team_members().GetTeamMemberByIdProvider(
+    get_member_use_case = container.team_members().GetTeamMemberByIdProvider(
         TeamMembersRepository__db=db
     )
 
@@ -53,7 +53,7 @@ async def api_get_team_members_by_team_id(
     db: Session = Depends(get_db),
 ) -> dict[str, str | list[TeamMemberDTO]]:
     container: Container = request.app.state.container
-    get_members_use_case = container.sql.team_members().GetTeamMembersByTeamIdProvider(
+    get_members_use_case = container.team_members().GetTeamMembersByTeamIdProvider(
         TeamMembersRepository__db=db
     )
 
@@ -72,7 +72,7 @@ async def api_update_team_member_role(
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamMemberDTO]:
     container: Container = request.app.state.container
-    update_role_use_case = container.sql.team_members().UpdateTeamMemberRoleProvider(
+    update_role_use_case = container.team_members().UpdateTeamMemberRoleProvider(
         TeamMembersRepository__db=db,
     )
 
@@ -91,7 +91,7 @@ async def api_remove_member_from_team(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.state.container
-    remove_member_use_case = container.sql.team_members().RemoveMemberFromTeamProvider(
+    remove_member_use_case = container.team_members().RemoveMemberFromTeamProvider(
         TeamMembersRepository__db=db,
     )
 

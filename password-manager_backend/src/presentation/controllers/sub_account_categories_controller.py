@@ -4,7 +4,7 @@ import uuid
 from config import Container
 
 from application.dto.sub_account_categories_dto import *
-from infrastructure.databases.sql.database import get_db
+from infrastructure.databases.database import get_db
 
 router = APIRouter()
 
@@ -15,7 +15,7 @@ async def CreateSubAccauntCategory(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    create_subacc_category_use_case = container.sql.sub_account_categories().CreateSubAccountCategoryProvider(
+    create_subacc_category_use_case = container.sub_account_categories().CreateSubAccountCategoryProvider(
         SubAccountCategoriesRepository__db=db,
     )
 
@@ -34,7 +34,7 @@ async def GetAllCategoriesBySubAccountId(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    get_subacc_categories_use_case = container.sql.sub_account_categories().GetAllCategoriesBySubAccountIdProvider(
+    get_subacc_categories_use_case = container.sub_account_categories().GetAllCategoriesBySubAccountIdProvider(
         SubAccountCategoriesRepository__db=db,
     )
 
@@ -52,7 +52,7 @@ async def DeleteSubAccauntCategory(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    delete_subacc_category_use_case = container.sql.sub_account_categories().DeleteSubAccountCategoryProvider(
+    delete_subacc_category_use_case = container.sub_account_categories().DeleteSubAccountCategoryProvider(
         SubAccountCategoriesRepository__db=db,
     )
 

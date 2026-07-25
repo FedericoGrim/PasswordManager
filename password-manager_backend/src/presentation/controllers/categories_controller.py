@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 import uuid
 from config import Container
 
-from infrastructure.databases.sql.database import get_db
+from infrastructure.databases.database import get_db
 from application.dto.categories_dto import CreateCategoryDTO, UpdateCategoryDTO
 
 router = APIRouter()
@@ -17,7 +17,7 @@ async def CreateCategory(
     db: Session = Depends(get_db),
 ):
     container: Container = request.app.state.container
-    create_category_use_case = container.sql.categories().CreateCategoriesProvider(
+    create_category_use_case = container.categories().CreateCategoriesProvider(
         CategoriesRepository__db=db,
     )
 
@@ -38,7 +38,7 @@ async def GetAllCategoriesByTeamId(
     db: Session = Depends(get_db), 
 ):
     container: Container = request.app.state.container
-    get_categories_use_case = container.sql.categories().GetAllCategoriesByTeamIdProvider(
+    get_categories_use_case = container.categories().GetAllCategoriesByTeamIdProvider(
         CategoriesRepository__db=db,
     )
 
@@ -58,7 +58,7 @@ async def UpdateCategoryById(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    update_category_use_case = container.sql.categories().UpdateCategoryByIdProvider(
+    update_category_use_case = container.categories().UpdateCategoryByIdProvider(
         CategoriesRepository__db=db,
     )
 
@@ -81,7 +81,7 @@ async def DeleteCategory(
     db: Session = Depends(get_db)
 ):
     container: Container = request.app.state.container
-    delete_category_use_case = container.sql.categories().DeleteCategoryByIdProvider(
+    delete_category_use_case = container.categories().DeleteCategoryByIdProvider(
         CategoriesRepository__db=db,
     )
 
