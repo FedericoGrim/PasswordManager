@@ -1,0 +1,12 @@
+#!/bin/bash
+# Runs once, only on first cluster initialization (empty data dir), via
+# postgres's official docker-entrypoint-initdb.d mechanism. Creates a
+# dedicated database + role for Keycloak alongside the app's own database,
+# so this single dev Postgres instance can serve both.
+set -euo pipefail
+
+psql -v ON_ERROR_STOP=1 --username "$POSTGRES_USER" --dbname "$POSTGRES_DB" <<-EOSQL
+    CREATE USER "${KC_DB_USER}" WITH PASSWORD '${KC_DB_PASSWORD}';
+    CREATE DATABASE "${KC_DB_NAME}" OWNER "${KC_DB_USER}";
+    GRANT ALL PRIVILEGES ON DATABASE "${KC_DB_NAME}" TO "${KC_DB_USER}";
+EOSQL

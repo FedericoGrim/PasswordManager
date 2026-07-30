@@ -1,2 +1,6 @@
 # Auto detect text files and perform LF normalization
 * text=auto
+
+# Shell scripts must keep LF endings — a CRLF shebang breaks `exec` in
+# Linux containers (e.g. the backend's start.sh via Docker COPY).
+*.sh text eol=lf

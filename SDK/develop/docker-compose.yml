@@ -1,0 +1,59 @@
+# Local dev infra: a single Postgres instance (app DB + Keycloak DB) and
+# Keycloak. `pm_dev_network` is published with a fixed name so the app's
+# root docker-compose.yml (backend) can join it as an external network and
+# reach this "db" service by name — start this stack first.
+services:
+  db:
+    image: postgres:16
+    container_name: pm_dev_db
+    environment:
+      POSTGRES_USER: ${DB_USER:-PostgresUser}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-PostgresPassword}
+      POSTGRES_DB: ${DB_NAME:-postgres}
+      KC_DB_USER: ${KC_DB_USER:-keycloak}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD:-keycloak}
+      KC_DB_NAME: ${KC_DB_NAME:-keycloak}
+    volumes:
+      - pm_dev_db_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d:ro
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pm_dev_network
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: pm_dev_keycloak
+    command: start-dev
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/${KC_DB_NAME:-keycloak}
+      KC_DB_USERNAME: ${KC_DB_USER:-keycloak}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD:-keycloak}
+      KEYCLOAK_ADMIN: ${KC_ADMIN_USER:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD:-admin}
+    ports:
+      - "8080:8080"
+    volumes:
+      - pm_dev_keycloak_data:/opt/keycloak/data
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - pm_dev_network
+    restart: unless-stopped
+
+networks:
+  pm_dev_network:
+    name: pm_dev_network
+    driver: bridge
+
+volumes:
+  pm_dev_db_data:
+  pm_dev_keycloak_data:

@@ -8,5 +8,8 @@ Thumbs.db
 # --- Allow .env.example files ---
 !.env.example
 
+# --- SDK compose env files (secrets) ---
+SDK/**/.env
+
 # --- draw.io backup/lock files ---
 .$*.bkp
