@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { keycloakFactory, hasRoleAccess } from './keycloakClient';
 
-const withAuth = (Component: React.ComponentType, requiredRole: string) => {
-  const AuthenticatedComponent = (props: any) => {
+const withAuth = <P extends object>(Component: React.ComponentType<P>, requiredRole: string) => {
+  const AuthenticatedComponent = (props: P) => {
     const router = useRouter();
     const [isAuthenticated, setIsAuthenticated] = useState<boolean>(false);
 

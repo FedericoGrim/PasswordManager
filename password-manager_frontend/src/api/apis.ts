@@ -1,5 +1,4 @@
 import axiosClient from './axiosClient';
-import { keycloakFactory } from './keycloakClient';
 import { mainUser } from './entities/mainUser';
 import { subAccount } from './entities/subAccount';
 import { UUID } from 'crypto';

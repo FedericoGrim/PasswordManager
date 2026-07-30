@@ -1,7 +1,5 @@
-import { env } from 'next-runtime-env';
-
-const getEnvVar = (key: string, fallbackValue: string | undefined) => {
-  return (env('NEXT_PUBLIC_' + key) || fallbackValue)!;
+const getEnvVar = (_key: string, fallbackValue: string | undefined) => {
+  return fallbackValue!;
 }
 
 const getIntEnvVar = (key: string, fallbackValue: string | undefined) => {
