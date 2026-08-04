@@ -1,15 +1,22 @@
 import uuid
 
-from sqlalchemy import UUID, LargeBinary
+from sqlalchemy import UUID, LargeBinary, String, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column
 
 from domain.entities.base import Base
+from domain.generate_user_code import USER_CODE_LENGTH
 
 class User(Base):
     __tablename__ = 'users'
+    __table_args__ = (
+        UniqueConstraint('username', 'code', name='uq_users_username_code'),
+    )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
     id_keycloak: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4)
+
+    username: Mapped[str] = mapped_column(String, nullable=False)
+    code: Mapped[str] = mapped_column(String(USER_CODE_LENGTH), nullable=False)
 
     public_key: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
     private_key: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)

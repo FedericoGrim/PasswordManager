@@ -5,6 +5,7 @@ from application.exceptions.user_use_Case_exceptions import *
 
 from domain.interfaces.user_service_interface import IUserService
 from domain.generate_pbk_pvk import generate_keypair
+from domain.generate_user_code import generate_user_code
 
 class CreateUserUseCase:
     def __init__(self, UserRepository: IUserService):
@@ -14,6 +15,7 @@ class CreateUserUseCase:
         try:
             user_entity = user_create.to_entity()
             user_entity.private_key, user_entity.public_key = generate_keypair()
+            user_entity.code = generate_user_code()
             user = self.user_repository.create_user(user_entity)
 
             return UserDTO.from_entity(user)
