@@ -18,5 +18,10 @@ class User(Base):
     username: Mapped[str] = mapped_column(String, nullable=False)
     code: Mapped[str] = mapped_column(String(USER_CODE_LENGTH), nullable=False)
 
-    public_key: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
-    private_key: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    salt: Mapped[str] = mapped_column(String, nullable=False)
+
+    public_key_ec: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    private_key_ec: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+
+    public_key_pq: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
+    private_key_pq: Mapped[bytes] = mapped_column(LargeBinary, nullable=False)
