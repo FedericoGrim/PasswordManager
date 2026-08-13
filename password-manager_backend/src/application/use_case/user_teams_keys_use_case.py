@@ -17,7 +17,7 @@ class AddUserTeamsKeyUseCase:
                 id=uuid.UUID(str(user_teams_key.id)),
                 user_id=uuid.UUID(str(user_teams_key.user_id)),
                 team_id=uuid.UUID(str(user_teams_key.team_id)),
-                key=str(user_teams_key.key)
+                team_key_encrypted=str(user_teams_key.team_key_encrypted)
             )
 
         except Exception as e:
@@ -34,7 +34,7 @@ class GetUserTeamsKeyByIdUseCase:
                 id=uuid.UUID(str(key.id)),
                 user_id=uuid.UUID(str(key.user_id)),
                 team_id=uuid.UUID(str(key.team_id)),
-                key=str(key.key)
+                team_key_encrypted=str(key.team_key_encrypted)
             )
 
         except Exception as e:
@@ -51,7 +51,7 @@ class GetUserTeamsKeysByTeamIdUseCase:
                 id=uuid.UUID(str(key.id)),
                 user_id=uuid.UUID(str(key.user_id)),
                 team_id=uuid.UUID(str(key.team_id)),
-                key=str(key.key)
+                team_key_encrypted=str(key.team_key_encrypted)
             ) for key in keys]
 
         except Exception as e:
@@ -68,7 +68,7 @@ class GetUserTeamsKeysByUserIdUseCase:
                 id=uuid.UUID(str(key.id)),
                 user_id=uuid.UUID(str(key.user_id)),
                 team_id=uuid.UUID(str(key.team_id)),
-                key=str(key.key)
+                team_key_encrypted=str(key.team_key_encrypted)
             ) for key in keys]
 
         except Exception as e:
@@ -91,7 +91,7 @@ class UpdateUserTeamsKeyUseCase:
                 id=uuid.UUID(str(updated_key.id)),
                 user_id=uuid.UUID(str(updated_key.user_id)),
                 team_id=uuid.UUID(str(updated_key.team_id)),
-                key=str(updated_key.key)
+                team_key_encrypted=str(updated_key.team_key_encrypted)
             )
 
         except Exception as e:

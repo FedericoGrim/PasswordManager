@@ -29,7 +29,7 @@ class UserService(IUserService):
         
     def get_user_by_keycloak_id(self, keycloak_user_id: uuid.UUID):
         try:
-            user = self.db.query(User).filter(User.id_keycloak == keycloak_user_id).first()            
+            user = self.db.query(User).filter(User.keycloak_id == keycloak_user_id).first()
             if not user:
                 raise UserNotFoundException(f"User with keycloak_id {keycloak_user_id} not found.")
             return user

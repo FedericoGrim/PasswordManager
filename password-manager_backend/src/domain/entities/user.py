@@ -13,7 +13,7 @@ class User(Base):
     )
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4, nullable=False)
-    id_keycloak: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4)
+    keycloak_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), unique=True, nullable=False, default=uuid.uuid4)
 
     username: Mapped[str] = mapped_column(String, nullable=False)
     code: Mapped[str] = mapped_column(String(USER_CODE_LENGTH), nullable=False)

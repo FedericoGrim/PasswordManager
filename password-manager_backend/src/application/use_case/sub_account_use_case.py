@@ -38,12 +38,11 @@ class GetAllSubAccountsByTeamIdUseCase():
             return [SubAccountDTO(
                             id=uuid.UUID(str(sub_account.id)),
                             team_id=uuid.UUID(str(sub_account.team_id)),
-                            title=str(sub_account.title),
-                            username=str(sub_account.username),
-                            email=str(sub_account.email),
-                            password=str(sub_account.password),
-                            link=str(sub_account.link),
-                            necessary_role=str(sub_account.necessary_role)
+                            username_encrypted=str(sub_account.username_encrypted),
+                            email_encrypted=str(sub_account.email_encrypted),
+                            password_encrypted=str(sub_account.password_encrypted),
+                            site_link_encrypted=str(sub_account.site_link_encrypted),
+                            required_perm_level_id=uuid.UUID(str(sub_account.required_perm_level_id))
                             )
                         for sub_account in result]
         except Exception as e:
@@ -61,12 +60,11 @@ class UpdateSubAccountByIdUseCase():
             return SubAccountDTO(
                 id=uuid.UUID(str(result.id)),
                 team_id=uuid.UUID(str(result.team_id)),
-                title=str(result.title),
-                username=str(result.username),
-                email=str(result.email),
-                password=str(result.password),
-                link=str(result.link),
-                necessary_role=str(result.necessary_role)
+                username_encrypted=str(result.username_encrypted),
+                email_encrypted=str(result.email_encrypted),
+                password_encrypted=str(result.password_encrypted),
+                site_link_encrypted=str(result.site_link_encrypted),
+                required_perm_level_id=uuid.UUID(str(result.required_perm_level_id))
             )
         
         except Exception as e:

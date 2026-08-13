@@ -1,67 +1,61 @@
-from pydantic import BaseModel, UUID4, StringConstraints
-from typing import Optional, Annotated
+from pydantic import BaseModel, UUID4
+from typing import Optional
 
 from domain.entities.sub_account import SubAccount
 
 class SubAccountDTO(BaseModel):
     id: UUID4
     team_id: UUID4
-    title: str
-    username: str
-    email: str
-    password: str
-    link: str
-    necessary_role: str
+    username_encrypted: str
+    email_encrypted: str
+    password_encrypted: str
+    site_link_encrypted: str
+    required_perm_level_id: UUID4
 
     def to_entity(self):
         return SubAccount(
             team_id=self.team_id,
-            title=self.title,
-            username=self.username,
-            email=self.email,
-            password=self.password,
-            link=self.link,
-            necessary_role=self.necessary_role
+            username_encrypted=self.username_encrypted,
+            email_encrypted=self.email_encrypted,
+            password_encrypted=self.password_encrypted,
+            site_link_encrypted=self.site_link_encrypted,
+            required_perm_level_id=self.required_perm_level_id
         )
 
 class CreateSubAccountDTO(BaseModel):
     team_id: UUID4
-    title: Annotated[str, StringConstraints(min_length=1)]
-    username: str
-    email: str
-    password: str
-    link: str
-    necessary_role: Annotated[str, StringConstraints(min_length=1)]
+    username_encrypted: str
+    email_encrypted: str
+    password_encrypted: str
+    site_link_encrypted: str
+    required_perm_level_id: UUID4
 
     def to_entity(self):
         return SubAccount(
             team_id=self.team_id,
-            title=self.title,
-            username=self.username,
-            email=self.email,
-            password=self.password,
-            link=self.link,
-            necessary_role=self.necessary_role
+            username_encrypted=self.username_encrypted,
+            email_encrypted=self.email_encrypted,
+            password_encrypted=self.password_encrypted,
+            site_link_encrypted=self.site_link_encrypted,
+            required_perm_level_id=self.required_perm_level_id
         )
 
 class UpdateSubAccountDTO(BaseModel):
     id: UUID4
-    title: Optional[Annotated[str, StringConstraints(min_length=1)]]
-    username: Optional[str]
-    email: Optional[str]
-    password: Optional[str]
-    link: Optional[str]
-    necessary_role: Optional[Annotated[str, StringConstraints(min_length=1)]]
+    username_encrypted: Optional[str]
+    email_encrypted: Optional[str]
+    password_encrypted: Optional[str]
+    site_link_encrypted: Optional[str]
+    required_perm_level_id: Optional[UUID4]
 
     def to_entity(self, existing_sub_account: SubAccount):
         return SubAccount(
             team_id=existing_sub_account.team_id,
-            title=self.title if self.title is not None else existing_sub_account.title,
-            username=self.username if self.username is not None else existing_sub_account.username,
-            email=self.email if self.email is not None else existing_sub_account.email,
-            password=self.password if self.password is not None else existing_sub_account.password,
-            link=self.link if self.link is not None else existing_sub_account.link,
-            necessary_role=self.necessary_role if self.necessary_role is not None else existing_sub_account.necessary_role
+            username_encrypted=self.username_encrypted if self.username_encrypted is not None else existing_sub_account.username_encrypted,
+            email_encrypted=self.email_encrypted if self.email_encrypted is not None else existing_sub_account.email_encrypted,
+            password_encrypted=self.password_encrypted if self.password_encrypted is not None else existing_sub_account.password_encrypted,
+            site_link_encrypted=self.site_link_encrypted if self.site_link_encrypted is not None else existing_sub_account.site_link_encrypted,
+            required_perm_level_id=self.required_perm_level_id if self.required_perm_level_id is not None else existing_sub_account.required_perm_level_id
         )
         
 class DeleteSubAccountDTO(BaseModel):

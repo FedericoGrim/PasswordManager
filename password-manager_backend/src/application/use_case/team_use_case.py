@@ -29,7 +29,7 @@ class GetTeamByIdUseCase:
             return TeamDTO(
                 id=uuid.UUID(str(team.id)),
                 name=str(team.name),
-                salt_argon=str(team.salt_argon)
+                is_personal=bool(team.is_personal)
             )
         
         except Exception as e:
@@ -45,7 +45,7 @@ class GetTeamsByUserIdUseCase:
             return [TeamDTO(
                 id=uuid.UUID(str(team.id)),
                 name=str(team.name),
-                salt_argon=str(team.salt_argon)
+                is_personal=bool(team.is_personal)
             ) for team in teams]
         
         except Exception as e:
@@ -63,7 +63,7 @@ class UpdateTeamByIdUseCase:
             return TeamDTO(
                 id=uuid.UUID(str(team.id)),
                 name=str(team.name),
-                salt_argon=str(team.salt_argon)
+                is_personal=bool(team.is_personal)
             )
         
         except Exception as e:

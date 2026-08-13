@@ -17,7 +17,7 @@ class AddMemberToTeamUseCase:
                 id=uuid.UUID(str(team_member.id)),
                 user_id=uuid.UUID(str(team_member.user_id)),
                 team_id=uuid.UUID(str(team_member.team_id)),
-                role=str(team_member.role)
+                perm_level_id=uuid.UUID(str(team_member.perm_level_id))
             )
         
         except Exception as e:
@@ -34,9 +34,9 @@ class GetTeamMemberByIdUseCase:
                 id=uuid.UUID(str(member.id)),
                 user_id=uuid.UUID(str(member.user_id)),
                 team_id=uuid.UUID(str(member.team_id)),
-                role=str(member.role)
+                perm_level_id=uuid.UUID(str(member.perm_level_id))
             )
-        
+
         except Exception as e:
             raise TeamMemberRetrievalByIdException(str(e)) from e
 
@@ -51,7 +51,7 @@ class GetTeamMembersByTeamIdUseCase:
             id=uuid.UUID(str(member.id)),
             user_id=uuid.UUID(str(member.user_id)),
             team_id=uuid.UUID(str(member.team_id)),
-            role=str(member.role)
+            perm_level_id=uuid.UUID(str(member.perm_level_id))
         ) for member in team_members]
         
         except Exception as e:
@@ -69,7 +69,7 @@ class UpdateTeamMemberRoleUseCase:
                 id=uuid.UUID(str(updated_member.id)),
                 user_id=uuid.UUID(str(updated_member.user_id)),
                 team_id=uuid.UUID(str(updated_member.team_id)),
-                role=str(updated_member.role)
+                perm_level_id=uuid.UUID(str(updated_member.perm_level_id))
             )
         
         except Exception as e:

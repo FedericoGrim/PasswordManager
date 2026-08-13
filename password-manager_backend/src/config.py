@@ -1,8 +1,4 @@
 from __future__ import annotations
-from typing import TYPE_CHECKING
-
-if TYPE_CHECKING:
-    from config import SQLContainer
 
 from dependency_injector import containers, providers
 
@@ -13,6 +9,7 @@ from infrastructure.databases.team_member_postgreSQL import TeamMembersService
 from infrastructure.databases.user_teams_keys_postgreSQL import UserTeamsKeysService
 from infrastructure.databases.categories_postgresql import CategoriesService
 from infrastructure.databases.sub_account_categories_postgresql import SubAccountCategoriesService
+from infrastructure.databases.team_perm_levels_postgresql import TeamPermLevelsService
 
 
 
@@ -69,14 +66,28 @@ from application.use_case.sub_account_categories_use_case import (
     DeleteSubAccountCategoryUseCase,
 )
 
+from application.use_case.team_perm_levels_use_case import (
+    CreateTeamPermLevelUseCase,
+    GetTeamPermLevelByIdUseCase,
+    GetAllTeamPermLevelsByTeamIdUseCase,
+    UpdateTeamPermLevelByIdUseCase,
+    DeleteTeamPermLevelByIdUseCase,
+)
+
 
 # ------------------- sql Containers -------------------
 class UserContainer(containers.DeclarativeContainer):
     UserRepositoryFactory = providers.Factory(UserService, db=providers.Dependency())
+    TeamRepositoryFactory = providers.Factory(TeamService, db=providers.Dependency())
+    TeamPermLevelRepositoryFactory = providers.Factory(TeamPermLevelsService, db=providers.Dependency())
+    TeamMembersRepositoryFactory = providers.Factory(TeamMembersService, db=providers.Dependency())
 
     CreateUserProvider = providers.Factory(
         CreateUserUseCase,
         UserRepository=UserRepositoryFactory,
+        TeamRepository=TeamRepositoryFactory,
+        TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
+        TeamMembersRepository=TeamMembersRepositoryFactory,
     )
     GetUserByKeycloakIdProvider = providers.Factory(
         GetUserByKeycloakIdUseCase,
@@ -237,8 +248,32 @@ class SubAccountCategoriesContainer(containers.DeclarativeContainer):
         SubAccountCategoriesRepository=SubAccountCategoriesRepositoryFactory,
     )
 
-# ------------------- Aggregated Containers -------------------
-class SQLContainer(containers.DeclarativeContainer):
+class TeamPermLevelsContainer(containers.DeclarativeContainer):
+    TeamPermLevelRepositoryFactory = providers.Factory(TeamPermLevelsService, db=providers.Dependency())
+
+    CreateTeamPermLevelProvider = providers.Factory(
+        CreateTeamPermLevelUseCase,
+        TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
+    )
+    GetTeamPermLevelByIdProvider = providers.Factory(
+        GetTeamPermLevelByIdUseCase,
+        TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
+    )
+    GetAllTeamPermLevelsByTeamIdProvider = providers.Factory(
+        GetAllTeamPermLevelsByTeamIdUseCase,
+        TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
+    )
+    UpdateTeamPermLevelByIdProvider = providers.Factory(
+        UpdateTeamPermLevelByIdUseCase,
+        TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
+    )
+    DeleteTeamPermLevelByIdProvider = providers.Factory(
+        DeleteTeamPermLevelByIdUseCase,
+        TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
+    )
+
+# ------------------- Aggregated Container -------------------
+class Container(containers.DeclarativeContainer):
     user = providers.Container(UserContainer)
     subaccount = providers.Container(SubAccountContainer)
     team = providers.Container(TeamContainer)
@@ -246,8 +281,5 @@ class SQLContainer(containers.DeclarativeContainer):
     user_teams_keys = providers.Container(UserTeamsKeysContainer)
     categories = providers.Container(CategoriesContainer)
     sub_account_categories = providers.Container(SubAccountCategoriesContainer)
-
-
-class Container(containers.DeclarativeContainer):
-    sql: SQLContainer = providers.Container(SQLContainer)  # type: ignore[assignment]
+    team_perm_levels = providers.Container(TeamPermLevelsContainer)
 

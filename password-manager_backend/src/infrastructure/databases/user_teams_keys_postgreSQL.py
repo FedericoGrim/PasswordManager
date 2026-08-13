@@ -66,7 +66,7 @@ class UserTeamsKeysService(IUserTeamsKeysService):
             if not key:
                 raise Exception("Key not found for this user in this team.")
 
-            key.key = new_key_data.key
+            key.team_key_encrypted = new_key_data.team_key_encrypted
             self.Db.flush()
             self.Db.refresh(key)
 

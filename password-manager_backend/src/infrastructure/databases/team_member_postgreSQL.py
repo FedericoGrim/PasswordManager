@@ -38,14 +38,14 @@ class TeamMembersService(ITeamMembersService):
             logging.error(f"Error: {e}")
             raise Exception("Failed to retrieve team member by ID.")
         
-    def get_teams_by_member_id(self, member_id: uuid.UUID) -> list[TeamMember]:
+    def get_members_by_team_id(self, team_id: uuid.UUID) -> list[TeamMember]:
         try:
-            members = self.Db.query(TeamMember).filter_by(user_id=member_id).all()
+            members = self.Db.query(TeamMember).filter_by(team_id=team_id).all()
             return members
 
         except Exception as e:
             logging.error(f"Error: {e}")
-            raise Exception("Failed to retrieve teams for the member.")
+            raise Exception("Failed to retrieve members for the team.")
         
     def update_member_role(self, new_user_data: TeamMember) -> TeamMember:
         try:
@@ -57,7 +57,7 @@ class TeamMembersService(ITeamMembersService):
             if not member:
                 raise Exception("Member not found in the team.")
             
-            member.role = new_user_data.role
+            member.perm_level_id = new_user_data.perm_level_id
             self.Db.flush()
             self.Db.refresh(member)
 

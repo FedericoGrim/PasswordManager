@@ -6,7 +6,7 @@ from domain.entities.user import User
 
 class UserDTO(BaseModel):
     id: UUID
-    id_keycloak: UUID
+    keycloak_id: UUID
 
     username: str
     code: str
@@ -23,7 +23,7 @@ class UserDTO(BaseModel):
     def from_entity(cls, entity: User) -> "UserDTO":
         return cls(
             id=entity.id,
-            id_keycloak=entity.id_keycloak,
+            keycloak_id=entity.keycloak_id,
             username=entity.username,
             code=entity.code,
             salt=entity.salt,
@@ -35,7 +35,7 @@ class UserDTO(BaseModel):
 
     def to_entity(self) -> User:
         return User(
-            id_keycloak=self.id_keycloak,
+            keycloak_id=self.keycloak_id,
             username=self.username,
             code=self.code,
             salt=self.salt,
@@ -45,7 +45,7 @@ class UserDTO(BaseModel):
             private_key_pq=self.private_key_pq,
         )
 class CreateUserDTO(BaseModel):
-    id_keycloak: UUID
+    keycloak_id: UUID
     username: str
 
     salt: str
@@ -58,7 +58,7 @@ class CreateUserDTO(BaseModel):
 
     def to_entity(self):
         return User(
-            id_keycloak=self.id_keycloak,
+            keycloak_id=self.keycloak_id,
             username=self.username,
             salt=self.salt,
             public_key_ec=self.public_key_ec,
@@ -68,7 +68,7 @@ class CreateUserDTO(BaseModel):
         )
 
 class UpdateUserDTO(BaseModel):
-    id_keycloak: Optional[UUID]
+    keycloak_id: Optional[UUID]
     username: Optional[str]
 
     salt: Optional[str]
@@ -82,7 +82,7 @@ class UpdateUserDTO(BaseModel):
     def to_entity(self, existing_user: User):
         return User(
             id=existing_user.id,
-            id_keycloak=self.id_keycloak if self.id_keycloak is not None else existing_user.id_keycloak,
+            keycloak_id=self.keycloak_id if self.keycloak_id is not None else existing_user.keycloak_id,
             username=self.username if self.username is not None else existing_user.username,
             salt=self.salt if self.salt is not None else existing_user.salt,
             public_key_ec=self.public_key_ec if self.public_key_ec is not None else existing_user.public_key_ec,

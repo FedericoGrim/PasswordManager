@@ -16,12 +16,11 @@ class SubAccountService(ISubAccountService):
         try:
             subaccount_entity = SubAccount(
                 team_id = sub_account.team_id,
-                title = sub_account.title,
-                username = sub_account.username,
-                password = sub_account.password,
-                email = sub_account.email,
-                link = sub_account.link,
-                necessary_role = sub_account.necessary_role
+                username_encrypted = sub_account.username_encrypted,
+                password_encrypted = sub_account.password_encrypted,
+                email_encrypted = sub_account.email_encrypted,
+                site_link_encrypted = sub_account.site_link_encrypted,
+                required_perm_level_id = sub_account.required_perm_level_id
             )
 
             self.db.add(subaccount_entity)
@@ -64,12 +63,11 @@ class SubAccountService(ISubAccountService):
             if not sub_account:
                 raise SubAccountNotFoundException("SubAccount not found.")
 
-            sub_account.title = new_subaccount.title
-            sub_account.username = new_subaccount.username
-            sub_account.email = new_subaccount.email
-            sub_account.password = new_subaccount.password
-            sub_account.link = new_subaccount.link
-            sub_account.necessary_role = new_subaccount.necessary_role
+            sub_account.username_encrypted = new_subaccount.username_encrypted
+            sub_account.email_encrypted = new_subaccount.email_encrypted
+            sub_account.password_encrypted = new_subaccount.password_encrypted
+            sub_account.site_link_encrypted = new_subaccount.site_link_encrypted
+            sub_account.required_perm_level_id = new_subaccount.required_perm_level_id
             self.db.flush()
             self.db.refresh(sub_account)
             return sub_account
