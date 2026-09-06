@@ -19,7 +19,7 @@ async def ApiCreateTeam(
     request: Request,
     db: Session = Depends(get_db),
 ):
-    container: Container = request.app.container
+    container: Container = request.app.state.container
     create_team_use_case = container.team().CreateTeamProvider(
         TeamRepository__db=db,
     )
@@ -38,7 +38,7 @@ async def ApiGetTeamById(
     request: Request,
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamDTO]:
-    container: Container = request.app.container
+    container: Container = request.app.state.container
     get_team_use_case = container.team().GetTeamByIdProvider(
         TeamRepository__db=db
     )
@@ -49,14 +49,14 @@ async def ApiGetTeamById(
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e))
     
-@router.get("/{user_id}")
+@router.get("/user/{user_id}")
 
 async def ApiGetTeamsByUserId(
     user_id: uuid.UUID,
     request: Request,
     db: Session = Depends(get_db),
 ) -> dict[str, str | list[TeamDTO]]:
-    container: Container = request.app.container
+    container: Container = request.app.state.container
     get_teams_use_case = container.team().GetTeamsByUserIdProvider(
         TeamRepository__db=db
     )
@@ -76,7 +76,7 @@ async def ApiUpdateTeam(
     request: Request,
     db: Session = Depends(get_db),
 ) -> dict[str, str | TeamDTO]:
-    container: Container = request.app.container
+    container: Container = request.app.state.container
     update_team_use_case = container.team().UpdateTeamByIdProvider(
         TeamRepository__db=db,
     )
@@ -96,7 +96,7 @@ async def ApiDeleteTeam(
     request: Request,
     db: Session = Depends(get_db),
 ) -> dict[str, str]:
-    container: Container = request.app.container
+    container: Container = request.app.state.container
     delete_team_use_case = container.team().DeleteTeamByIdProvider(
         TeamRepository__db=db,
     )
