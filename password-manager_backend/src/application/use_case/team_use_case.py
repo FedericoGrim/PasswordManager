@@ -36,8 +36,8 @@ class GetTeamByIdUseCase:
             raise TeamRetrievalByIdException(str(e)) from e
     
 class GetTeamsByUserIdUseCase:
-    def __init__(self, team_repository: ITeamService):
-        self.team_repository = team_repository
+    def __init__(self, TeamRepository: ITeamService):
+        self.team_repository = TeamRepository
 
     def execute(self, user_id: uuid.UUID):
         try:
@@ -52,8 +52,8 @@ class GetTeamsByUserIdUseCase:
             raise TeamsRetrievalByUserIdException(str(e)) from e
     
 class UpdateTeamByIdUseCase:
-    def __init__(self, team_repository: ITeamService):
-        self.team_repository = team_repository
+    def __init__(self, TeamRepository: ITeamService):
+        self.team_repository = TeamRepository
 
     def execute(self, interactor_id: uuid.UUID, new_team: UpdateTeamDTO):
         try:
@@ -70,8 +70,8 @@ class UpdateTeamByIdUseCase:
             raise TeamUpdateException(str(e)) from e
     
 class DeleteTeamByIdUseCase:
-    def __init__(self, team_repository: ITeamService):
-        self.team_repository = team_repository
+    def __init__(self, TeamRepository: ITeamService):
+        self.team_repository = TeamRepository
 
     def execute(self, interactor_id: uuid.UUID, team_to_delete: DeleteTeamDTO):
         try:
