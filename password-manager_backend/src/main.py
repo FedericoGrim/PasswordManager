@@ -11,6 +11,7 @@ from presentation.controllers.user_teams_keys_controller import router as user_t
 from presentation.controllers.categories_controller import router as categories_router
 from presentation.controllers.sub_account_categories_controller import router as subacc_categories_router
 from presentation.controllers.team_perm_levels_controller import router as team_perm_levels_router
+from presentation.controllers.user_favorite_controller import router as user_favorites_router
 
 from infrastructure.databases.database import SessionLocal
 
@@ -36,7 +37,8 @@ container.wire(modules=["presentation.controllers.user_controller",
                         "presentation.controllers.user_teams_keys_controller",
                         "presentation.controllers.categories_controller",
                         "presentation.controllers.sub_account_categories_controller",
-                        "presentation.controllers.team_perm_levels_controller"
+                        "presentation.controllers.team_perm_levels_controller",
+                        "presentation.controllers.user_favorite_controller"
                         ])
 
 app = FastAPI()
@@ -97,6 +99,12 @@ app.include_router(
     team_perm_levels_router,
     prefix="/api/team-perm-levels",
     tags=["TeamPermLevels"],
+)
+
+app.include_router(
+    user_favorites_router,
+    prefix="/api/favorites",
+    tags=["Favorites"],
 )
 
 # ------------------------------

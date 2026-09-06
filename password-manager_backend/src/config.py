@@ -10,12 +10,15 @@ from infrastructure.databases.user_teams_keys_postgreSQL import UserTeamsKeysSer
 from infrastructure.databases.categories_postgresql import CategoriesService
 from infrastructure.databases.sub_account_categories_postgresql import SubAccountCategoriesService
 from infrastructure.databases.team_perm_levels_postgresql import TeamPermLevelsService
+from infrastructure.databases.user_favorites_postgreSQL import UserFavoritesService
 
 
 
 from application.use_case.user_use_case import (
     CreateUserUseCase,
     GetUserByKeycloakIdUseCase,
+    GetUserByUsernameAndCodeUseCase,
+    GetUserByIdUseCase,
     UpdateUserByIdUseCase,
     DeleteUserByIdUseCase,
 )
@@ -74,6 +77,12 @@ from application.use_case.team_perm_levels_use_case import (
     DeleteTeamPermLevelByIdUseCase,
 )
 
+from application.use_case.user_favorite_use_case import (
+    AddFavoriteUseCase,
+    GetFavoritesByUserIdUseCase,
+    RemoveFavoriteUseCase,
+)
+
 
 # ------------------- sql Containers -------------------
 class UserContainer(containers.DeclarativeContainer):
@@ -81,6 +90,7 @@ class UserContainer(containers.DeclarativeContainer):
     TeamRepositoryFactory = providers.Factory(TeamService, db=providers.Dependency())
     TeamPermLevelRepositoryFactory = providers.Factory(TeamPermLevelsService, db=providers.Dependency())
     TeamMembersRepositoryFactory = providers.Factory(TeamMembersService, db=providers.Dependency())
+    UserTeamsKeysRepositoryFactory = providers.Factory(UserTeamsKeysService, db=providers.Dependency())
 
     CreateUserProvider = providers.Factory(
         CreateUserUseCase,
@@ -88,9 +98,18 @@ class UserContainer(containers.DeclarativeContainer):
         TeamRepository=TeamRepositoryFactory,
         TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
         TeamMembersRepository=TeamMembersRepositoryFactory,
+        UserTeamsKeysRepository=UserTeamsKeysRepositoryFactory,
     )
     GetUserByKeycloakIdProvider = providers.Factory(
         GetUserByKeycloakIdUseCase,
+        UserRepository=UserRepositoryFactory,
+    )
+    GetUserByUsernameAndCodeProvider = providers.Factory(
+        GetUserByUsernameAndCodeUseCase,
+        UserRepository=UserRepositoryFactory,
+    )
+    GetUserByIdProvider = providers.Factory(
+        GetUserByIdUseCase,
         UserRepository=UserRepositoryFactory,
     )
     UpdateUserByIdProvider = providers.Factory(
@@ -272,6 +291,22 @@ class TeamPermLevelsContainer(containers.DeclarativeContainer):
         TeamPermLevelRepository=TeamPermLevelRepositoryFactory,
     )
 
+class UserFavoritesContainer(containers.DeclarativeContainer):
+    UserFavoriteRepositoryFactory = providers.Factory(UserFavoritesService, db=providers.Dependency())
+
+    AddFavoriteProvider = providers.Factory(
+        AddFavoriteUseCase,
+        UserFavoriteRepository=UserFavoriteRepositoryFactory,
+    )
+    GetFavoritesByUserIdProvider = providers.Factory(
+        GetFavoritesByUserIdUseCase,
+        UserFavoriteRepository=UserFavoriteRepositoryFactory,
+    )
+    RemoveFavoriteProvider = providers.Factory(
+        RemoveFavoriteUseCase,
+        UserFavoriteRepository=UserFavoriteRepositoryFactory,
+    )
+
 # ------------------- Aggregated Container -------------------
 class Container(containers.DeclarativeContainer):
     user = providers.Container(UserContainer)
@@ -282,4 +317,5 @@ class Container(containers.DeclarativeContainer):
     categories = providers.Container(CategoriesContainer)
     sub_account_categories = providers.Container(SubAccountCategoriesContainer)
     team_perm_levels = providers.Container(TeamPermLevelsContainer)
+    user_favorites = providers.Container(UserFavoritesContainer)
 
