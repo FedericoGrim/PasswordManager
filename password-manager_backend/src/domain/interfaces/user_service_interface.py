@@ -14,6 +14,14 @@ class IUserService(ABC):
         pass
 
     @abstractmethod
+    def get_user_by_username_and_code(self, username: str, code: str) -> User:
+        pass
+
+    @abstractmethod
+    def get_user_by_id(self, user_id: uuid.UUID) -> User:
+        pass
+
+    @abstractmethod
     def update_user_by_id(self, user_id: uuid.UUID, new_user: User) -> User:
         pass
 

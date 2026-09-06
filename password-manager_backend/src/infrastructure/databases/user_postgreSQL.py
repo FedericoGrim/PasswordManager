@@ -41,6 +41,34 @@ class UserService(IUserService):
             logging.error(f"Error: {e}")
             raise GetUserByIdRetrivalException()
         
+    def get_user_by_username_and_code(self, username: str, code: str):
+        try:
+            user = self.db.query(User).filter(User.username == username, User.code == code).first()
+            if not user:
+                raise UserNotFoundException(f"User with username {username} and code {code} not found.")
+            return user
+
+        except UserNotFoundException:
+            raise
+
+        except Exception as e:
+            logging.error(f"Error: {e}")
+            raise GetUserByIdRetrivalException()
+
+    def get_user_by_id(self, user_id: uuid.UUID):
+        try:
+            user = self.db.query(User).filter(User.id == user_id).first()
+            if not user:
+                raise UserNotFoundException(f"User with id {user_id} not found.")
+            return user
+
+        except UserNotFoundException:
+            raise
+
+        except Exception as e:
+            logging.error(f"Error: {e}")
+            raise GetUserByIdRetrivalException()
+
     def update_user_by_id(self, user_id: uuid.UUID, new_user: User):
         try:
             user = self.db.query(User).filter(User.id == user_id).first()
