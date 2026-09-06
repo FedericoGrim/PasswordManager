@@ -1,8 +1,9 @@
-from fastapi import FastAPI, Response, Request
+from fastapi import Depends, FastAPI, Response, Request
 from fastapi.middleware.cors import CORSMiddleware
 from starlette.middleware.base import RequestResponseEndpoint
 
 from config import Container
+from infrastructure.keycloak.jwt_token_autentication import jwt_authentication
 from presentation.controllers.user_controller import router as user_router
 from presentation.controllers.sub_account_controller import router as subaccount_router
 from presentation.controllers.team_controller import router as team_router
@@ -57,54 +58,63 @@ app.include_router(
     user_router,
     prefix="/api/user",
     tags=["User"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     subaccount_router,
     prefix="/api/subaccount",
     tags=["SubAccount"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     team_router,
     prefix="/api/team",
     tags=["Team"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     team_members_router,
     prefix="/api/team-members",
     tags=["TeamMembers"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     user_teams_keys_router,
     prefix="/api/user-teams-keys",
     tags=["UserTeamsKeys"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     categories_router,
     prefix="/api/categories",
     tags=["Categories"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     subacc_categories_router,
     prefix="/api/subaccount-categories",
     tags=["SubAccountCategories"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     team_perm_levels_router,
     prefix="/api/team-perm-levels",
     tags=["TeamPermLevels"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 app.include_router(
     user_favorites_router,
     prefix="/api/favorites",
     tags=["Favorites"],
+    dependencies=[Depends(jwt_authentication)],
 )
 
 # ------------------------------

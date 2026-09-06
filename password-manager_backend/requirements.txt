@@ -10,6 +10,10 @@ cryptography
 #Apis
 FastAPI
 uvicorn
+requests
+
+#Keycloak
+python-jose[cryptography]
 
 #SQL DB
 SQLAlchemy
