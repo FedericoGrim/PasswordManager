@@ -1,5 +1,5 @@
-const getEnvVar = (_key: string, fallbackValue: string | undefined) => {
-  return fallbackValue!;
+const getEnvVar = (key: string, fallbackValue: string | undefined) => {
+  return (process.env[`NEXT_PUBLIC_${key}`] || fallbackValue)!;
 }
 
 const getIntEnvVar = (key: string, fallbackValue: string | undefined) => {
