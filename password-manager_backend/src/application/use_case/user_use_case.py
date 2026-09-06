@@ -1,17 +1,19 @@
 import uuid
 
-from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO
+from application.dto.user_dto import CreateUserDTO, UpdateUserDTO, UserDTO, UserPublicDTO
 from application.exceptions.user_use_Case_exceptions import *
 
 from domain.interfaces.user_service_interface import IUserService
 from domain.interfaces.team_service_interface import ITeamService
 from domain.interfaces.team_perm_level_service_interface import ITeamPermLevelService
 from domain.interfaces.team_member_service_interface import ITeamMembersService
+from domain.interfaces.user_teams_keys_service_interface import IUserTeamsKeysService
 from domain.entities.team import Team
 from domain.entities.team_perm_level import TeamPermLevel
 from domain.entities.team_member import TeamMember
-from domain.generate_user_code import generate_user_code
+from domain.entities.user_teams_keys import UserTeamsKeys
 
+PERSONAL_TEAM_NAME = "Me"
 PERSONAL_TEAM_OWNER_PERM_LEVEL_NAME = "Owner"
 PERSONAL_TEAM_OWNER_PERM_LEVEL_RANK = 0
 
@@ -22,20 +24,21 @@ class CreateUserUseCase:
         TeamRepository: ITeamService,
         TeamPermLevelRepository: ITeamPermLevelService,
         TeamMembersRepository: ITeamMembersService,
+        UserTeamsKeysRepository: IUserTeamsKeysService,
     ):
         self.user_repository = UserRepository
         self.team_repository = TeamRepository
         self.team_perm_level_repository = TeamPermLevelRepository
         self.team_members_repository = TeamMembersRepository
+        self.user_teams_keys_repository = UserTeamsKeysRepository
 
     async def execute(self, user_create: CreateUserDTO) -> UserDTO:
         try:
             user_entity = user_create.to_entity()
-            user_entity.code = generate_user_code()
             user = self.user_repository.create_user(user_entity)
 
             personal_team = self.team_repository.CreateTeam(
-                Team(name=f"{user.username}#{user.code} Personal Team", is_personal=True)
+                Team(name=PERSONAL_TEAM_NAME, is_personal=True)
             )
             owner_perm_level = self.team_perm_level_repository.CreateTeamPermLevel(
                 TeamPermLevel(
@@ -49,6 +52,13 @@ class CreateUserUseCase:
                     team_id=personal_team.id,
                     user_id=user.id,
                     perm_level_id=owner_perm_level.id,
+                )
+            )
+            self.user_teams_keys_repository.add_key(
+                UserTeamsKeys(
+                    user_id=user.id,
+                    team_id=personal_team.id,
+                    team_key_encrypted=user_create.team_key_encrypted,
                 )
             )
 
@@ -71,6 +81,32 @@ class GetUserByKeycloakIdUseCase:
             raise UserRetrievalException(str(e)) from e
 
 
+class GetUserByUsernameAndCodeUseCase:
+    def __init__(self, UserRepository: IUserService):
+        self.user_repository = UserRepository
+
+    def execute(self, username: str, code: str) -> UserPublicDTO:
+        try:
+            user = self.user_repository.get_user_by_username_and_code(username, code)
+            return UserPublicDTO.from_entity(user)
+
+        except Exception as e:
+            raise UserRetrievalException(str(e)) from e
+
+
+class GetUserByIdUseCase:
+    def __init__(self, UserRepository: IUserService):
+        self.user_repository = UserRepository
+
+    def execute(self, user_id: uuid.UUID) -> UserPublicDTO:
+        try:
+            user = self.user_repository.get_user_by_id(user_id)
+            return UserPublicDTO.from_entity(user)
+
+        except Exception as e:
+            raise UserRetrievalException(str(e)) from e
+
+
 class UpdateUserByIdUseCase:
     def __init__(self, UserRepository: IUserService):
         self.user_repository = UserRepository
@@ -88,8 +124,8 @@ class UpdateUserByIdUseCase:
 
 
 class DeleteUserByIdUseCase:
-    def __init__(self, user_repository: IUserService):
-        self.user_repository = user_repository
+    def __init__(self, UserRepository: IUserService):
+        self.user_repository = UserRepository
 
     async def execute(self, user_id: uuid.UUID):
         try:
