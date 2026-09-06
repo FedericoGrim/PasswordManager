@@ -50,7 +50,11 @@ const keycloakFactory = (): Keycloak => {
       clientId: keycloakClientId
     });
 
-    keycloak.init({ onLoad: 'login-required' }).then((authenticated) => {
+    // checkLoginIframe relies on a 3rd-party-cookie session check that this
+    // embedded/sandboxed browser blocks (net::ERR_ABORTED on the iframe init) —
+    // that false-positive "session changed" signal was forcing re-auth and
+    // wiping the in-memory vault on what looked like ordinary navigation.
+    keycloak.init({ onLoad: 'login-required', checkLoginIframe: false }).then((authenticated) => {
       if (authenticated) {
         logTokenDetails(keycloak?.tokenParsed);
         setInterval(refreshKeycloakToken, refreshInterval); 
