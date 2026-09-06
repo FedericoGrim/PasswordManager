@@ -10,13 +10,13 @@ cryptography
 #Apis
 FastAPI
 uvicorn
-httpx
+requests
+
+#Keycloak
+python-jose[cryptography]
 
 #SQL DB
 SQLAlchemy
-
-#NoSQL DB
-beanie
 
 #Injection
 dependency_injector
@@ -31,8 +31,3 @@ alembic
 #Docs
 sphinx
 sphinx-autobuild
-
-motor
-
-#Keycloak
-jose

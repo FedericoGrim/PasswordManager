@@ -9,5 +9,6 @@ done
 # Applica le migration
 alembic upgrade head
 
-# Avvia l'app
-uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+# Avvia l'app (main.py sta in src/, --app-dir lo aggiunge al PYTHONPATH
+# senza cambiare la cwd, cosi' alembic.ini resta risolvibile sopra)
+uvicorn main:app --host 0.0.0.0 --port 8000 --reload --app-dir src

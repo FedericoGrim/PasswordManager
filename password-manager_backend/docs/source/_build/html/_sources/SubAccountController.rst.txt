@@ -1,7 +1,0 @@
-SubAccountController module
-===========================
-
-.. automodule:: SubAccountController
-   :members:
-   :show-inheritance:
-   :undoc-members:

@@ -8,7 +8,7 @@ type FavItem = {
   title: string;
 };
 
-const ITEMS_PER_PAGE = 6;
+const ITEMS_PER_PAGE = 3;
 
 const favItems: FavItem[] = Array.from({ length: 20 }, (_, i) => ({
   id: i + 1,

@@ -1,5 +1,15 @@
 # --- Editor / OS files ---
 .DS_Store
+Thumbs.db
+
+# --- Virtual environments ---
+.venv/
 
 # --- Allow .env.example files ---
 !.env.example
+
+# --- SDK compose env files (secrets) ---
+SDK/**/.env
+
+# --- draw.io backup/lock files ---
+.$*.bkp
