@@ -1,8 +1,9 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 from typing import Optional
 from uuid import UUID
 
 from domain.entities.user import User
+from domain.generate_user_code import USER_CODE_LENGTH
 
 class UserDTO(BaseModel):
     id: UUID
@@ -45,8 +46,10 @@ class UserDTO(BaseModel):
             private_key_pq=self.private_key_pq,
         )
 class CreateUserDTO(BaseModel):
+    id: UUID
     keycloak_id: UUID
     username: str
+    code: str = Field(min_length=USER_CODE_LENGTH, max_length=USER_CODE_LENGTH, pattern=r'^[A-Za-z0-9]+$')
 
     salt: str
 
@@ -56,15 +59,37 @@ class CreateUserDTO(BaseModel):
     public_key_pq: bytes
     private_key_pq: bytes
 
+    team_key_encrypted: str
+
     def to_entity(self):
         return User(
+            id=self.id,
             keycloak_id=self.keycloak_id,
             username=self.username,
+            code=self.code,
             salt=self.salt,
             public_key_ec=self.public_key_ec,
             private_key_ec=self.private_key_ec,
             public_key_pq=self.public_key_pq,
             private_key_pq=self.private_key_pq,
+        )
+
+class UserPublicDTO(BaseModel):
+    id: UUID
+    username: str
+    code: str
+
+    public_key_ec: bytes
+    public_key_pq: bytes
+
+    @classmethod
+    def from_entity(cls, entity: User) -> "UserPublicDTO":
+        return cls(
+            id=entity.id,
+            username=entity.username,
+            code=entity.code,
+            public_key_ec=entity.public_key_ec,
+            public_key_pq=entity.public_key_pq,
         )
 
 class UpdateUserDTO(BaseModel):
