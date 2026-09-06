@@ -7,7 +7,6 @@ import { Star, Trash2, Users, Settings, ChevronRight } from "lucide-react";
 import "./Sidebar.css";
 
 export default function Sidebar() {
-  const [usersMenuOpen, setUsersMenuOpen] = useState(false);
   const [settingsMenuOpen, setSettingsMenuOpen] = useState(false);
 
   return (
@@ -26,35 +25,19 @@ export default function Sidebar() {
           </div>
         </Link>
 
-        <Link href="/favorites" className="icon-button">
+        <Link href="/home" className="icon-button">
           <Star className="icon" />
         </Link>
 
-        <Link href="/trash" className="icon-button">
+        {/* Trash: no backend concept exists yet (no field, no endpoint) —
+            disabled rather than linking to a dead route. */}
+        <button className="icon-button" disabled title="Coming soon">
           <Trash2 className="icon" />
+        </button>
+
+        <Link href="/teams" className="icon-button">
+          <Users className="icon" />
         </Link>
-
-        {/* Users menu */}
-        <div className="relative">
-          <div className="menu-button-container">
-            <button
-              onClick={() => setUsersMenuOpen((v) => !v)}
-              className="menu-button group"
-            >
-              <Users className="icon" />
-              <div className="menu-arrow group-hover">
-                <ChevronRight className="icon arrow-icon" />
-              </div>
-            </button>
-          </div>
-
-          {usersMenuOpen && (
-            <div className="dropdown-menu">
-              <Link href="/users" className="dropdown-link">Users</Link>
-              <Link href="/teams" className="dropdown-link">Teams</Link>
-            </div>
-          )}
-        </div>
       </div>
 
       {/* GRUPPO INFERIORE: Impostazioni */}
@@ -75,7 +58,6 @@ export default function Sidebar() {
           {settingsMenuOpen && (
             <div className="dropdown-menu">
               <Link href="/settings/profile" className="dropdown-link">Profile</Link>
-              <Link href="/settings/security" className="dropdown-link">Security</Link>
             </div>
           )}
         </div>
