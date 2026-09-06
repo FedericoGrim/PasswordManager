@@ -1,0 +1,131 @@
+.team-detail-page {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+.team-detail-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 24px;
+}
+
+.team-detail-header h1 {
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #2d267a;
+}
+
+.team-detail-actions {
+  display: flex;
+  gap: 10px;
+}
+
+.team-detail-actions button {
+  background-color: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 10px 18px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.team-detail-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 16px;
+  margin-bottom: 36px;
+}
+
+.team-detail-card {
+  position: relative;
+  background: white;
+  border-radius: 14px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  padding: 16px;
+  text-align: left;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.team-detail-card:hover {
+  transform: translateY(-2px);
+}
+
+.team-detail-card-title {
+  font-weight: 700;
+  color: #2d267a;
+  word-break: break-word;
+}
+
+.team-detail-card-sub {
+  font-size: 0.8rem;
+  color: #415a77;
+  margin-top: 4px;
+  word-break: break-word;
+}
+
+.team-detail-card-tags {
+  font-size: 0.75rem;
+  color: #4f6fbf;
+  margin-top: 6px;
+}
+
+.team-detail-card-delete {
+  position: absolute;
+  top: 8px;
+  right: 10px;
+  color: #b91c1c;
+  font-weight: 700;
+}
+
+.team-detail-section {
+  margin-top: 30px;
+}
+
+.team-detail-section h2 {
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #2d267a;
+  margin-bottom: 10px;
+}
+
+.team-detail-category-add {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 12px;
+}
+
+.team-detail-category-add input {
+  padding: 6px 10px;
+  border-radius: 8px;
+  border: 2px solid #415a77;
+}
+
+.team-detail-category-add button {
+  background: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 6px 14px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.team-detail-category-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.team-detail-category-chip {
+  background: #e0e1dd;
+  color: #2d267a;
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
