@@ -24,8 +24,9 @@ async def CreateSubAccount(
     )
 
     try:
-        if create_subaccount_use_case.execute(interactor_id, subaccountObj):
-            return {"message": "SubAccount created successfully"}
+        created = create_subaccount_use_case.execute(interactor_id, subaccountObj)
+        if created:
+            return {"message": "SubAccount created successfully", "subaccount_id": str(created.id)}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -47,7 +48,7 @@ async def GetSubAccountById(
     except Exception as e:
         raise HTTPException(status_code=404, detail=str(e) + "\n SubAccount not found")
 
-@router.get("/{team_id}")
+@router.get("/team/{team_id}")
 async def GetAllSubAccountsByTeamId(
     team_id: uuid.UUID, 
     request: Request,
