@@ -12,7 +12,7 @@ class SubAccountService(ISubAccountService):
     def __init__(self, db: Session):
         self.db = db
 
-    def create_sub_account(self, sub_account: SubAccount) -> SubAccount:
+    def CreateSubAccount(self, sub_account: SubAccount) -> SubAccount:
         try:
             subaccount_entity = SubAccount(
                 team_id = sub_account.team_id,
@@ -35,7 +35,7 @@ class SubAccountService(ISubAccountService):
             logging.error(f"Error: {e}")
             raise SubAccountCreationFailedException("Failed to create sub_account.")
         
-    def get_sub_account_by_id(self, sub_account_id: uuid.UUID) -> SubAccount:
+    def GetSubAccountById(self, sub_account_id: uuid.UUID) -> SubAccount:
         try:
             sub_account = self.db.query(SubAccount).filter(SubAccount.id == sub_account_id).first()
             if not sub_account:
@@ -46,18 +46,16 @@ class SubAccountService(ISubAccountService):
             logging.error(f"Error: {e}")
             raise SubAccountRetrievalException("Failed to retrieve sub_account by ID.")
     
-    def get_all_sub_accounts_by_team_id(self, team_id: uuid.UUID) -> list[SubAccount]:
+    def GetAllSubAccountsByTeamId(self, team_id: uuid.UUID) -> list[SubAccount]:
         try:
             subaccounts: list[SubAccount] = self.db.query(SubAccount).filter(SubAccount.team_id == team_id).all()
-            if not subaccounts:
-                raise GetAllSubAccountsByTeamIdNotFoundException("No subaccounts found for the given team ID.")
             return [sub_account for sub_account in subaccounts]
             
         except Exception as e:
             logging.error(f"Error: {e}")
             raise SubAccountRetrievalException("Failed to retrieve subaccounts.")
         
-    def update_sub_account_by_id(self, new_subaccount: SubAccount) -> SubAccount:
+    def UpdateSubAccountById(self, new_subaccount: SubAccount) -> SubAccount:
         try:
             sub_account = self.db.query(SubAccount).filter(SubAccount.id == new_subaccount.id).first()
             if not sub_account:
@@ -76,7 +74,7 @@ class SubAccountService(ISubAccountService):
             logging.error(f"Error: {e}")
             raise SubAccountUpdateException("Failed to update sub_account.")
         
-    def delete_sub_account_by_id(self, sub_account_id: uuid.UUID) -> dict[str, str]:
+    def DeleteSubAccountById(self, sub_account_id: uuid.UUID) -> dict[str, str]:
         try:
             sub_account = self.db.query(SubAccount).filter(SubAccount.id == sub_account_id).first()
             if not sub_account:
