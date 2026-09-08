@@ -1,0 +1,31 @@
+@import "tailwindcss";
+
+:root {
+  --darkest-blue: #271d66;
+  --medium-blue: #4e6cac;
+  --light-blue: #d1e8ff;
+  
+  --background: #ffffff;
+  --foreground: var(--darkest-blue);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: var(--darkest-blue);
+    --foreground: #ffffff;
+  }
+}
+
+body {
+  background-color: var(--darkest-blue); 
+  background-image: url('./../../public/sfonfo_keyden_2.png');
+  
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  background-attachment: fixed;
+
+  color: var(--foreground);
+  font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  min-height: 100vh;
+}

@@ -1,0 +1,89 @@
+.subaccount-form-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(13, 27, 42, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 50;
+}
+
+.subaccount-form {
+  background: white;
+  border-radius: 16px;
+  padding: 28px;
+  width: 100%;
+  max-width: 420px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.subaccount-form h2 {
+  font-size: 1.3rem;
+  font-weight: 900;
+  color: #2d267a;
+  margin-bottom: 10px;
+}
+
+.subaccount-form label {
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #415a77;
+  margin-top: 8px;
+}
+
+.subaccount-form input,
+.subaccount-form select {
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: 2px solid #415a77;
+}
+
+.subaccount-form-categories {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.subaccount-form-category-chip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 400;
+  font-size: 0.85rem;
+  background: #e0e1dd;
+  border-radius: 20px;
+  padding: 4px 10px;
+}
+
+.subaccount-form-error {
+  color: #b91c1c;
+  margin-top: 8px;
+}
+
+.subaccount-form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  margin-top: 18px;
+}
+
+.subaccount-form-actions button {
+  padding: 8px 16px;
+  border-radius: 8px;
+  border: none;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.subaccount-form-actions button[type="submit"] {
+  background: #2d267a;
+  color: white;
+}
+
+.subaccount-form-actions button[type="button"] {
+  background: #e0e1dd;
+  color: #2d267a;
+}

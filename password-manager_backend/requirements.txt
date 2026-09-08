@@ -1,0 +1,33 @@
+#Logic
+pydantic
+python-multipart
+pydantic[email]
+psycopg2-binary
+python-dotenv
+argon2-cffi
+cryptography
+
+#Apis
+FastAPI
+uvicorn
+requests
+
+#Keycloak
+python-jose[cryptography]
+
+#SQL DB
+SQLAlchemy
+
+#Injection
+dependency_injector
+
+#Testing
+pytest
+pytest-asyncio
+
+#Migration SQL
+alembic
+
+#Docs
+sphinx
+sphinx-autobuild

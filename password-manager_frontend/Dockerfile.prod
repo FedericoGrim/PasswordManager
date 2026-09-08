@@ -1,0 +1,53 @@
+# ---------- Dependencies stage ----------
+FROM node:22-bookworm-slim AS deps
+
+WORKDIR /app
+
+COPY package.json package-lock.json ./
+RUN npm ci
+
+# ---------- Build stage ----------
+FROM node:22-bookworm-slim AS builder
+
+WORKDIR /app
+
+COPY --from=deps /app/node_modules ./node_modules
+COPY . .
+
+# NEXT_PUBLIC_* vars are inlined into the JS bundle at build time, so they
+# must be supplied as build args (see SDK/production/docker-compose.yml).
+ARG NEXT_PUBLIC_KEYCLOAK_URL
+ARG NEXT_PUBLIC_KEYCLOAK_REALM
+ARG NEXT_PUBLIC_KEYCLOAK_CLIENT_ID
+ARG NEXT_PUBLIC_API_BASE_URL
+ARG NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL
+ENV NEXT_PUBLIC_KEYCLOAK_URL=$NEXT_PUBLIC_KEYCLOAK_URL \
+    NEXT_PUBLIC_KEYCLOAK_REALM=$NEXT_PUBLIC_KEYCLOAK_REALM \
+    NEXT_PUBLIC_KEYCLOAK_CLIENT_ID=$NEXT_PUBLIC_KEYCLOAK_CLIENT_ID \
+    NEXT_PUBLIC_API_BASE_URL=$NEXT_PUBLIC_API_BASE_URL \
+    NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL=$NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL
+
+# next.config.ts sets output: "standalone", which produces a minimal
+# self-contained server bundle (no full node_modules needed at runtime).
+RUN npm run build
+
+# ---------- Runtime stage ----------
+# Distroless Node.js: no shell, no package manager, ENTRYPOINT is already
+# ["node"], so CMD only needs the entry script.
+FROM gcr.io/distroless/nodejs22-debian12 AS runtime
+
+LABEL maintainer="Federico Grimaldi <federico.grimaldi2006@gmail.com>"
+
+WORKDIR /app
+
+ENV NODE_ENV=production \
+    PORT=3000 \
+    HOSTNAME=0.0.0.0
+
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/.next/standalone ./
+COPY --from=builder /app/.next/static ./.next/static
+
+EXPOSE 3000
+
+CMD ["server.js"]

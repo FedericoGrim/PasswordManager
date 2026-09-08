@@ -1,0 +1,88 @@
+.fav-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* O 100% a seconda del genitore */
+  width: 100%;
+  box-sizing: border-box;
+  padding: 20px;
+}
+
+.fav-grid {
+  /* Layout a 2 colonne */
+  display: grid;
+  grid-template-columns: repeat(1, 1fr); 
+  gap: 20px;
+
+  background-color: white;
+  padding: 30px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  margin: auto; 
+  width: fit-content; 
+  /* Aumentiamo il max-width per non tagliare le card su schermi piccoli */
+  max-width: 95%; 
+}
+
+.fav-card {
+  background-color: #4f6fbf;
+  color: white;
+  
+  /* ALTEZZA INVARIATA: 16.25vh */
+  /* LARGHEZZA RADDOPPIATA: 32.5vh */
+  width: 32.5vh;  
+  height: 16.25vh;
+  
+  /* Rimosso aspect-ratio perché non è più un quadrato */
+  
+  border-radius: 12px;
+  border: none;
+  cursor: pointer;
+  font-weight: 900;
+  font-size: 1rem; /* Leggermente aumentato per le nuove dimensioni */
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  padding: 15px;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.fav-card:hover {
+  filter: brightness(1.1);
+  transform: translateY(-2px);
+}
+
+.fav-pagination {
+  margin-top: 20px; /* Spazio tra il box bianco e la paginazione */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding-bottom: 20px;
+}
+
+/* --- Paginazione (come prima) --- */
+.pagination-arrow, .pagination-page {
+  background-color: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pagination-page.active {
+  background-color: white;
+  color: #2d267a;
+  outline: 3px solid #2d267a;
+  outline-offset: -3px; 
+}
+
+button:disabled {
+  opacity: 0.3;
+}

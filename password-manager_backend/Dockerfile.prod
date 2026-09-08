@@ -1,0 +1,45 @@
+# ---------- Build stage ----------
+# Same OS base (Debian 12 "bookworm") as the distroless runtime image below,
+# so compiled extensions (psycopg2-binary, cryptography, argon2-cffi) are
+# glibc-compatible with the final stage.
+FROM python:3.11-slim-bookworm AS builder
+
+WORKDIR /app
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential \
+    gcc \
+    libpq-dev \
+    libffi-dev \
+    python3-dev \
+    && rm -rf /var/lib/apt/lists/*
+
+COPY requirements.txt .
+
+# --target (instead of --prefix) drops packages flat into /deps, independent
+# of the interpreter's own lib/pythonX.Y layout, so it can be copied as-is
+# into the distroless image regardless of its bundled Python minor version.
+RUN pip install --upgrade pip \
+    && pip install --no-cache-dir --target=/deps -r requirements.txt
+
+# ---------- Runtime stage ----------
+FROM gcr.io/distroless/python3-debian12:nonroot AS runtime
+
+LABEL maintainer="Federico Grimaldi <federico.grimaldi2006@gmail.com>"
+
+WORKDIR /app
+
+ENV PYTHONPATH=/app/deps \
+    PYTHONUNBUFFERED=1
+
+COPY --from=builder /deps /app/deps
+COPY alembic.ini .
+COPY migrations ./migrations
+COPY src ./src
+COPY entrypoint.py .
+
+EXPOSE 8000
+
+# No shell in the distroless base: entrypoint.py replaces start.sh
+# (DB wait-loop, alembic upgrade, uvicorn) entirely in Python.
+ENTRYPOINT ["python", "entrypoint.py"]

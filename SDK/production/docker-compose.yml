@@ -1,0 +1,105 @@
+services:
+  db:
+    image: postgres:16
+    container_name: pm_prod_db
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+      KC_DB_USER: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_DB_NAME: ${KC_DB_NAME}
+    volumes:
+      - pm_prod_db_data:/var/lib/postgresql/data
+      - ./init-db:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $$POSTGRES_USER -d $$POSTGRES_DB"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - pm_prod_network
+    restart: unless-stopped
+
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: pm_prod_keycloak
+    command: start --optimized
+    environment:
+      KC_DB: postgres
+      KC_DB_URL: jdbc:postgresql://db:5432/${KC_DB_NAME}
+      KC_DB_USERNAME: ${KC_DB_USER}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_ADMIN_USER}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_ADMIN_PASSWORD}
+      KC_HOSTNAME: ${KC_HOSTNAME}
+      KC_HTTP_ENABLED: "true"
+      KC_PROXY_HEADERS: xforwarded
+      KC_HEALTH_ENABLED: "true"
+    volumes:
+      - pm_prod_keycloak_data:/opt/keycloak/data
+    ports:
+      - "8080:8080"
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - pm_prod_network
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ../../password-manager_backend
+      dockerfile: Dockerfile.prod
+    container_name: pm_prod_api
+    environment:
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      DB_HOST: db
+      DB_PORT: 5432
+      DB_NAME: ${DB_NAME}
+      FRONTEND_URL: ${FRONTEND_URL}
+      DEBUG: ${DEBUG:-false}
+      KEYCLOAK_HOST: keycloak
+      KEYCLOAK_PORT: 8080
+      KEYCLOAK_REALM: ${KC_REALM}
+      KEYCLOAK_CLIENT_ID: ${KC_CLIENT_ID}
+      KEYCLOAK_AUDIENCE: ${KC_AUDIENCE}
+      KEYCLOAK_REDIRECT_URI: ${KEYCLOAK_REDIRECT_URI}
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+      keycloak:
+        condition: service_started
+    networks:
+      - pm_prod_network
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ../../password-manager_frontend
+      dockerfile: Dockerfile.prod
+      args:
+        NEXT_PUBLIC_KEYCLOAK_URL: ${NEXT_PUBLIC_KEYCLOAK_URL}
+        NEXT_PUBLIC_KEYCLOAK_REALM: ${KC_REALM}
+        NEXT_PUBLIC_KEYCLOAK_CLIENT_ID: ${KC_CLIENT_ID}
+        NEXT_PUBLIC_API_BASE_URL: ${NEXT_PUBLIC_API_BASE_URL}
+        NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL: ${NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL:-60000}
+    container_name: pm_prod_frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - pm_prod_network
+    restart: unless-stopped
+
+networks:
+  pm_prod_network:
+    driver: bridge
+
+volumes:
+  pm_prod_db_data:
+  pm_prod_keycloak_data:

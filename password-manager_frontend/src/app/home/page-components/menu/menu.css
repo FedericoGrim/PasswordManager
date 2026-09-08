@@ -1,0 +1,121 @@
+.grid-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  width: 100%;
+  box-sizing: border-box;
+  /* Se vuoi uno sfondo esterno diverso dal bianco del box, impostalo qui */
+}
+
+/* BARRA RICERCA: Rimane in alto */
+.grid-search {
+  color: #271d66;
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  width: 100%;
+  padding: 20px 0 20px 10%; 
+  box-sizing: border-box;
+}
+
+.grid-search input {
+  width: 250px;
+  height: 45px;
+  padding: 0 15px;
+  border-radius: 25px;
+  border: 4px solid #4f6fbf;
+  font-weight: bold;
+  font-size: 1rem;
+}
+
+.filter-btn, .add-btn {
+  height: 45px;
+  background-color: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 10px;
+  padding: 0 15px;
+  font-weight: 900;
+  cursor: pointer;
+}
+
+/* BOX BIANCO CENTRALE: Contiene la griglia */
+.grid {
+  display: grid;
+  /* Definisce 2 colonne uguali */
+  grid-template-columns: repeat(2, 1fr); 
+  
+  /* Aumentiamo il gap per dare respiro alle card più grandi */
+  gap: 30px;
+
+  background-color: white;
+  padding: 40px;
+  border-radius: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+
+  margin: auto; 
+  
+  /* Raddoppiamo la larghezza massima per ospitare card più grandi */
+  width: 76%;
+  max-height: 66%;
+  box-sizing: border-box;
+}
+
+/* CARD: Fluide e proporzionali */
+.grid-card {
+  background-color: #4f6fbf;
+  color: white;
+  width: 100%;
+  
+  /* Se vuoi che siano rettangolari e non quadrati giganti: */
+  aspect-ratio: 2 / 1; 
+  
+  border-radius: 15px;
+  border: none;
+  cursor: pointer;
+  
+  /* Aumentiamo il font per proporzione */
+  font-size: 1.4rem; 
+  font-weight: 900;
+  
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  padding: 20px;
+  text-align: center;
+  transition: transform 0.2s ease;
+}
+
+.grid-card:hover {
+  transform: scale(1.03);
+}
+
+/* PAGINAZIONE: In fondo */
+.grid-pagination {
+  margin-top: auto; 
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 0;
+}
+
+/* Stili comuni per i bottoni paginazione (coerenti con il precedente) */
+.pagination-arrow, .pagination-page {
+  background-color: #2d267a;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  width: 36px;
+  height: 36px;
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.pagination-page.active {
+  background-color: white;
+  color: #2d267a;
+  outline: 3px solid #2d267a;
+  outline-offset: -3px; 
+}

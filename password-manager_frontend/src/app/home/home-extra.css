@@ -1,0 +1,58 @@
+.fav-card {
+  position: relative;
+}
+
+.fav-card-unfav {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  color: white;
+  font-weight: 700;
+}
+
+.grid-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 0 0 12px 10%;
+  box-sizing: border-box;
+}
+
+.team-select {
+  height: 45px;
+  padding: 0 12px;
+  border-radius: 12px;
+  border: 4px solid #4f6fbf;
+  font-weight: bold;
+  color: #271d66;
+  background: white;
+}
+
+.add-btn {
+  margin-left: auto;
+  margin-right: 10%;
+}
+
+.grid-card-star {
+  position: absolute;
+  top: 6px;
+  right: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  color: #ffd75e;
+  line-height: 1;
+}
+
+.grid-card-star.inactive {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.empty-state {
+  color: #271d66;
+  font-weight: 700;
+  text-align: center;
+  padding: 20px;
+}

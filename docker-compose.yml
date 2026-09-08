@@ -1,0 +1,21 @@
+# Requires the Postgres+Keycloak dev stack in SDK/develop to be running
+# first (`docker compose -f SDK/develop/docker-compose.yml up -d`) — it
+# owns the "db" service and publishes the pm_dev_network this backend joins.
+services:
+  backend:
+    build:
+      context: ./password-manager_backend
+    container_name: password_manager_api
+    ports:
+      - "8000:8000"
+    env_file:
+      - ./password-manager_backend/.env
+    environment:
+      DB_HOST: db
+    networks:
+      - pm_dev_network
+
+networks:
+  pm_dev_network:
+    external: true
+    name: pm_dev_network
