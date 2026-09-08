@@ -1,5 +1,14 @@
-To generete a migration enter in the folder password-manager_backend: 
+Alembic database migrations
+============================
+
+Generate a migration from model changes (run from `password-manager_backend`):
+
     python -m alembic revision --autogenerate -m "name of the migration"
 
-To apply the changes from the migration on the DB:
-    python -m alembic upgrade head  
+Apply pending migrations to the database:
+
+    python -m alembic upgrade head
+
+Roll back the most recent migration:
+
+    python -m alembic downgrade -1

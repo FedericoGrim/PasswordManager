@@ -1,44 +1,38 @@
-# Generazione Documentazione - Password Manager Backend
+# Generating documentation — Password Manager Backend
 
-Per generare la documentazione automatica del codice Python con Sphinx:
+How to generate the Python code documentation automatically with Sphinx.
 
----
+## 1. Preparation
 
-## 1. Preparazione
+- Make sure **every folder containing `.py` files has an `__init__.py` file** (can be empty).
+- Write **docstrings** (explanations of functions, classes and methods) using `''' ... '''` or `""" ... """`, right after their definition.
 
-- Assicurarsi che **ogni cartella contenente file `.py` abbia un file `__init__.py`** (anche vuoto).  
-- Scrivere **docstring** (cioè spiegazioni delle funzioni) tra `''' ... '''` o `""" ... """`, subito dopo la definizione di funzioni, classi e metodi.
+## 2. Generating the `.rst` files
 
----
+From the `docs` folder, run:
 
-## 2. Generazione dei file `.rst`
+```bash
+sphinx-apidoc -o . ../
+```
 
-Aprire il terminale, spostarsi nella cartella `docs`, ed eseguire il comando:
+This generates one `.rst` file per module, based on the docstrings in the `.py` files.
 
-    sphinx-apidoc -o . ../
+## 3. Build and live preview of the documentation
 
-Questo comando genererà file `.rst` (uno per modulo) partendo dai commenti nei file `.py`.  
-Serviranno per creare automaticamente la documentazione.
+Move the generated `.rst` files into `docs/source/`, then make sure they're listed in the `toctree` in `index.rst`:
 
----
+```rst
+.. toctree::
+   :maxdepth: 2
+   :caption: Contents
 
-## 3. Lancio della pagina di documentazione
+   modules
+```
 
-- Spostare i file `.rst` generati dentro la cartella `docs/source/`.
-- Aggiungere `modules.rst` (o il file principale generato) all'interno del file `index.rst`, sotto la direttiva `.. toctree::`, così:
+Finally, from the `docs/source` folder, start the preview server:
 
-    .. toctree::
-       :maxdepth: 2
-       :caption: Indice
+```bash
+sphinx-autobuild . _build/html
+```
 
-       modules
-
-- Spostarsi nella cartella `docs/source` ed eseguire il comando:
-
-    sphinx-autobuild . _build/html
-
-Ora la pagina web della documentazione sarà accessibile all'indirizzo:
-
-    http://127.0.0.1:8000
-
-e si aggiornerà automaticamente ad ogni modifica al codice o ai commenti.
+The documentation will be available at http://127.0.0.1:8000 and will rebuild automatically on every change to the code or docstrings.

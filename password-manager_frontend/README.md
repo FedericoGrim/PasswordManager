@@ -1,36 +1,45 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Keyden — Frontend
 
-## Getting Started
+Next.js (App Router) client for Keyden. See the [root README](../readme.md) for the full-stack overview, architecture, and encryption model.
 
-First, run the development server:
+All password encryption/decryption and key wrapping happens in this app, in the browser — see [`src/Functions/Cripting-Decripting`](src/Functions/Cripting-Decripting) and [`src/Functions/Provisioning`](src/Functions/Provisioning).
+
+## Running locally
+
+Requires the backend API and Keycloak to be running (see the root README).
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open http://localhost:3000.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### Environment variables
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Read from `NEXT_PUBLIC_*` (see [`src/api/envVars.ts`](src/api/envVars.ts)):
 
-## Learn More
+| Variable | Purpose |
+|---|---|
+| `NEXT_PUBLIC_API_BASE_URL` | Base URL of the Keyden backend API |
+| `NEXT_PUBLIC_KEYCLOAK_URL` | Keycloak server URL |
+| `NEXT_PUBLIC_KEYCLOAK_REALM` | Keycloak realm (`PasswordManager` in the dev stack) |
+| `NEXT_PUBLIC_KEYCLOAK_CLIENT_ID` | Keycloak client ID |
+| `NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL` | Token refresh interval, in seconds |
 
-To learn more about Next.js, take a look at the following resources:
+## Scripts
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- `npm run dev` — start the dev server (Turbopack)
+- `npm run build` — production build
+- `npm run start` — run a production build
+- `npm run lint` — run ESLint
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Structure
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```
+src/app/                       routes (App Router): auth, home, teams, settings
+src/Components/                shared UI (Sidebar, Footer, AuthGate, ...)
+src/Functions/Cripting-Decripting/  client-side crypto (Argon2id, AES-GCM, ECDH/ML-KEM hybrid wrap)
+src/Functions/Provisioning/    user & team-key provisioning flows
+src/api/                       axios client, Keycloak client, entity types
+```
