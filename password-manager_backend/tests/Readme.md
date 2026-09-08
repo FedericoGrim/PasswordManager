@@ -1,12 +1,20 @@
 # Tests
 
-This folder is the home for the backend's unit tests (none have been added yet).
-
-Run a test file with:
+Unit tests for the use case (application) layer, run with `pytest`. Each use
+case is tested against a mocked repository interface — no database needed.
 
 ```bash
 cd password-manager_backend
-python -m unittest tests/<name>_test.py
+pip install -r requirements.txt
+pytest
 ```
 
-`pytest` and `pytest-asyncio` are also listed in `requirements.txt` for when async test cases are needed.
+Run a single file or test:
+
+```bash
+pytest tests/application/use_case/test_sub_account_use_case.py
+pytest tests/application/use_case/test_sub_account_use_case.py::TestCreateSubAccountUseCase::test_wraps_repository_errors
+```
+
+`pytest.ini` (at the project root) points `pytest` at `src/` and enables
+`pytest-asyncio` for the async use cases (e.g. user creation).
