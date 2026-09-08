@@ -109,6 +109,7 @@ class UpdateUserDTO(BaseModel):
             id=existing_user.id,
             keycloak_id=self.keycloak_id if self.keycloak_id is not None else existing_user.keycloak_id,
             username=self.username if self.username is not None else existing_user.username,
+            code=existing_user.code,
             salt=self.salt if self.salt is not None else existing_user.salt,
             public_key_ec=self.public_key_ec if self.public_key_ec is not None else existing_user.public_key_ec,
             private_key_ec=self.private_key_ec if self.private_key_ec is not None else existing_user.private_key_ec,
