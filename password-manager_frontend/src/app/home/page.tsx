@@ -137,6 +137,10 @@ export default function Home() {
 
   useEffect(() => {
     if (selectedTeamId) {
+      // loadGrid sets state, but only after awaiting the network/crypto work
+      // below — this is the standard "fetch when a dependency changes"
+      // effect, not a synchronous setState-in-render.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       loadGrid(selectedTeamId);
       getAllTeamPermLevelsByTeamId(selectedTeamId).then(setPermLevels);
       getCategoriesByTeamId(selectedTeamId).then(setCategories);
@@ -263,6 +267,10 @@ export default function Home() {
       {formTarget && selectedTeamId && (
         <SubAccountForm
           teamId={selectedTeamId}
+          // teamKeyCache is a plain out-of-React cache keyed by team id, already
+          // populated (awaited) by loadGrid before the form can be opened —
+          // reading it here is a synchronous lookup, not a mutation read race.
+          // eslint-disable-next-line react-hooks/refs
           teamAesKey={teamKeyCache.current.get(selectedTeamId)!}
           interactorId={vault.user.id}
           permLevels={permLevels}

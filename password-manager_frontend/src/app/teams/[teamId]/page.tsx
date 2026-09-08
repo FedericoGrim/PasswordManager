@@ -78,6 +78,9 @@ export default function TeamDetailPage() {
   }, [teamId, teamAesKey]);
 
   useEffect(() => {
+    // Same shape as home/page.tsx: loadSubAccounts only sets state after
+    // awaiting the network/crypto work, re-run whenever the team key changes.
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     loadSubAccounts();
   }, [loadSubAccounts]);
 

@@ -28,7 +28,7 @@ const getMainUserByKeycloakId = async (keycloak_user_id: UUID): Promise<mainUser
     try {
         const response = await axiosClient.get(`/api/user/${keycloak_user_id}`);
         return response.data.user as mainUser;
-    } catch (error) {
+    } catch {
         return null;
     }
 };
@@ -55,7 +55,7 @@ const getUserByUsernameAndCode = async (username: string, code: string): Promise
     try {
         const response = await axiosClient.get(`/api/user/lookup/${username}/${code}`);
         return response.data.user as userPublic;
-    } catch (error) {
+    } catch {
         return null;
     }
 };
@@ -64,7 +64,7 @@ const getUserById = async (userId: string): Promise<userPublic | null> => {
     try {
         const response = await axiosClient.get(`/api/user/id/${userId}`);
         return response.data.user as userPublic;
-    } catch (error) {
+    } catch {
         return null;
     }
 };
@@ -216,7 +216,7 @@ const getSubAccountById = async (subaccountId: string): Promise<subAccount | nul
     try {
         const response = await axiosClient.get(`/api/subaccount/${subaccountId}`);
         return response.data.subaccount as subAccount;
-    } catch (error) {
+    } catch {
         return null;
     }
 };
