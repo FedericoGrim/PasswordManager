@@ -103,9 +103,11 @@ Open `http://localhost:3000`.
 
 ## Testing
 
+Unit tests for the backend's use case layer, run with `pytest` (see [`password-manager_backend/tests`](password-manager_backend/tests/Readme.md)):
+
 ```bash
 cd password-manager_backend
-python -m unittest tests/<test_file>.py
+pytest
 ```
 
 ## API documentation
@@ -115,3 +117,7 @@ Beyond the live Swagger/ReDoc UIs, the backend's internal architecture is docume
 ## Project status
 
 Keyden is an active, evolving project. Contributions, issues, and suggestions are welcome.
+
+## License
+
+Keyden is licensed under the [GNU Affero General Public License v3.0](LICENSE). In short: you're free to use, modify, and self-host it, but if you run a modified version as a network service, you must make that modified source available to its users.
