@@ -1,10 +1,10 @@
-import Keycloak from 'keycloak-js';
+import Keycloak, { KeycloakTokenParsed } from 'keycloak-js';
 import axiosClient from './axiosClient';
 import { getEnvVar, getIntEnvVar } from './envVars';
 
 let keycloak: Keycloak | null = null;
 
-const logTokenDetails = (tokenParsed: any) => {
+const logTokenDetails = (tokenParsed: KeycloakTokenParsed | undefined) => {
   if (tokenParsed) {
     console.log(`Token details:
       exp: ${tokenParsed.exp}
@@ -39,10 +39,10 @@ axiosClient.interceptors.request.use((config) => {
 
 const keycloakFactory = (): Keycloak => {
   if (!keycloak) {
-    var keycloakUrl = getEnvVar('KEYCLOAK_URL', process.env.NEXT_PUBLIC_KEYCLOAK_URL);
-    var keycloakRealm = getEnvVar('KEYCLOAK_REALM', process.env.NEXT_PUBLIC_KEYCLOAK_REALM);
-    var keycloakClientId = getEnvVar('KEYCLOAK_CLIENT_ID', process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID);
-    var refreshInterval = getIntEnvVar('KEYCLOAK_REFRESH_INTERVAL', process.env.NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL);
+    const keycloakUrl = getEnvVar('KEYCLOAK_URL', process.env.NEXT_PUBLIC_KEYCLOAK_URL);
+    const keycloakRealm = getEnvVar('KEYCLOAK_REALM', process.env.NEXT_PUBLIC_KEYCLOAK_REALM);
+    const keycloakClientId = getEnvVar('KEYCLOAK_CLIENT_ID', process.env.NEXT_PUBLIC_KEYCLOAK_CLIENT_ID);
+    const refreshInterval = getIntEnvVar('KEYCLOAK_REFRESH_INTERVAL', process.env.NEXT_PUBLIC_KEYCLOAK_REFRESH_INTERVAL);
 
     keycloak = new Keycloak({
       url: keycloakUrl,
