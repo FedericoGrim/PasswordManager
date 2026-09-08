@@ -7,6 +7,16 @@ from infrastructure.exceptions.user_favorites_postgreSQL_exceptions import *
 
 from domain.interfaces.user_favorite_service_interface import IUserFavoriteService
 from domain.entities.user_favorite import UserFavorite
+from infrastructure.databases.models.user_favorite_model import UserFavoriteModel
+
+
+def _to_domain(model: UserFavoriteModel) -> UserFavorite:
+    return UserFavorite(
+        id=model.id,
+        user_id=model.user_id,
+        sub_account_id=model.sub_account_id,
+    )
+
 
 class UserFavoritesService(IUserFavoriteService):
     def __init__(self, db: Session):
@@ -14,11 +24,16 @@ class UserFavoritesService(IUserFavoriteService):
 
     def add_favorite(self, new_favorite: UserFavorite) -> UserFavorite:
         try:
-            self.Db.add(new_favorite)
-            self.Db.flush()
-            self.Db.refresh(new_favorite)
+            favorite_model = UserFavoriteModel(
+                user_id=new_favorite.user_id,
+                sub_account_id=new_favorite.sub_account_id,
+            )
 
-            return new_favorite
+            self.Db.add(favorite_model)
+            self.Db.flush()
+            self.Db.refresh(favorite_model)
+
+            return _to_domain(favorite_model)
 
         except IntegrityError:
             raise Exception("This sub-account is already a favorite.")
@@ -29,15 +44,15 @@ class UserFavoritesService(IUserFavoriteService):
 
     def remove_favorite(self, user_id: uuid.UUID, sub_account_id: uuid.UUID) -> dict[str, str]:
         try:
-            favorite = self.Db.query(UserFavorite).filter_by(
+            favorite_model = self.Db.query(UserFavoriteModel).filter_by(
                 user_id=user_id,
                 sub_account_id=sub_account_id
             ).first()
 
-            if not favorite:
+            if not favorite_model:
                 raise Exception("Favorite not found.")
 
-            self.Db.delete(favorite)
+            self.Db.delete(favorite_model)
             self.Db.flush()
 
             return {"message": "Favorite removed successfully."}
@@ -48,8 +63,8 @@ class UserFavoritesService(IUserFavoriteService):
 
     def get_favorites_by_user_id(self, user_id: uuid.UUID) -> list[UserFavorite]:
         try:
-            favorites = self.Db.query(UserFavorite).filter_by(user_id=user_id).all()
-            return favorites
+            favorite_models = self.Db.query(UserFavoriteModel).filter_by(user_id=user_id).all()
+            return [_to_domain(favorite_model) for favorite_model in favorite_models]
 
         except Exception as e:
             logging.error(f"Error: {e}")

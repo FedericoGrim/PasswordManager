@@ -8,7 +8,18 @@ import sys
 
 sys.path.insert(0, os.path.join(os.path.dirname(__file__), "..", "src"))
 
-from domain.entities.base import Base
+from infrastructure.databases.base import Base
+# ORM mappings live in infrastructure now, not domain, so they have to be
+# imported explicitly here to register their tables on Base.metadata.
+import infrastructure.databases.models.user_model  # noqa: F401
+import infrastructure.databases.models.team_model  # noqa: F401
+import infrastructure.databases.models.team_perm_level_model  # noqa: F401
+import infrastructure.databases.models.team_member_model  # noqa: F401
+import infrastructure.databases.models.sub_account_model  # noqa: F401
+import infrastructure.databases.models.categories_model  # noqa: F401
+import infrastructure.databases.models.sub_account_categories_model  # noqa: F401
+import infrastructure.databases.models.user_favorite_model  # noqa: F401
+import infrastructure.databases.models.user_teams_keys_model  # noqa: F401
 
 config = context.config
 if config.config_file_name is not None:
