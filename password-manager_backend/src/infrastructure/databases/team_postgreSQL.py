@@ -7,7 +7,17 @@ from infrastructure.exceptions.team_postgreSQL_exceptions import *
 
 from domain.interfaces.team_service_interface import ITeamService
 from domain.entities.team import Team
-from domain.entities.team_member import TeamMember
+from infrastructure.databases.models.team_model import TeamModel
+from infrastructure.databases.models.team_member_model import TeamMemberModel
+
+
+def _to_domain(model: TeamModel) -> Team:
+    return Team(
+        id=model.id,
+        name=model.name,
+        is_personal=model.is_personal,
+    )
+
 
 class TeamService(ITeamService):
     def __init__(self, db: Session):
@@ -15,11 +25,16 @@ class TeamService(ITeamService):
 
     def CreateTeam(self, new_team: Team) -> Team:
         try:
-            self.Db.add(new_team)
-            self.Db.flush()
-            self.Db.refresh(new_team)
+            team_model = TeamModel(
+                name=new_team.name,
+                is_personal=new_team.is_personal,
+            )
 
-            return new_team
+            self.Db.add(team_model)
+            self.Db.flush()
+            self.Db.refresh(team_model)
+
+            return _to_domain(team_model)
 
         except IntegrityError:
             raise TeamAlreadyExistsException()
@@ -27,57 +42,56 @@ class TeamService(ITeamService):
         except Exception as e:
             logging.error(f"Error: {e}")
             raise TeamCreationFailedException()
-        
+
     def GetTeamById(self, team_id: uuid.UUID):
         try:
-            team = self.Db.query(Team).filter(Team.id == team_id).first()
-            if not team:
+            team_model = self.Db.query(TeamModel).filter(TeamModel.id == team_id).first()
+            if not team_model:
                 raise GetTeamByIdNotFoundException("No Team found for the given Team Id.")
-            
-            return team
-        
+
+            return _to_domain(team_model)
+
         except Exception as e:
             logging.error(f"Error: {e}")
             raise GetTeamByIdRetrivalException()
-        
+
     def GetTeamsByUserId(self, user_id: uuid.UUID):
         try:
-            teams: list[Team] = self.Db.query(Team).join(TeamMember, Team.id == TeamMember.team_id).filter(TeamMember.user_id == user_id).all()
-            if not teams:
+            team_models: list[TeamModel] = self.Db.query(TeamModel).join(TeamMemberModel, TeamModel.id == TeamMemberModel.team_id).filter(TeamMemberModel.user_id == user_id).all()
+            if not team_models:
                 raise GetTeamsByUserIdNotFoundException("No Teams found for the given User Id.")
-            return [team for team in teams]
-            
+            return [_to_domain(team_model) for team_model in team_models]
+
         except Exception as e:
             logging.error(f"Error: {e}")
             raise TeamRetrievalException("Failed to retrieve teams.")
-        
+
     def UpdateTeamById(self, new_team: Team) -> Team:
         try:
-            team: Team = self.Db.query(Team).filter(Team.id == new_team.id).first()
-            if not team:
+            team_model = self.Db.query(TeamModel).filter(TeamModel.id == new_team.id).first()
+            if not team_model:
                 raise TeamNotFoundException("Team not found.")
-            
-            team.name = new_team.name
-            self.Db.flush()
-            self.Db.refresh(team)
 
-            return team
-        
+            team_model.name = new_team.name
+            self.Db.flush()
+            self.Db.refresh(team_model)
+
+            return _to_domain(team_model)
+
         except Exception as e:
             logging.error(f"Error: {e}")
             raise TeamUpdateException()
-        
+
     def DeleteTeamById(self, team_id: uuid.UUID) -> dict[str, str]:
         try:
-            team = self.Db.query(Team).filter(Team.id == team_id).first()
-            if not team:
+            team_model = self.Db.query(TeamModel).filter(TeamModel.id == team_id).first()
+            if not team_model:
                 raise TeamNotFoundException("Team not found.")
 
-            self.Db.delete(team)
-                
+            self.Db.delete(team_model)
+
             return {"message": "Team deleted successfully."}
-        
+
         except Exception as e:
             logging.error(f"Error: {e}")
             raise TeamDeleteException()
-        
