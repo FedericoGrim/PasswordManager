@@ -6,7 +6,7 @@
     "dev": "next dev --turbopack",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "eslint ."
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",
@@ -25,7 +25,6 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
-    "@eslint/eslintrc": "^3",
     "@tailwindcss/postcss": "^4",
     "@types/argon2-browser": "^1.18.4",
     "@types/node": "^20",
@@ -33,7 +32,7 @@
     "@types/react-dom": "^19",
     "@typescript-eslint/eslint-plugin": "^8.65.0",
     "@typescript-eslint/parser": "^8.65.0",
-    "eslint": "^10.8.0",
+    "eslint": "^9.7.0",
     "eslint-config-next": "^16.2.11",
     "tailwindcss": "^4",
     "typescript": "^5"
